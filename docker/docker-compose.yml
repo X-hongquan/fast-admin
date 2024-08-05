@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  mysql:
+    image: mysql:8.0.36
+    container_name: mysql
+    network_mode: "host"
+    volumes:
+      - /usr/local/mysql/data:/var/lib/mysql
+      - /usr/local/mysql/conf/my.cnf:/etc/mysql/conf.d/my.cnf
+    command: --default-authentication-plugin=mysql_native_password
+    #restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+  redis: # 服务名称
+    image: redis:7.2.4 # 创建容器时所需的镜像
+    container_name: redis # 容器名称
+    # restart: always # 容器总是重新启动
+    network_mode: "host" # host 网络模式
+    volumes: # 数据卷，目录挂载
+      - /usr/local/redis/master/conf/redis.conf:/usr/local/etc/redis/redis.conf
+      - /usr/local/redis/master/data:/data
+    command: redis-server /usr/local/etc/redis/redis.conf # 覆盖容器启动后默认执行的命令
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    network_mode: "host"
+    volumes:
+      - /usr/local/minio/data:/data
+      - /usr/local/minio/config:/root/.minio
+    environment:
+      MINIO_ROOT_USER: "minioadmin"
+      MINIO_ROOT_PASSWORD: "minioadmin"
+    command: server /data --console-address ":9090" -address ":9000"
+    privileged: true
+    

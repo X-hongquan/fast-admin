@@ -1,0 +1,28 @@
+{
+  "name": "v-3-v",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --open",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^2.3.1",
+    "@types/node": "^22.0.0",
+    "axios": "^1.7.2",
+    "element-plus": "^2.7.8",
+    "fast-glob": "^3.3.2",
+    "nprogress": "^0.2.0",
+    "pinia": "^2.2.0",
+    "vue": "^3.4.31",
+    "vue-router": "4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.5",
+    "sass": "^1.77.8",
+    "vite": "^5.3.4",
+    "vite-plugin-svg-icons": "^2.0.1"
+  }
+}
