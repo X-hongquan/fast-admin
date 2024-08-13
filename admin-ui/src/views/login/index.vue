@@ -5,7 +5,7 @@ import {ElNotification} from "element-plus";
 import {useRoute, useRouter} from "vue-router";
 import {getTimes} from '@/utils/time';
 import {checkPassword, checkUserName} from "@/utils/validate.js";
-
+import  setting from '@/../setting'
 const userStore = useUserStore();
 const router = useRouter();
 const route = useRoute()
@@ -62,7 +62,7 @@ async function login() {
 
         <el-form class="login-form" :model="loginForm" :rules="rules" ref="loginComponent">
           <h1>登录</h1>
-          <h2>后台管理系统</h2>
+          <h2>{{setting.logoTitle}}</h2>
           <el-form-item prop="username">
             <el-input prefix-icon="user" class="input-height" type="text" placeholder="请输入用户名"
                       v-model="loginForm.username"></el-input>

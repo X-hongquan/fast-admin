@@ -112,14 +112,13 @@ const direction = ref('rtl')
 const permissions = ref([])
 const selectionPermissions = ref([])
 
-let levelOne;
-let levelTwo;
-
 
 const selectionMenus = ref([])
 const menus = ref([])
-const parentMap = new Map()
+
 const menuTree = ref(null)
+
+let menuMap
 
 async function handleAssignMenu(row) {
   menuDrawer.value = true
@@ -127,10 +126,9 @@ async function handleAssignMenu(row) {
   roleId = row.id
   const res = await getMenuListAPI({pageSize: 500})
   if (res.code === 200) {
-    const {arr, map, second} = preHandleMenu(res.data)
+    const {arr, map} = preHandleMenu(res.data)
     menus.value = arr
-    levelOne = map
-    levelTwo = second
+    menuMap = map
   }
   const r = await getMenuListAPI({pageSize: 500, roleId: row.id == 1 ? undefined : row.id})
   if (res.code === 200) {
@@ -206,25 +204,41 @@ async function submit() {
   }
 }
 
-async function handleCheckMenu(val, data) {
-  console.log(val,data)
-  if (data.checkedKeys.length > selectionMenus.value.length) {
-    selectionMenus.value = data.checkedKeys
-  } else {
-    if (levelOne.get(val.id)) {
-      const arr = data.checkedNodes.filter((item) => item.parentId !== val.id)
-      selectionMenus.value = arr.map(item => item.id)
-    } else if (levelTwo.get(val.id)) {
-      const arr = data.checkedNodes.filter((item) => item.parentId !== val.id)
-      selectionMenus.value = arr.map(item => item.id)
-    } else {
-      selectionMenus.value = data.checkedKeys
-    }
-
-    menuTree.value.setCheckedKeys(selectionMenus.value)
-
+function makeParentChecked(val) {
+  if (val.parentId === '0')
+    return
+  const menu = menuMap.get(val.parentId)
+  let find = selectionMenus.value.find(item => item === menu.id);
+  if (!find) {
+    selectionMenus.value.push(menu.id)
+    makeParentChecked(menu)
   }
+}
 
+function makeSonUnChecked(val) {
+  const menu = menuMap.get(val.id)
+  if (menu.children && menu.children.length > 0) {
+    selectionMenus.value = selectionMenus.value.filter(item => {
+      const m = menuMap.get(item)
+      return item !== menu.id && m.parentId !== menu.id
+    })
+    for (let i = 0; i < menu.children.length; i++) {
+      makeSonUnChecked(menu.children[i])
+    }
+  }
+}
+
+async function handleCheckMenu(val, data) {
+  if (data.checkedKeys.length > selectionMenus.value.length) {
+    makeParentChecked(val)
+    selectionMenus.value.push(val.id)
+  } else {
+    if (val.children)
+      makeSonUnChecked(val)
+    else
+      selectionMenus.value = data.checkedKeys
+  }
+  menuTree.value.setCheckedKeys(selectionMenus.value)
 
 }
 
@@ -289,7 +303,7 @@ onMounted(() => {
     <template #default>
       <div>
         <el-checkbox-group v-model="selectionPermissions" size="large">
-          <el-checkbox @change="handleChange($event, item)" :value="item.id" :label="item.description" size="large"
+          <el-checkbox :value="item.id" :label="item.description" size="large"
                        border
                        v-for="item in permissions" :key="item.id"/>
         </el-checkbox-group>

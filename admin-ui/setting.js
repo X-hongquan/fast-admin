@@ -1,6 +1,5 @@
 const setting = {
-
-    logoTitle: '后台管理系统',
+    logoTitle: 'hq-admin',
 }
 
 export default setting

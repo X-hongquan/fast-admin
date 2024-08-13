@@ -1,6 +1,9 @@
 package com.chq.app.service.impl;
 
+import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.chq.app.common.aspectj.DataScopeAspect;
+import com.chq.app.common.enums.PermissionModeEnum;
+import com.chq.app.common.exception.AuthException;
 import com.chq.app.pojo.Setting;
 import com.chq.app.mapper.SettingMapper;
 import com.chq.app.service.ISettingService;
@@ -31,7 +34,16 @@ public class SettingServiceImpl extends ServiceImpl<SettingMapper, Setting> impl
     }
 
     @Override
-    public int updatePermissionMode(Integer permissionMode) {
-        return 0;
+    public int updatePermissionMode(Setting setting) {
+        System.out.println(setting);
+        if (setting.getPermissionMode() == null) throw new AuthException();
+        if (setting.getPermissionMode() == PermissionModeEnum.KING) {
+            updateById(setting);
+            dataScopeAspect.setMode(setting.getPermissionMode());
+        } else if (setting.getPermissionMode() == PermissionModeEnum.CAPITALIST) {
+            updateById(setting);
+            dataScopeAspect.setMode(setting.getPermissionMode());
+        }
+        return 1;
     }
 }

@@ -1,9 +1,9 @@
-<script setup >
+<script setup>
 import {useSettingStore} from "@/store/setting.js";
 import {useUserStore} from "@/store/user.js";
 import {ElNotification} from "element-plus";
 import {useRoute, useRouter} from "vue-router";
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 
 const userStore = useUserStore()
 const settingStore = useSettingStore()
@@ -19,6 +19,7 @@ async function logout() {
     message: '退出成功',
   })
 }
+
 function goPerson() {
   router.push({path: '/person'})
 }
@@ -35,10 +36,39 @@ function fullScreen() {
 function changeMode() {
   document.documentElement.className = settingStore.theme ? 'dark' : ''
 }
+
 function changeColor() {
   document.documentElement.style.setProperty('--el-color-primary', color.value)
 }
+
 const color = ref()
+
+async function getSetting() {
+  try {
+    await settingStore.getSetting()
+  } catch (e) {
+    ElNotification({
+      type: 'error',
+      title: '提示',
+      message: '获取设置失败',
+    })
+  }
+}
+async function updateSetting() {
+  try {
+  await settingStore.updateSetting()
+  } catch (e) {
+    ElNotification({
+      type: 'error',
+      title: '提示',
+      message: '更新设置失败',
+    })
+  }
+}
+
+onMounted(() => {
+  getSetting()
+})
 </script>
 
 <template>
@@ -57,7 +87,14 @@ const color = ref()
             <el-color-picker v-model="color" @change="changeColor" show-alpha :teleported="false"/>
           </el-form-item>
           <el-form-item label="暗黑模式">
-            <el-switch v-model="settingStore.theme" active-icon="Moon"  inactive-icon="Sunny" @change="changeMode"/>
+            <el-switch v-model="settingStore.theme" active-icon="Moon" inactive-icon="Sunny" @change="changeMode"/>
+          </el-form-item>
+          <el-form-item label="权限模式">
+            <el-switch v-model="settingStore.setting.permissionMode" :active-value="1" :inactive-value="0"
+                       active-text="封建家"  inactive-text="资本家"  style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
+                       @change="updateSetting"
+            >
+            </el-switch>
           </el-form-item>
 
         </el-form>

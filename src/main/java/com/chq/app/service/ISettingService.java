@@ -13,5 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ISettingService extends IService<Setting> {
 
-    int updatePermissionMode(Integer permissionMode);
+    int updatePermissionMode(Setting setting);
 }
