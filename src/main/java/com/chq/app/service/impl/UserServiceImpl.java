@@ -8,6 +8,7 @@ import com.chq.app.common.annoation.DataScope;
 import com.chq.app.common.domain.LoginUser;
 import com.chq.app.common.domain.R;
 
+import com.chq.app.common.enums.ExecuteType;
 import com.chq.app.config.MinioConfig;
 import com.chq.app.dto.MessageDto;
 import com.chq.app.common.exception.ServiceException;
@@ -65,9 +66,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     private MinioConfig minioConfig;
 
 
-
     @Override
-    @DataScope(alias = "ur",mainAlias = "u")
+    @DataScope(alias = "ur", mainAlias = "u")
     public List<User> getList(User user) {
         List<User> userList = baseMapper.getUserList(user);
         for (User u : userList) {
@@ -166,9 +166,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
 
     private void sendCode(MessageDto dto) {
-        AsyncExecutor.executeSendEmail(() -> {
+        AsyncExecutor.execute(() -> {
             JavaMailUntil.sendMail(dto);
-        }, dto);
+        }, ExecuteType.MAIl, dto);
     }
 
     public void sendEmailCode(String email) {

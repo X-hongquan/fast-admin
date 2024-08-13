@@ -2,10 +2,12 @@ package com.chq.app.controller;
 
 
 import com.alibaba.excel.EasyExcel;
+import com.chq.app.common.annoation.Log;
 import com.chq.app.common.domain.LoginUser;
 import com.chq.app.common.domain.R;
 import com.chq.app.common.domain.TableInfo;
 import com.chq.app.common.annoation.PreAuth;
+import com.chq.app.common.enums.BusinessType;
 import com.chq.app.dto.form.EmailForm;
 import com.chq.app.dto.form.LoginForm;
 import com.chq.app.dto.form.PasswordForm;
@@ -75,6 +77,7 @@ public class UserController {
 
     @PostMapping
     @PreAuth("system:user:add")
+    @Log(title = "新增用户", businessType = BusinessType.INSERT, excludeParamNames = {"password"})
     public R<Integer> add(@RequestBody User user) {
         int row = userService.add(user);
         return R.ok(row);
