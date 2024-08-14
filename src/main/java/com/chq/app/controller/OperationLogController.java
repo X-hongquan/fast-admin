@@ -6,6 +6,7 @@ import com.chq.app.common.domain.TableInfo;
 import com.chq.app.pojo.OperationLog;
 import com.chq.app.service.IOperationLogService;
 import com.chq.app.util.PageUtils;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/log")
+@Tag(name = "操作日志")
 public class OperationLogController {
 
     @Resource

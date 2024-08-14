@@ -14,35 +14,39 @@ export const routerPackage = function (routers, routeName) {
     if (routers) {
         routers.forEach((itemRouter) => {
             if (routeName) {
-                router.addRoute(routeName, {
-                    path: itemRouter.url,
-                    name: itemRouter.name,
-                    redirect: itemRouter.redirect || undefined,
-                    meta: {
-                        title: itemRouter.title,
-                        icon: itemRouter.icon
-                    },
-                    component:
-                    //本地能使用，上生产直接裂开~~
-                    //()=>import(/* @vite-ignore */ `/@views/${itemRouter.component}`),
-                    //使用modules
-                        modules[`../views/${itemRouter.component}.vue`],
-                })
+                if (itemRouter.link===0) {
+                    router.addRoute(routeName, {
+                        path: itemRouter.url,
+                        name: itemRouter.name,
+                        redirect: itemRouter.redirect || undefined,
+                        meta: {
+                            title: itemRouter.title,
+                            icon: itemRouter.icon
+                        },
+                        component:
+                        //本地能使用，上生产直接裂开~~
+                        //()=>import(/* @vite-ignore */ `/@views/${itemRouter.component}`),
+                        //使用modules
+                            modules[`../views/${itemRouter.component}.vue`],
+                    })
+                }
             } else {
-                router.addRoute({
-                    path: itemRouter.url,
-                    name: itemRouter.name,
-                    redirect: itemRouter.redirect || undefined,
-                    meta: {
-                        title: itemRouter.title,
-                        icon: itemRouter.icon
-                    },
-                    component:
-                    //本地能使用，上生产直接裂开~~
-                    //()=>import(/* @vite-ignore */ `/@views/${itemRouter.component}`),
-                    //使用modules
-                        modules[`../views/${itemRouter.component}.vue`],
-                })
+                if (itemRouter.link===0) {
+                    router.addRoute({
+                        path: itemRouter.url,
+                        name: itemRouter.name,
+                        redirect: itemRouter.redirect || undefined,
+                        meta: {
+                            title: itemRouter.title,
+                            icon: itemRouter.icon
+                        },
+                        component:
+                        //本地能使用，上生产直接裂开~~
+                        //()=>import(/* @vite-ignore */ `/@views/${itemRouter.component}`),
+                        //使用modules
+                            modules[`../views/${itemRouter.component}.vue`],
+                    })
+                }
             }
 
             if (itemRouter.children && itemRouter.children.length) {

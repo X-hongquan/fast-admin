@@ -9,8 +9,18 @@ defineProps({
 })
 const router = useRouter()
 
+let documentElement
 function goMenu(item) {
+  if (item.link===0)
   router.push(item.index)
+  else {
+    if (!documentElement) {
+      documentElement = document.createElement('a')
+      documentElement.href = item.url
+      documentElement.target = '_blank'
+    }
+    documentElement.click()
+  }
 }
 </script>
 
@@ -23,7 +33,7 @@ export default {
 <template>
   <template v-for="item in menus">
     <template v-if="!item.children">
-      <el-menu-item v-if="item.type===2?false:true" :index="item.url" @click="goMenu">
+      <el-menu-item v-if="item.type===2?false:true" :index="item.url" @click="goMenu(item)">
         <el-icon>
           <component :is="item.icon"></component>
         </el-icon>

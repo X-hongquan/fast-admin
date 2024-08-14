@@ -6,5 +6,7 @@ public interface UrlInterceptor {
             "/user/hello",
             "user/text",
             "/user/login",
+            "/swagger-ui/**",
+            "/v3/**"
     };
 }

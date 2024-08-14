@@ -42,3 +42,9 @@ minio:
   access-key: minioadmin
   secret-key: minioadmin
   bucket-name: app
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui/index.html
+  show-actuator: true
