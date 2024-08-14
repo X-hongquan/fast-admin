@@ -2,4 +2,27 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.chq.app.mapper.OperationLogMapper">
 
+    <select id="getOperationList" resultType="com.chq.app.pojo.OperationLog">
+            select * from sys_operation_log as l
+            where 1=1
+            <if test="operationName != null and operationName != ''">
+                and l.operation_name = #{operationName}
+            </if>
+            <if test="title != null and title != ''">
+                and l.title = #{title}
+            </if>
+              <if test="requestMethod != null and requestMethod != ''">
+                and l.request_method = #{requestMethod}
+            </if>
+            <if test="operatorType != null">
+                and l.operator_type = #{operatorType}
+            </if>
+            <if test="businessType != null">
+                and l.business_type = #{businessType}
+            </if>
+            <if test="status !=null">
+                and l.status = #{status}
+            </if>
+
+    </select>
 </mapper>

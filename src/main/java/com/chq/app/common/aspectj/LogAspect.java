@@ -2,6 +2,7 @@ package com.chq.app.common.aspectj;
 
 import com.alibaba.fastjson2.JSON;
 
+import com.alibaba.fastjson2.JSONWriter;
 import com.chq.app.common.annoation.Log;
 import com.chq.app.common.domain.LoginUser;
 import com.chq.app.common.enums.BusinessStatus;
@@ -13,6 +14,8 @@ import com.chq.app.util.AsyncExecutor;
 import com.chq.app.util.SpringUtils;
 import com.chq.app.util.UserHolder;
 import com.chq.app.util.WebUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.websocket.RemoteEndpoint;
@@ -29,8 +32,10 @@ import org.springframework.core.NamedThreadLocal;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.lang.runtime.ObjectMethods;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Map;
@@ -43,6 +48,9 @@ import java.util.Map;
 public class LogAspect {
     private static final Logger log = LoggerFactory.getLogger(LogAspect.class);
 
+
+    @Resource
+    private ObjectMapper objectMapper;
     /**
      * 排除敏感属性字段
      */
@@ -52,6 +60,9 @@ public class LogAspect {
      * 计算操作消耗时间
      */
     private static final ThreadLocal<Long> TIME_THREADLOCAL = new NamedThreadLocal<Long>("Cost Time");
+
+
+
 
     /**
      * 处理请求前执行
@@ -158,6 +169,7 @@ public class LogAspect {
      * @throws Exception 异常
      */
     private void setRequestValue(JoinPoint joinPoint, OperationLog operationLog, String[] excludeParamNames) throws Exception {
+
         Map<String, String> paramsMap = WebUtils.getParamMap(WebUtils.getRequest());
         String requestMethod = operationLog.getRequestMethod();
         if (paramsMap.isEmpty()
@@ -165,7 +177,7 @@ public class LogAspect {
             String params = argsArrayToString(joinPoint.getArgs(), excludeParamNames);
             operationLog.setOperationParam(StringUtils.substring(params, 0, 2000));
         } else {
-            operationLog.setOperationParam(StringUtils.substring(JSON.toJSONString(paramsMap, excludePropertyPreFilter(excludeParamNames)), 0, 2000));
+            operationLog.setOperationParam(StringUtils.substring(JSON.toJSONString(paramsMap, excludePropertyPreFilter(excludeParamNames), JSONWriter.Feature.WriteLongAsString), 0, 2000));
         }
     }
 
@@ -178,7 +190,7 @@ public class LogAspect {
             for (Object o : paramsArray) {
                 if (o != null && !isFilterObject(o)) {
                     try {
-                        String jsonObj = JSON.toJSONString(o, excludePropertyPreFilter(excludeParamNames));
+                        String jsonObj = JSON.toJSONString(o, excludePropertyPreFilter(excludeParamNames),JSONWriter.Feature.WriteLongAsString);
                         params += jsonObj.toString() + " ";
                     } catch (Exception e) {
                     }

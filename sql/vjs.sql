@@ -11,7 +11,7 @@
  Target Server Version : 80036 (8.0.36)
  File Encoding         : 65001
 
- Date: 05/08/2024 21:36:52
+ Date: 14/08/2024 18:46:48
 */
 
 SET NAMES utf8mb4;
@@ -54,6 +54,7 @@ INSERT INTO `menu` VALUES (5, 'permission', 1, 'system/permission/index', '/syst
 INSERT INTO `menu` VALUES (6, 'user-add', 1, 'system/user/detail/index', '/system/user/add', NULL, '新增用户', 2, 2, 'User', 1, '2024-08-02 12:51:37', NULL, '2024-08-02 12:51:37', NULL, 'admin', 0);
 INSERT INTO `menu` VALUES (7, 'user-edit', 1, 'system/user/detail/index', '/system/user/edit/:userId', NULL, '编辑用户', 2, 2, 'User', 1, '2024-08-02 13:14:49', NULL, '2024-08-02 13:14:49', NULL, 'admin', 0);
 INSERT INTO `menu` VALUES (8, 'user-detail', 1, 'system/user/detail/index', '/system/user/detail/:userId', NULL, '用户详细', 2, 2, 'User', 1, '2024-08-02 13:14:49', NULL, '2024-08-02 13:14:49', NULL, 'admin', 0);
+INSERT INTO `menu` VALUES (1823348525811974145, 'log', 1, 'system/log/index', '/system/log', 5, '日志管理', 2, 1, 'Calendar', 1, '2024-08-13 21:18:59', NULL, '2024-08-13 21:18:59', NULL, 'admin', 0);
 
 -- ----------------------------
 -- Table structure for permission
@@ -90,6 +91,8 @@ INSERT INTO `permission` VALUES (14, 'system:permission:add', '新增权限', 'a
 INSERT INTO `permission` VALUES (15, 'system:permission:edit', '修改权限', 'admin', '2024-08-05 06:43:50', NULL, NULL);
 INSERT INTO `permission` VALUES (16, 'system:permission:delete', '删除权限', 'admin', '2024-08-05 06:43:50', NULL, NULL);
 INSERT INTO `permission` VALUES (1820304541141196802, 'system:role:query', '角色查询', 'admin', '2024-08-05 11:43:17', NULL, '2024-08-05 11:43:17');
+INSERT INTO `permission` VALUES (1823671284207239169, 'system:log:query', '查询日志', 'admin', '2024-08-14 18:41:31', NULL, '2024-08-14 18:41:31');
+INSERT INTO `permission` VALUES (1823671879701938178, 'system:setting:query', '设置查询', 'admin', '2024-08-14 18:43:53', NULL, '2024-08-14 18:43:53');
 
 -- ----------------------------
 -- Table structure for role
@@ -112,9 +115,6 @@ CREATE TABLE `role`  (
 INSERT INTO `role` VALUES (1, '系统管理员', 'admin', '2024-08-04 17:46:59', NULL, NULL);
 INSERT INTO `role` VALUES (2, '总管', 'admin', '2024-08-04 17:46:59', NULL, NULL);
 INSERT INTO `role` VALUES (3, '大卫', 'admin', '2024-08-04 17:46:59', NULL, NULL);
-INSERT INTO `role` VALUES (1820351924566765570, 'huawei小弟', 'admin', '2024-08-05 14:51:34', NULL, '2024-08-05 14:51:34');
-INSERT INTO `role` VALUES (1820352066497818626, 'eqwe', 'admin', '2024-08-05 14:52:08', NULL, '2024-08-05 14:52:08');
-INSERT INTO `role` VALUES (1820352904444366850, 'huawei小弟的', 'huawei', '2024-08-05 14:55:28', NULL, '2024-08-05 14:55:28');
 
 -- ----------------------------
 -- Table structure for role_menu
@@ -145,6 +145,10 @@ INSERT INTO `role_menu` VALUES (1820427946033197061, 1820352904444366850, 8);
 INSERT INTO `role_menu` VALUES (1820427946033197062, 1820352904444366850, 2);
 INSERT INTO `role_menu` VALUES (1820427946033197063, 1820352904444366850, 3);
 INSERT INTO `role_menu` VALUES (1820427946033197064, 1820352904444366850, 4);
+INSERT INTO `role_menu` VALUES (1823671062106259458, 3, 1);
+INSERT INTO `role_menu` VALUES (1823671062106259459, 3, 3);
+INSERT INTO `role_menu` VALUES (1823671062106259460, 3, 4);
+INSERT INTO `role_menu` VALUES (1823671062106259461, 3, 5);
 
 -- ----------------------------
 -- Table structure for role_permission
@@ -160,26 +164,42 @@ CREATE TABLE `role_permission`  (
 -- ----------------------------
 -- Records of role_permission
 -- ----------------------------
-INSERT INTO `role_permission` VALUES (1820308458193313793, 3, 3);
-INSERT INTO `role_permission` VALUES (1820351613395546114, 2, 1);
-INSERT INTO `role_permission` VALUES (1820351613395546115, 2, 2);
-INSERT INTO `role_permission` VALUES (1820351613395546116, 2, 3);
-INSERT INTO `role_permission` VALUES (1820351613395546117, 2, 4);
-INSERT INTO `role_permission` VALUES (1820351613395546118, 2, 1820304541141196802);
-INSERT INTO `role_permission` VALUES (1820351613395546119, 2, 14);
-INSERT INTO `role_permission` VALUES (1820351613395546120, 2, 16);
-INSERT INTO `role_permission` VALUES (1820351613395546121, 2, 13);
-INSERT INTO `role_permission` VALUES (1820351613395546122, 2, 10);
-INSERT INTO `role_permission` VALUES (1820351613395546123, 2, 7);
-INSERT INTO `role_permission` VALUES (1820351613395546124, 2, 6);
-INSERT INTO `role_permission` VALUES (1820351613395546125, 2, 9);
-INSERT INTO `role_permission` VALUES (1820351613395546126, 2, 12);
-INSERT INTO `role_permission` VALUES (1820351613395546127, 2, 15);
-INSERT INTO `role_permission` VALUES (1820351613395546128, 2, 11);
-INSERT INTO `role_permission` VALUES (1820351613395546129, 2, 8);
-INSERT INTO `role_permission` VALUES (1820426692498337794, 1820352904444366850, 15);
-INSERT INTO `role_permission` VALUES (1820426692498337795, 1820352904444366850, 16);
-INSERT INTO `role_permission` VALUES (1820426692498337796, 1820352904444366850, 14);
+INSERT INTO `role_permission` VALUES (1823671894524608514, 3, 3);
+INSERT INTO `role_permission` VALUES (1823671894524608515, 3, 2);
+INSERT INTO `role_permission` VALUES (1823671894524608516, 3, 6);
+INSERT INTO `role_permission` VALUES (1823671894524608517, 3, 9);
+INSERT INTO `role_permission` VALUES (1823671894524608518, 3, 12);
+INSERT INTO `role_permission` VALUES (1823671894524608519, 3, 13);
+INSERT INTO `role_permission` VALUES (1823671894524608520, 3, 7);
+INSERT INTO `role_permission` VALUES (1823671894524608521, 3, 10);
+INSERT INTO `role_permission` VALUES (1823671894591717377, 3, 16);
+INSERT INTO `role_permission` VALUES (1823671894591717378, 3, 1823671284207239169);
+INSERT INTO `role_permission` VALUES (1823671894591717379, 3, 15);
+INSERT INTO `role_permission` VALUES (1823671894591717380, 3, 14);
+INSERT INTO `role_permission` VALUES (1823671894591717381, 3, 11);
+INSERT INTO `role_permission` VALUES (1823671894591717382, 3, 8);
+INSERT INTO `role_permission` VALUES (1823671894591717383, 3, 4);
+INSERT INTO `role_permission` VALUES (1823671894591717384, 3, 1);
+INSERT INTO `role_permission` VALUES (1823671894591717385, 3, 1820304541141196802);
+INSERT INTO `role_permission` VALUES (1823671894591717386, 3, 1823671879701938178);
+INSERT INTO `role_permission` VALUES (1823671904330891266, 2, 1);
+INSERT INTO `role_permission` VALUES (1823671904330891267, 2, 2);
+INSERT INTO `role_permission` VALUES (1823671904330891268, 2, 3);
+INSERT INTO `role_permission` VALUES (1823671904330891269, 2, 4);
+INSERT INTO `role_permission` VALUES (1823671904330891270, 2, 1820304541141196802);
+INSERT INTO `role_permission` VALUES (1823671904330891271, 2, 14);
+INSERT INTO `role_permission` VALUES (1823671904330891272, 2, 16);
+INSERT INTO `role_permission` VALUES (1823671904330891273, 2, 13);
+INSERT INTO `role_permission` VALUES (1823671904330891274, 2, 10);
+INSERT INTO `role_permission` VALUES (1823671904330891275, 2, 7);
+INSERT INTO `role_permission` VALUES (1823671904330891276, 2, 6);
+INSERT INTO `role_permission` VALUES (1823671904330891277, 2, 9);
+INSERT INTO `role_permission` VALUES (1823671904330891278, 2, 12);
+INSERT INTO `role_permission` VALUES (1823671904330891279, 2, 15);
+INSERT INTO `role_permission` VALUES (1823671904330891280, 2, 11);
+INSERT INTO `role_permission` VALUES (1823671904330891281, 2, 8);
+INSERT INTO `role_permission` VALUES (1823671904330891282, 2, 1823671284207239169);
+INSERT INTO `role_permission` VALUES (1823671904330891283, 2, 1823671879701938178);
 
 -- ----------------------------
 -- Table structure for setting
@@ -195,6 +215,34 @@ CREATE TABLE `setting`  (
 -- Records of setting
 -- ----------------------------
 INSERT INTO `setting` VALUES (1, 0);
+
+-- ----------------------------
+-- Table structure for sys_operation_log
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_operation_log`;
+CREATE TABLE `sys_operation_log`  (
+  `id` bigint NOT NULL COMMENT '日志主键',
+  `title` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '模块标题',
+  `business_type` int NULL DEFAULT 0 COMMENT '业务类型（0其它 1新增 2修改 3删除）',
+  `method` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '方法名称',
+  `request_method` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '请求方式',
+  `operator_type` int NULL DEFAULT 0 COMMENT '操作类别（0其它 1后台用户 2手机端用户）',
+  `operation_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '操作人员',
+  `operation_param` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '请求参数',
+  `json_result` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '返回参数',
+  `status` int NULL DEFAULT 0 COMMENT '操作状态（0正常 1异常）',
+  `error_msg` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '错误消息',
+  `operation_time` datetime NULL DEFAULT NULL COMMENT '操作时间',
+  `cost_time` bigint NULL DEFAULT 0 COMMENT '消耗时间,单位ms',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_sys_operation_log_bt`(`business_type` ASC) USING BTREE,
+  INDEX `idx_sys_oper_log_ct`(`operation_time` ASC) USING BTREE,
+  INDEX `idx_sys_operation_log_s`(`status` ASC) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '操作日志记录' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of sys_operation_log
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for user
@@ -219,10 +267,8 @@ CREATE TABLE `user`  (
 -- Records of user
 -- ----------------------------
 INSERT INTO `user` VALUES (1, 'admin', '$2a$10$8rSmx1t3VoitB2krA.2uuOUwuTn6wJqxYpZ0SchTCDo9Z7ri1zdmG', '/minio/app/0c43434ea4f5612a97db6c88d706f64a.gif', 1, '2024-07-30 18:32:36', '2024-08-02 10:13:56', NULL, 'admin', 'chq_109@sina.com');
-INSERT INTO `user` VALUES (2, 'huawei', '$2a$10$kOCJgPOMNecWEPUi0l.gaeM6MVMMCfZFJs0Hngx5QuQBq1LwBhrAi', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', 1, '2024-07-30 20:48:27', '2024-07-30 20:48:27', NULL, 'admin', 'hq@qq.com');
-INSERT INTO `user` VALUES (1819626829397458946, '额请问请问', '$2a$10$OSBCH.Jrv/Uj9CcMPPhkJ.WZlSuRH.R/1aMZiKKBpyl67WpqtIExW', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', 1, '2024-08-03 14:50:18', '2024-08-03 14:56:17', NULL, 'admin', NULL);
-INSERT INTO `user` VALUES (1819631450358644737, '恶趣味王企鹅', '$2a$10$rD.ZDKcWRiz/6K9hEgBCFOxMdPdIUZXBKsGY/kUBlom/pW15uXTTK', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', 1, '2024-08-03 15:08:40', '2024-08-03 15:08:40', NULL, 'admin', NULL);
-INSERT INTO `user` VALUES (1819631612548186114, '卫栖梧而且', '$2a$10$WrruhVRpNz7md8tBBuQtWOtl8dW5u3tf6ip7ixQSXAROf2g1zHg6K', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', 1, '2024-08-03 15:09:18', '2024-08-05 11:33:25', NULL, 'admin', '');
+INSERT INTO `user` VALUES (2, 'huawei', '$2a$10$kOCJgPOMNecWEPUi0l.gaeM6MVMMCfZFJs0Hngx5QuQBq1LwBhrAi', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', 1, '2024-07-30 20:48:27', '2024-08-14 18:39:37', NULL, 'admin', 'hq@qq.com');
+INSERT INTO `user` VALUES (1823670915230121985, 'dawei1', '$2a$10$wiNdBO3DMYF.0Pk8kHf/NekSXoYdFI.6AV.AuprXXj/6kYQH3reO2', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', 1, '2024-08-14 18:40:03', '2024-08-14 18:40:03', NULL, 'admin', NULL);
 
 -- ----------------------------
 -- Table structure for user_role
@@ -239,13 +285,7 @@ CREATE TABLE `user_role`  (
 -- Records of user_role
 -- ----------------------------
 INSERT INTO `user_role` VALUES (1, 1, 1);
-INSERT INTO `user_role` VALUES (2, 2, 2);
-INSERT INTO `user_role` VALUES (3, 2, 3);
-INSERT INTO `user_role` VALUES (4, 3, 3);
-INSERT INTO `user_role` VALUES (1819628336226336770, 1819626829397458946, 2);
-INSERT INTO `user_role` VALUES (1819631450358644738, 1819631450358644737, 3);
-INSERT INTO `user_role` VALUES (1819631450358644739, 1819631450358644737, 2);
-INSERT INTO `user_role` VALUES (1820302060386553858, 1819631612548186114, 3);
-INSERT INTO `user_role` VALUES (1820302060386553859, 1819631612548186114, 2);
+INSERT INTO `user_role` VALUES (1823670805909782530, 2, 2);
+INSERT INTO `user_role` VALUES (1823670915230121986, 1823670915230121985, 3);
 
 SET FOREIGN_KEY_CHECKS = 1;

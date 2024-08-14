@@ -38,7 +38,7 @@ const menu = reactive({
   status: undefined,
   type: undefined,
   icon: undefined,
-  lever: undefined,
+  level: undefined,
 })
 
 
@@ -109,6 +109,7 @@ function handAddLevel(row) {
   title.value = '新增菜单'
   menu.parentId = row.id
   lock.value = true
+  menu.level = row.level + 1
 }
 
 async function handleUpdate(row) {
@@ -218,6 +219,9 @@ onMounted(() => {
         </el-form-item>
         <el-form-item label="路由路径" required>
           <el-input v-model="menu.url" placeholder="请输入路径"></el-input>
+        </el-form-item>
+        <el-form-item label="层级" required>
+          <el-input v-model="menu.level" placeholder="请输入路径"></el-input>
         </el-form-item>
         <el-form-item label="排序" disabled>
           <el-input v-model="menu.sort" placeholder="请输入排序"></el-input>
