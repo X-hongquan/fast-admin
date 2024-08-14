@@ -28,17 +28,18 @@ const title = ref('')
 const menus = ref([])
 const menu = reactive({
   id: undefined,
-  title: undefined,
+  name: undefined,
   parentId: undefined,
   component: undefined,
-  name: undefined,
   url: undefined,
   sort: undefined,
-  redirect: undefined,
-  status: undefined,
+  title: undefined,
+  level: undefined,
   type: undefined,
   icon: undefined,
-  level: undefined,
+  status: undefined,
+  redirect: undefined,
+  link: undefined,
 })
 
 
@@ -205,6 +206,12 @@ onMounted(() => {
       <el-form :model="menu" label-width="80px">
         <el-form-item label="标题" prop="title" required>
           <el-input v-model="menu.title" placeholder="请输入标题"></el-input>
+        </el-form-item>
+        <el-form-item label="类型">
+          <el-radio-group v-model="menu.link">
+            <el-radio :label="0">非外链</el-radio>
+            <el-radio :label="1">外链</el-radio>
+          </el-radio-group>
         </el-form-item>
         <el-form-item label="父级菜单" required>
           <el-select v-model="menu.parentId" placeholder="请选择父级菜单" :disabled="lock">

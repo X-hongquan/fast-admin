@@ -12,7 +12,7 @@ const router = useRouter()
 let documentElement
 function goMenu(item) {
   if (item.link===0)
-  router.push(item.index)
+  router.push(item.url)
   else {
     if (!documentElement) {
       documentElement = document.createElement('a')
