@@ -27,9 +27,13 @@ public class LoginUser {
         return roles.contains(role);
     }
 
+
+    public String getUsername() {
+        return user.getUsername();
+    }
+
     public void checkHasControl(String createBy) {
         if (isAdmin()) return;
-        System.out.println(createBy);
         if (!user.getUsername().equals(createBy)) {
             throw new AuthException();
         }

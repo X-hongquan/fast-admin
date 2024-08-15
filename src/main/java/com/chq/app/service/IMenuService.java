@@ -19,11 +19,10 @@ public interface IMenuService extends IService<Menu> {
 
   Menu getMenuById(Long id);
 
-  int deleteMenuByIds(Long[] ids);
 
     List<Menu> initMenu(Menu menu);
 
    int add(Menu menu);
 
-
+    int removeMenuByIds(Long[] ids);
 }

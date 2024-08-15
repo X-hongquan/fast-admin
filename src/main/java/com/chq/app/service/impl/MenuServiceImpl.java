@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.chq.app.common.annoation.DataScope;
 import com.chq.app.common.domain.LoginUser;
 import com.chq.app.common.exception.ServiceException;
+import com.chq.app.mapper.RoleMenuMapper;
 import com.chq.app.pojo.Menu;
 import com.chq.app.mapper.MenuMapper;
 import com.chq.app.pojo.Role;
+import com.chq.app.pojo.RoleMenu;
 import com.chq.app.service.IMenuService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chq.app.service.IRoleService;
@@ -30,6 +32,9 @@ import java.util.stream.Collectors;
 public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IMenuService {
 
 
+    @Resource
+    private RoleMenuMapper roleMenuMapper;
+
 
     @Override
     @DataScope(alias = "rm", mainAlias = "m")
@@ -49,12 +54,13 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
     }
 
     @Override
-    public int deleteMenuByIds(Long[] ids) {
+    public int removeMenuByIds(Long[] ids) {
         LoginUser loginUser = UserHolder.getUser();
         for (Long id : ids) {
             Menu m = getMenuById(id);
             loginUser.checkHasControl(m.getCreateBy());
         }
+        roleMenuMapper.delete(new LambdaQueryWrapper<RoleMenu>().in(RoleMenu::getMenuId, ids));
         return baseMapper.deleteBatchIds(Arrays.asList(ids));
     }
 

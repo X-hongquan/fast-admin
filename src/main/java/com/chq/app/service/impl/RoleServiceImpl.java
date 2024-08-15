@@ -7,21 +7,20 @@ import com.chq.app.common.exception.ServiceException;
 import com.chq.app.dto.RoleMenuDto;
 import com.chq.app.dto.RolePermissionDto;
 import com.chq.app.mapper.RoleMapper;
-import com.chq.app.mapper.RolePermissionMapper;
+import com.chq.app.mapper.UserRoleMapper;
 import com.chq.app.pojo.*;
 import com.chq.app.service.*;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chq.app.util.SpringUtils;
 import com.chq.app.util.UserHolder;
 import jakarta.annotation.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.Array;
+
 import java.util.*;
 
-import static com.chq.app.common.aspectj.DataScopeAspect.NO_CONTROL;
 
 /**
  * <p>
@@ -45,6 +44,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
 
     @Resource
     private IRoleMenuService roleMenuService;
+
+    @Resource
+    private UserRoleMapper userRoleMapper;
 
 
     @Override
@@ -70,6 +72,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
             Role r = getRoleById(id);
             loginUser.checkHasControl(r.getCreateBy());
         }
+        userRoleMapper.delete(new LambdaQueryWrapper<UserRole>().in(UserRole::getRoleId, ids));
+        roleMenuService.remove(new LambdaQueryWrapper<RoleMenu>().in(RoleMenu::getRoleId, ids));
+        rolePermissionService.remove(new LambdaQueryWrapper<RolePermission>().in(RolePermission::getRoleId, ids));
         return baseMapper.deleteBatchIds(Arrays.asList(ids));
     }
 
@@ -117,5 +122,13 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
             roleMenuService.saveBatch(rms);
         }
         return rms.size();
+    }
+
+    @Override
+    @Transactional
+    public int insertRole(Role role) {
+        save(role);
+        return userRoleMapper.insert(new UserRole().setUserId(UserHolder.getUser().getUser().getId()).setRoleId(role.getId()));
+
     }
 }

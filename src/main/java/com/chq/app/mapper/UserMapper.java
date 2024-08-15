@@ -4,6 +4,7 @@ import com.chq.app.pojo.Role;
 import com.chq.app.pojo.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -18,7 +19,7 @@ import java.util.Set;
 public interface UserMapper extends BaseMapper<User> {
 
 
-    Set<Role> getRoleIdsByUserId(Long id);
+    LinkedHashSet<Role> getRoleIdsByUserId(Long id);
 
     Set<String> getPermissionsByRoleIds(Set<Long> roleIds);
 

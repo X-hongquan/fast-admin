@@ -5,8 +5,9 @@
 
 
     <select id="getRoleIdsByUserId" resultType="com.chq.app.pojo.Role" parameterType="java.lang.Long">
-        select r.id, r.name from role as r
+        select r.id, r.name,r.create_by from role as r
         join user_role as ur on r.id=ur.role_id and ur.user_id = #{userId}
+
     </select>
 
 

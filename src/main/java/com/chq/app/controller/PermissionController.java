@@ -43,13 +43,6 @@ public class PermissionController {
     @GetMapping("/list")
     @PreAuth("system:permission:query")
     public TableInfo<List<Permission>> list(Permission permission) {
-        LoginUser loginUser = UserHolder.getUser();
-        if (permission.getRoleId() != null) {
-            if (!loginUser.containRole(permission.getRoleId())) {
-                roleService.getRoleById(permission.getRoleId());
-                permission.getParams().put(CONTROL, null);
-            }
-        }
         PageUtils.startPage();
         List<Permission> list = permissionService.getList(permission);
         return TableInfo.ok(list);
@@ -76,9 +69,7 @@ public class PermissionController {
     @PreAuth("system:permission:edit")
     public R<Object> edit(@RequestBody Permission permission) {
         Permission p = permissionService.getPermissionById(permission.getId());
-        LoginUser loginUser = UserHolder.getUser();
-        loginUser.checkHasControl(p.getCreateBy());
-
+        UserHolder.getUser().checkHasControl(p.getCreateBy());
         LambdaQueryWrapper<Permission> lqw = new LambdaQueryWrapper<Permission>().eq(Permission::getCode, permission.getCode()).ne(Permission::getId, permission.getId());
         if (permissionService.getOne(lqw) != null) {
             return R.fail("权限码" + permission.getCode() + "已存在");
@@ -90,7 +81,7 @@ public class PermissionController {
     @DeleteMapping("/{ids}")
     @PreAuth("system:permission:remove")
     public R<Object> delete(@PathVariable Long[] ids) {
-        int row = permissionService.deleteRoleByIds(ids);
+        int row = permissionService.removePermissionByIds(ids);
         return R.ok(row);
     }
 }

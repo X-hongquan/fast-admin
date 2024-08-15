@@ -55,13 +55,6 @@ public class UserController {
     @GetMapping("/list")
     @PreAuth("system:user:query")
     public TableInfo<List<User>> list(User user) {
-        LoginUser loginUser = UserHolder.getUser();
-        if (user.getRoleId() != null) {
-            if (!loginUser.containRole(user.getRoleId())) {
-                roleService.getRoleById(user.getRoleId());
-                user.getParams().put(CONTROL, null);
-            }
-        }
         PageUtils.startPage();
         List<User> list = userService.getList(user);
         return TableInfo.ok(list);
@@ -87,8 +80,7 @@ public class UserController {
     @PreAuth("system:user:edit")
     public R<Integer> update(@RequestBody User user) {
         User u = userService.getUserById(user.getId());
-        LoginUser loginUser = UserHolder.getUser();
-        loginUser.checkHasControl(u.getCreateBy());
+        UserHolder.getUser().checkHasControl(u.getCreateBy());
         int row = userService.edit(user);
         return R.ok(row);
     }

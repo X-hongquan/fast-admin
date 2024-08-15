@@ -11,8 +11,10 @@ import com.chq.app.dto.RolePermissionDto;
 import com.chq.app.pojo.Role;
 import com.chq.app.pojo.UserRole;
 import com.chq.app.service.IRoleService;
+import com.chq.app.service.IUserRoleService;
 import com.chq.app.util.PageUtils;
 import com.chq.app.util.UserHolder;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,6 +37,8 @@ public class RoleController {
 
     @Autowired
     private IRoleService roleService;
+
+
 
     @GetMapping("/list")
     @PreAuth("system:role:query")
@@ -59,7 +63,7 @@ public class RoleController {
         if (roleService.getOne(lqw) != null) {
             return R.fail("角色名" + role.getName() + "已存在");
         }
-        roleService.save(role);
+        roleService.insertRole(role);
         return R.ok();
     }
 
@@ -67,8 +71,7 @@ public class RoleController {
     @PreAuth("system:role:edit")
     public R<Object> edit(@RequestBody Role role) {
         Role r = roleService.getRoleById(role.getId());
-        LoginUser loginUser = UserHolder.getUser();
-        loginUser.checkHasControl(r.getCreateBy());
+        UserHolder.getUser().checkHasControl(r.getCreateBy());
         LambdaQueryWrapper<Role> lqw = new LambdaQueryWrapper<Role>().eq(Role::getName, role.getName()).ne(Role::getId, role.getId());
         if (roleService.getOne(lqw) != null) {
             return R.fail("角色名" + role.getName() + "已存在");
@@ -88,8 +91,7 @@ public class RoleController {
     @PreAuth("system:role:edit")
     public R<Object> assignPermission(@RequestBody RolePermissionDto dto) {
         Role r = roleService.getRoleById(dto.getRoleId());
-        LoginUser loginUser = UserHolder.getUser();
-        loginUser.checkHasControl(r.getCreateBy());
+        UserHolder.getUser().checkHasControl(r.getCreateBy());
         int row = roleService.updateRolePermission(dto);
         return R.ok(row);
     }
@@ -98,8 +100,7 @@ public class RoleController {
     @PreAuth("system:role:edit")
     public R<Object> assignMenu(@RequestBody RoleMenuDto dto) {
         Role r = roleService.getRoleById(dto.getRoleId());
-        LoginUser loginUser = UserHolder.getUser();
-        loginUser.checkHasControl(r.getCreateBy());
+        UserHolder.getUser().checkHasControl(r.getCreateBy());
         int row = roleService.updateRoleMenu(dto);
         return R.ok(row);
     }

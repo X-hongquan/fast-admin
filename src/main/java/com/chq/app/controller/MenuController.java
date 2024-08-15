@@ -46,13 +46,6 @@ public class MenuController {
 
     @GetMapping("/list")
     public R<List<Menu>> getList(Menu menu) {
-        LoginUser loginUser = UserHolder.getUser();
-        if (menu.getRoleId() != null) {
-            if (!loginUser.containRole(menu.getRoleId())) {
-                roleService.getRoleById(menu.getRoleId());
-                menu.getParams().put(CONTROL, null);
-            }
-        }
         List<Menu> list = menuService.getList(menu);
         return R.ok(list);
     }
@@ -76,8 +69,7 @@ public class MenuController {
     @PreAuth("system:menu:edit")
     public R<Object> edit(@RequestBody Menu menu) {
         Menu m = menuService.getMenuById(menu.getId());
-        LoginUser loginUser = UserHolder.getUser();
-        loginUser.checkHasControl(m.getCreateBy());
+        UserHolder.getUser().checkHasControl(m.getCreateBy());
         menuService.updateById(menu);
         return R.ok();
     }
@@ -85,7 +77,7 @@ public class MenuController {
     @DeleteMapping("/{ids}")
     @PreAuth("system:menu:remove")
     public R<Integer> delete(@PathVariable Long[] ids) {
-        int row = menuService.deleteMenuByIds(ids);
+        int row = menuService.removeMenuByIds(ids);
         return R.ok(row);
     }
 }

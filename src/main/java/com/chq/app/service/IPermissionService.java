@@ -19,5 +19,6 @@ public interface IPermissionService extends IService<Permission> {
 
     Permission getPermissionById(Long id);
 
-    int deleteRoleByIds(Long[] ids);
+
+    int removePermissionByIds(Long[] ids);
 }

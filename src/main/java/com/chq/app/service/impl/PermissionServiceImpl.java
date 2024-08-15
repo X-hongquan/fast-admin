@@ -1,15 +1,20 @@
 package com.chq.app.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.chq.app.common.annoation.DataScope;
 import com.chq.app.common.domain.LoginUser;
 import com.chq.app.common.exception.ServiceException;
+import com.chq.app.mapper.RolePermissionMapper;
 import com.chq.app.pojo.Permission;
 import com.chq.app.mapper.PermissionMapper;
+import com.chq.app.pojo.RolePermission;
 import com.chq.app.service.IPermissionService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chq.app.util.SpringUtils;
 import com.chq.app.util.UserHolder;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +31,9 @@ import java.util.List;
  */
 @Service
 public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permission> implements IPermissionService {
+
+    @Resource
+    private RolePermissionMapper rolePermissionMapper;
 
     @Override
     @DataScope(alias = "rp", mainAlias = "p")
@@ -45,12 +53,15 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     }
 
     @Override
-    public int deleteRoleByIds(Long[] ids) {
+    @Transactional
+    public int removePermissionByIds(Long[] ids) {
         LoginUser loginUser = UserHolder.getUser();
         for (Long id : ids) {
             Permission p = getPermissionById(id);
             loginUser.checkHasControl(p.getCreateBy());
         }
+
+        rolePermissionMapper.delete(new LambdaQueryWrapper<RolePermission>().in(RolePermission::getPermissionId, ids));
         return baseMapper.deleteBatchIds(Arrays.asList(ids));
     }
 }

@@ -65,6 +65,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Resource
     private MinioConfig minioConfig;
 
+    @Resource
+    private IRoleService roleService;
+
 
     @Override
     @DataScope(alias = "ur", mainAlias = "u")
@@ -121,6 +124,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         List<UserRole> list = new ArrayList<>();
         if (!roles.isEmpty()) {
             for (Role role : roles) {
+                Role r = roleService.getRoleById(role.getId());
+                UserHolder.getUser().checkHasControl(r.getCreateBy());
                 UserRole userRole = new UserRole();
                 userRole.setUserId(user.getId());
                 userRole.setRoleId(role.getId());
@@ -139,13 +144,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         List<UserRole> list = new ArrayList<>();
         if (!roles.isEmpty()) {
             for (Role role : roles) {
+                Role r = roleService.getRoleById(role.getId());
+                UserHolder.getUser().checkHasControl(r.getCreateBy());
                 UserRole userRole = new UserRole();
                 userRole.setUserId(user.getId());
                 userRole.setRoleId(role.getId());
                 list.add(userRole);
             }
-            userRoleService.saveBatch(list);
         }
+        userRoleService.saveBatch(list);
         return row;
     }
 

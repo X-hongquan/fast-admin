@@ -39,7 +39,7 @@ public class BaseEntity {
      * 更新人
      */
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime updateBy;
+    private String updateBy;
 
     /**
      * 更新时间

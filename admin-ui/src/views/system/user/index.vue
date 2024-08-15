@@ -113,7 +113,7 @@ onMounted(() => {
       <el-table-column prop="email" label="邮箱"></el-table-column>
       <el-table-column prop="roles" label="角色">
         <template #default="{row}">
-          <el-tag v-for="(item) in row.roles" :key="item.id" class="t-box">{{ item.name }}</el-tag>
+          <el-tag :type="item.createBy===row.username?'primary':'danger'" v-for="(item) in row.roles" :key="item.id" class="t-box">{{ item.name }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column prop="createBy" label="创建人"></el-table-column>

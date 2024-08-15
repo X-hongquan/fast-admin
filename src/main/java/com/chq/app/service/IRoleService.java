@@ -27,4 +27,6 @@ public interface IRoleService extends IService<Role> {
     int updateRolePermission(RolePermissionDto dto);
 
     int updateRoleMenu(RoleMenuDto dto);
+
+    int insertRole(Role role);
 }

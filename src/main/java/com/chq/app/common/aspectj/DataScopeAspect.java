@@ -49,9 +49,6 @@ public class DataScopeAspect {
     private void handleDataScope(DataScope dataScope, BaseEntity entity) {
         LoginUser loginUser = UserHolder.getUser();
         if (loginUser.isAdmin()) return;
-        if (entity.getRoleId() != null) {
-
-        }
         Set<Role> roles = loginUser.getRoles();
         StringBuilder sb = new StringBuilder("(");
         for (Role role : roles) {
@@ -60,14 +57,11 @@ public class DataScopeAspect {
         sb.deleteCharAt(sb.length() - 1).append(")");
         String sql = null;
 
-        if (entity.getRoleId() != null && entity.getParams().containsKey(CONTROL) && mode == PermissionModeEnum.CAPITALIST) {
-            sql = String.format(" or %s.create_by= '%s' ", dataScope.mainAlias(), loginUser.getUser().getUsername());
-        } else {
-            sql = String.format(" and %s.%s in %s or %s.create_by = '%s' ",
-                    dataScope.alias(), dataScope.value(), sb.toString(), dataScope.mainAlias(),
-                    loginUser.getUser().getUsername()
-            );
-        }
+        sql = String.format("and ( %s.%s in %s or %s.create_by = '%s' )",
+                dataScope.alias(), dataScope.value(), sb, dataScope.mainAlias(),
+                loginUser.getUser().getUsername()
+        );
+
 
         entity.getParams().put(DATA_SCOPE, sql);
 
