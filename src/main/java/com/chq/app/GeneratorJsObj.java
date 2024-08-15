@@ -16,7 +16,7 @@ public class GeneratorJsObj {
         URL url = generatorJsObjClass.getResource(".");
         File file = new File(url.getPath());
 
-        File file1 = new File(System.getProperty("user.dir") + "\\dto.js");
+        File file1 = new File(System.getProperty("user.dir") +File.separator+ "dto.js");
         System.out.println(file1.getAbsolutePath());
         FileWriter fileWriter = new FileWriter(file1);
         traverseDirectory(file,fileWriter);

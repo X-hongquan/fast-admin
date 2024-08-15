@@ -17,24 +17,6 @@ const PasswordForm = reactive({
 	code: undefined,
 })
 
-const MenuDto = reactive({
-	id: undefined,
-	name: undefined,
-	parentId: undefined,
-	component: undefined,
-	url: undefined,
-	sort: undefined,
-	title: undefined,
-	level: undefined,
-	type: undefined,
-	icon: undefined,
-	redirect: undefined,
-	status: undefined,
-	createTime: undefined,
-	updateTime: undefined,
-	children: undefined,
-})
-
 const MessageDto = reactive({
 	theme: undefined,
 	content: undefined,
