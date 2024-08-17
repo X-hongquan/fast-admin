@@ -50,13 +50,13 @@ public class PermissionController {
 
     @GetMapping("/{id}")
     @PreAuth("system:permission:query")
-    public Permission getById(@PathVariable Long id) {
+    public Permission get(@PathVariable Long id) {
         return permissionService.getPermissionById(id);
     }
 
     @PostMapping
     @PreAuth("system:permission:add")
-    public R<Object> add(@RequestBody Permission permission) {
+    public R add(@RequestBody Permission permission) {
         LambdaQueryWrapper<Permission> lqw = new LambdaQueryWrapper<Permission>().eq(Permission::getCode, permission.getCode());
         if (permissionService.getOne(lqw) != null) {
             return R.fail("权限码" + permission.getCode() + "已存在");
@@ -67,7 +67,7 @@ public class PermissionController {
 
     @PutMapping
     @PreAuth("system:permission:edit")
-    public R<Object> edit(@RequestBody Permission permission) {
+    public R edit(@RequestBody Permission permission) {
         Permission p = permissionService.getPermissionById(permission.getId());
         UserHolder.getUser().checkHasControl(p.getCreateBy());
         LambdaQueryWrapper<Permission> lqw = new LambdaQueryWrapper<Permission>().eq(Permission::getCode, permission.getCode()).ne(Permission::getId, permission.getId());
@@ -80,7 +80,7 @@ public class PermissionController {
 
     @DeleteMapping("/{ids}")
     @PreAuth("system:permission:remove")
-    public R<Object> delete(@PathVariable Long[] ids) {
+    public R<Integer> delete(@PathVariable Long[] ids) {
         int row = permissionService.removePermissionByIds(ids);
         return R.ok(row);
     }

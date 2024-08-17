@@ -51,14 +51,14 @@ public class RoleController {
 
     @GetMapping("/{id}")
     @PreAuth("system:role:query")
-    public R getById(@PathVariable Long id) {
+    public R get(@PathVariable Long id) {
         Role role = roleService.getRoleById(id);
         return R.ok(role);
     }
 
     @PostMapping
     @PreAuth("system:role:add")
-    public R<Object> add(@RequestBody Role role) {
+    public R add(@RequestBody Role role) {
         LambdaQueryWrapper<Role> lqw = new LambdaQueryWrapper<Role>().eq(Role::getName, role.getName());
         if (roleService.getOne(lqw) != null) {
             return R.fail("角色名" + role.getName() + "已存在");
@@ -69,7 +69,7 @@ public class RoleController {
 
     @PutMapping
     @PreAuth("system:role:edit")
-    public R<Object> edit(@RequestBody Role role) {
+    public R edit(@RequestBody Role role) {
         Role r = roleService.getRoleById(role.getId());
         UserHolder.getUser().checkHasControl(r.getCreateBy());
         LambdaQueryWrapper<Role> lqw = new LambdaQueryWrapper<Role>().eq(Role::getName, role.getName()).ne(Role::getId, role.getId());
@@ -82,14 +82,14 @@ public class RoleController {
 
     @DeleteMapping("/{ids}")
     @PreAuth("system:role:remove")
-    public R<Object> delete(@PathVariable Long[] ids) {
+    public R<Integer> delete(@PathVariable Long[] ids) {
         int row = roleService.removeRoleByIds(ids);
         return R.ok(row);
     }
 
     @PutMapping("/assign/permission")
     @PreAuth("system:role:edit")
-    public R<Object> assignPermission(@RequestBody RolePermissionDto dto) {
+    public R<Integer> assignPermission(@RequestBody RolePermissionDto dto) {
         Role r = roleService.getRoleById(dto.getRoleId());
         UserHolder.getUser().checkHasControl(r.getCreateBy());
         int row = roleService.updateRolePermission(dto);
@@ -98,7 +98,7 @@ public class RoleController {
 
     @PutMapping("/assign/menu")
     @PreAuth("system:role:edit")
-    public R<Object> assignMenu(@RequestBody RoleMenuDto dto) {
+    public R<Integer> assignMenu(@RequestBody RoleMenuDto dto) {
         Role r = roleService.getRoleById(dto.getRoleId());
         UserHolder.getUser().checkHasControl(r.getCreateBy());
         int row = roleService.updateRoleMenu(dto);

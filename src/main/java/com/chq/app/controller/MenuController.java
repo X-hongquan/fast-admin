@@ -38,14 +38,14 @@ public class MenuController {
     private IRoleService roleService;
 
     @GetMapping("/init")
-    public R<List<Menu>> initMenu(Menu menu) {
+    public R<List<Menu>> init(Menu menu) {
         menu.setRoleId(null);
         List<Menu> list = menuService.initMenu(menu);
         return R.ok(list);
     }
 
     @GetMapping("/list")
-    public R<List<Menu>> getList(Menu menu) {
+    public R<List<Menu>> list(Menu menu) {
         List<Menu> list = menuService.getList(menu);
         return R.ok(list);
     }
@@ -53,21 +53,21 @@ public class MenuController {
 
     @GetMapping("/{id}")
     @PreAuth("system:menu:query")
-    public R<Menu> getById(@PathVariable Long id) {
+    public R<Menu> get(@PathVariable Long id) {
         Menu menu = menuService.getMenuById(id);
         return R.ok(menu);
     }
 
     @PostMapping
     @PreAuth("system:menu:add")
-    public R<Object> add(@RequestBody Menu menu) {
+    public R add(@RequestBody Menu menu) {
         int row = menuService.add(menu);
         return R.ok(row);
     }
 
     @PutMapping
     @PreAuth("system:menu:edit")
-    public R<Object> edit(@RequestBody Menu menu) {
+    public R edit(@RequestBody Menu menu) {
         Menu m = menuService.getMenuById(menu.getId());
         UserHolder.getUser().checkHasControl(m.getCreateBy());
         menuService.updateById(menu);

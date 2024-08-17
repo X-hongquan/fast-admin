@@ -25,7 +25,7 @@ public class SettingController {
 
     @PutMapping
     @PreAuth("system:admin:edit")
-    public R<Object> updatePermissionMode(@RequestBody Setting setting) {
+    public R<Integer> updatePermissionMode(@RequestBody Setting setting) {
         int row = settingService.updatePermissionMode(setting);
         return R.ok(row);
     }
@@ -33,7 +33,7 @@ public class SettingController {
 
     @GetMapping
     @PreAuth("system:admin:query")
-    public R<Setting> getSetting(Setting setting) {
+    public R<Setting> get(Setting setting) {
         Setting byId = settingService.getById(setting.getId());
         return R.ok(byId);
     }

@@ -62,7 +62,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     @PreAuth("system:user:query")
-    public R<User> getById(@PathVariable Long id) {
+    public R<User> get(@PathVariable Long id) {
         User user = userService.getUserById(id);
         return R.ok(user);
     }
@@ -78,7 +78,7 @@ public class UserController {
 
     @PutMapping
     @PreAuth("system:user:edit")
-    public R<Integer> update(@RequestBody User user) {
+    public R<Integer> edit(@RequestBody User user) {
         User u = userService.getUserById(user.getId());
         UserHolder.getUser().checkHasControl(u.getCreateBy());
         int row = userService.edit(user);

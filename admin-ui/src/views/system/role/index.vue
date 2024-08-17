@@ -28,17 +28,28 @@ const menuProps = {
   children: 'children',
   label: 'title',
 }
+
 const mode = ref(false)
 const title = ref('')
 
 const role = reactive({
   id: undefined,
-  name: ''
+  name: undefined,
+  createBy: undefined,
+  createTime: undefined,
+  updateBy: undefined,
+  updateTime: undefined
 })
 
 const total = ref(0)
+
 const selections = ref([])
 
+/**
+ * 选定函数
+ * @param {role[]} val
+ * @returns {Promise<void>}
+ */
 async function handleSelectionChange(val) {
   selections.value = val
 }
@@ -119,6 +130,7 @@ const menus = ref([])
 const menuTree = ref(null)
 
 let menuMap
+
 
 async function handleAssignMenu(row) {
   menuDrawer.value = true
