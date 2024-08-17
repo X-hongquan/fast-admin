@@ -227,11 +227,11 @@ onMounted(() => {
         <el-form-item label="路由路径" required>
           <el-input v-model="menu.url" placeholder="请输入路径"></el-input>
         </el-form-item>
-        <el-form-item label="层级" required>
-          <el-input v-model="menu.level" placeholder="请输入路径"></el-input>
+        <el-form-item label="层级" required >
+          <el-input v-model="menu.level" placeholder="请输入路径" :disabled="lock"></el-input>
         </el-form-item>
-        <el-form-item label="排序" disabled>
-          <el-input v-model="menu.sort" placeholder="请输入排序"></el-input>
+        <el-form-item label="排序" >
+          <el-input v-model="menu.sort" placeholder="请输入排序" disabled></el-input>
         </el-form-item>
         <el-form-item label="重定向">
           <el-input v-model="menu.redirect" placeholder="请输入重定向路径"></el-input>

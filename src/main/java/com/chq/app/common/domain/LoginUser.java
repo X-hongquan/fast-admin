@@ -34,7 +34,7 @@ public class LoginUser {
 
     public void checkHasControl(String createBy) {
         if (isAdmin()) return;
-        if (!user.getUsername().equals(createBy)) {
+        if (!getUsername().equals(createBy)) {
             throw new AuthException();
         }
     }

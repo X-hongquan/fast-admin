@@ -11,7 +11,7 @@
  Target Server Version : 80036 (8.0.36)
  File Encoding         : 65001
 
- Date: 15/08/2024 15:12:28
+ Date: 17/08/2024 18:43:38
 */
 
 SET NAMES utf8mb4;
@@ -56,6 +56,7 @@ INSERT INTO `menu` VALUES (7, 'user-edit', 1, 'system/user/detail/index', '/syst
 INSERT INTO `menu` VALUES (8, 'user-detail', 1, 'system/user/detail/index', '/system/user/detail/:userId', NULL, '用户详细', 2, 2, 'User', 1, '2024-08-02 13:14:49', NULL, '2024-08-02 13:14:49', NULL, 'admin', 0);
 INSERT INTO `menu` VALUES (1823348525811974145, 'log', 1, 'system/log/index', '/system/log', 5, '日志管理', 2, 1, 'Calendar', 1, '2024-08-13 21:18:59', NULL, '2024-08-13 21:18:59', NULL, 'admin', 0);
 INSERT INTO `menu` VALUES (1823701366858686465, 'apiDocument', 0, NULL, 'http://localhost:8080/api/swagger-ui/index.html', 2, '接口文档', 1, 1, 'ChatLineSquare', 1, '2024-08-14 20:41:03', NULL, '2024-08-14 20:41:03', NULL, 'admin', 1);
+INSERT INTO `menu` VALUES (1824754469368238082, 'generator', 1, 'system/generator/index', '/system/generator', 6, '文档生成', 2, 1, 'Box', 1, '2024-08-17 18:25:42', 'admin', '2024-08-17 18:25:42', NULL, 'admin', 0);
 
 -- ----------------------------
 -- Table structure for permission
@@ -133,22 +134,28 @@ CREATE TABLE `role_menu`  (
 -- ----------------------------
 -- Records of role_menu
 -- ----------------------------
-INSERT INTO `role_menu` VALUES (1823963385130225665, 2, 1);
-INSERT INTO `role_menu` VALUES (1823963385130225666, 2, 2);
-INSERT INTO `role_menu` VALUES (1823963385130225667, 2, 8);
-INSERT INTO `role_menu` VALUES (1823963385130225668, 2, 7);
-INSERT INTO `role_menu` VALUES (1823963385130225669, 2, 6);
-INSERT INTO `role_menu` VALUES (1823963385130225670, 2, 3);
-INSERT INTO `role_menu` VALUES (1823963385130225671, 2, 4);
-INSERT INTO `role_menu` VALUES (1823963385130225672, 2, 5);
-INSERT INTO `role_menu` VALUES (1823963385130225673, 2, 1823348525811974145);
-INSERT INTO `role_menu` VALUES (1823963385130225674, 2, 1823701366858686465);
-INSERT INTO `role_menu` VALUES (1823963554991149057, 3, 1);
-INSERT INTO `role_menu` VALUES (1823963554991149058, 3, 3);
-INSERT INTO `role_menu` VALUES (1823963554991149059, 3, 4);
-INSERT INTO `role_menu` VALUES (1823963554991149060, 3, 5);
-INSERT INTO `role_menu` VALUES (1823963554991149061, 3, 2);
-INSERT INTO `role_menu` VALUES (1823963555058257922, 3, 1823701366858686465);
+INSERT INTO `role_menu` VALUES (1824758343051251713, 2, 1);
+INSERT INTO `role_menu` VALUES (1824758343051251714, 2, 1823701366858686465);
+INSERT INTO `role_menu` VALUES (1824758343051251715, 2, 8);
+INSERT INTO `role_menu` VALUES (1824758343051251716, 2, 7);
+INSERT INTO `role_menu` VALUES (1824758343051251717, 2, 6);
+INSERT INTO `role_menu` VALUES (1824758343051251718, 2, 2);
+INSERT INTO `role_menu` VALUES (1824758343051251719, 2, 3);
+INSERT INTO `role_menu` VALUES (1824758343051251720, 2, 4);
+INSERT INTO `role_menu` VALUES (1824758343051251721, 2, 5);
+INSERT INTO `role_menu` VALUES (1824758343051251722, 2, 1823348525811974145);
+INSERT INTO `role_menu` VALUES (1824758343051251723, 2, 1824754469368238082);
+INSERT INTO `role_menu` VALUES (1824758388488146946, 3, 1);
+INSERT INTO `role_menu` VALUES (1824758388488146947, 3, 1823701366858686465);
+INSERT INTO `role_menu` VALUES (1824758388488146948, 3, 2);
+INSERT INTO `role_menu` VALUES (1824758388555255809, 3, 3);
+INSERT INTO `role_menu` VALUES (1824758388555255810, 3, 4);
+INSERT INTO `role_menu` VALUES (1824758388555255811, 3, 5);
+INSERT INTO `role_menu` VALUES (1824758388555255812, 3, 8);
+INSERT INTO `role_menu` VALUES (1824758388555255813, 3, 6);
+INSERT INTO `role_menu` VALUES (1824758388555255814, 3, 7);
+INSERT INTO `role_menu` VALUES (1824758388555255815, 3, 1824754469368238082);
+INSERT INTO `role_menu` VALUES (1824758388555255816, 3, 1823348525811974145);
 
 -- ----------------------------
 -- Table structure for role_permission
@@ -245,6 +252,7 @@ CREATE TABLE `sys_operation_log`  (
 -- ----------------------------
 -- Records of sys_operation_log
 -- ----------------------------
+INSERT INTO `sys_operation_log` VALUES (1824408668871884801, '新增用户', 1, 'com.chq.app.controller.UserController.add()', 'POST', 1, 'admin', '{\"createBy\":\"admin\",\"createTime\":\"2024-08-16 19:31:37.168231\",\"email\":\"2156\",\"id\":\"1824408668771221506\",\"roles\":[{\"id\":\"3\"}],\"status\":1,\"updateBy\":\"admin\",\"updateTime\":\"2024-08-16 19:31:37.168231\",\"username\":\"wqeeqwe\"}', '{\"code\":200,\"data\":1}', 0, '', '2024-08-16 19:31:37', 96);
 
 -- ----------------------------
 -- Table structure for user

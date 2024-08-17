@@ -20,14 +20,14 @@ public class Builder {
     GeneratorFilter api = new APIGeneratorFilter();
 
 
-    public InputStream builderType() {
+    public byte[] builderType() {
         Class<? extends Builder> aClass = this.getClass();
         URL url = aClass.getResource(".");
         String path = url.getFile();
         File files = new File(path);
         StringBuilder sb = new StringBuilder();
         traversTypeFile(sb, files);
-        return new ByteArrayInputStream(sb.toString().getBytes());
+        return sb.toString().getBytes();
 
     }
 
@@ -375,7 +375,7 @@ public class Builder {
             String noParamsJsTemplate = "export function %s() {\n" +
                     "    return request({\n" +
                     "        url: '%s',\n" +
-                    "        method: '%s',\n" +
+                    "        method: '%s'\n" +
                     "    })\n" +
                     "}\n\n";
 
@@ -389,7 +389,7 @@ public class Builder {
             String noParamsTemplate = "export function %s(): Promise<%s> {\n" +
                     "    return request({\n" +
                     "        url: '%s',\n" +
-                    "        method: '%s',\n" +
+                    "        method: '%s'\n" +
                     "    })\n" +
                     "}\n\n";
         }

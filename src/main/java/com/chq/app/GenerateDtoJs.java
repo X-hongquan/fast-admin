@@ -9,18 +9,14 @@ import java.net.URL;
 import java.util.Set;
 
 public class GenerateDtoJs {
-    public static void main(String[] args) {
+    public static byte[] build() {
         Class<GenerateDtoJs> generateDtoJsClass = GenerateDtoJs.class;
         URL url = generateDtoJsClass.getResource(".");
         String path = url.getFile();
         File file = new File(path);
         StringBuilder sb = new StringBuilder();
         fileSee(sb, file);
-        try(FileWriter fw=new FileWriter("D:\\IdeaProject\\hq-admin\\dto.js")) {
-            fw.write(sb.toString());
-        }catch (Exception e) {
-
-        }
+        return sb.toString().getBytes();
     }
 
     public static void fileSee(StringBuilder sb, File files) {
