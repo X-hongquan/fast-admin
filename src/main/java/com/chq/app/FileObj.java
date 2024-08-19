@@ -11,4 +11,8 @@ public class FileObj {
 
     private byte[] bytes;
     private String fileName;
+
+    public String getData() {
+        return new String(bytes);
+    }
 }

@@ -70,7 +70,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
 
     @Override
-    @DataScope(alias = "ur", mainAlias = "u")
+    @DataScope(alias = "ur")
     public List<User> getList(User user) {
         List<User> userList = baseMapper.getUserList(user);
         for (User u : userList) {

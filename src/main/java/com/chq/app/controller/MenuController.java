@@ -1,6 +1,7 @@
 package com.chq.app.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.chq.app.common.domain.LoginUser;
 import com.chq.app.common.domain.R;
 import com.chq.app.common.annoation.PreAuth;
@@ -15,7 +16,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import static com.chq.app.common.aspectj.DataScopeAspect.CONTROL;
 
 /**
  * <p>
@@ -33,9 +33,6 @@ public class MenuController {
     @Resource
     private IMenuService menuService;
 
-
-    @Resource
-    private IRoleService roleService;
 
     @GetMapping("/init")
     public R<List<Menu>> init(Menu menu) {
@@ -70,7 +67,7 @@ public class MenuController {
     public R edit(@RequestBody Menu menu) {
         Menu m = menuService.getMenuById(menu.getId());
         UserHolder.getUser().checkHasControl(m.getCreateBy());
-        menuService.updateById(menu);
+        menuService.updateMenu(m, menu);
         return R.ok();
     }
 

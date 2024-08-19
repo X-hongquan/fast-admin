@@ -17,7 +17,6 @@ import java.util.List;
 public interface MenuMapper extends BaseMapper<Menu> {
 
 
-
     List<Menu> getMenuList(Menu menu);
 
     List<Menu> getInitMenu(Menu menu);
@@ -25,4 +24,5 @@ public interface MenuMapper extends BaseMapper<Menu> {
     int selectMaxSortBySameParentId(Menu menu);
 
 
+    int updateMenuAdaptSort(Menu fresh);
 }

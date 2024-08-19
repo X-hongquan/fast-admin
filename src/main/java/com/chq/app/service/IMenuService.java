@@ -25,4 +25,6 @@ public interface IMenuService extends IService<Menu> {
    int add(Menu menu);
 
     int removeMenuByIds(Long[] ids);
+
+    void updateMenu(Menu old,Menu fresh);
 }

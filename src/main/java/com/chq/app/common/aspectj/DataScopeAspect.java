@@ -56,11 +56,8 @@ public class DataScopeAspect {
         }
         sb.deleteCharAt(sb.length() - 1).append(")");
         String sql = null;
-
-        sql = String.format("and ( %s.%s in %s or %s.create_by = '%s' )",
-                dataScope.alias(), dataScope.value(), sb, dataScope.mainAlias(),
-                loginUser.getUser().getUsername()
-        );
+        sql = String.format("and  %s.%s in %s",
+                dataScope.alias(), dataScope.value(), sb);
 
 
         entity.getParams().put(DATA_SCOPE, sql);

@@ -50,7 +50,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
 
 
     @Override
-    @DataScope(alias = "r", value = "id", mainAlias = "r")
+    @DataScope(alias = "r", value = "id")
     public List<Role> getList(Role role) {
         return baseMapper.getList(role);
     }

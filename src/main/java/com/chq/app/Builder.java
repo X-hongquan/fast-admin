@@ -53,7 +53,7 @@ public class Builder {
                     APIItem apiItem = new APIItem(className);
                     String render = apiItem.render(mode);
                     String s = StringUtils.substringAfterLast(className, ".");
-                    String fileName = s.replace("Controller", "").toLowerCase(Locale.ROOT);
+                    String fileName = s.replace("Controller", "").toLowerCase(Locale.ROOT)+"."+mode;
                     objs.add(new FileObj(render.getBytes(), fileName));
 
                 }

@@ -218,20 +218,20 @@ onMounted(() => {
             <el-option v-for="item in menus" :key="item.id" :label="item.title" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="组件" required>
+        <el-form-item label="组件" >
           <el-input v-model="menu.component" placeholder="请输入组件路径"></el-input>
         </el-form-item>
-        <el-form-item label="路由名称">
+        <el-form-item label="路由名称" required>
           <el-input v-model="menu.name" placeholder="请输入名称"></el-input>
         </el-form-item>
-        <el-form-item label="路由路径" required>
+        <el-form-item label="路径" required>
           <el-input v-model="menu.url" placeholder="请输入路径"></el-input>
         </el-form-item>
         <el-form-item label="层级" required >
-          <el-input v-model="menu.level" placeholder="请输入路径" :disabled="lock"></el-input>
+          <el-input v-model="menu.level" placeholder="请输入层级" disabled></el-input>
         </el-form-item>
         <el-form-item label="排序" >
-          <el-input v-model="menu.sort" placeholder="请输入排序" disabled></el-input>
+          <el-input v-model="menu.sort" placeholder="请输入排序" :disabled="lock"></el-input>
         </el-form-item>
         <el-form-item label="重定向">
           <el-input v-model="menu.redirect" placeholder="请输入重定向路径"></el-input>

@@ -1,6 +1,9 @@
 <script setup>
-import {generateAPIGeneratorAPI, generateTypeJSGeneratorAPI} from '@/api/generator.js'
+import {generateAPIGeneratorAPI, generateTypeJSGeneratorAPI, listGenerateAPI} from '@/api/generator.js'
+import {onMounted, ref} from "vue";
+import CodeBox from '@/components/CodeBox/index.vue'
 
+const list = ref([])
 
 async function downloadCode(mode) {
   let data
@@ -18,12 +21,12 @@ async function downloadCode(mode) {
     }
     case 'type-js': {
       data = await generateTypeJSGeneratorAPI('js')
-      ext = 'dto.js'
+      ext = 'type.js'
       break
     }
     case 'type-ts': {
       data = await generateTypeJSGeneratorAPI('ts')
-      ext = 'model.ts'
+      ext = 'type.ts'
       break
     }
   }
@@ -35,16 +38,25 @@ async function downloadCode(mode) {
   htmlAnchorElement.remove()
 }
 
+async function getList() {
+  const res = await listGenerateAPI()
+  list.value = res.data
+}
+
+onMounted(() => {
+  getList()
+})
 </script>
 
 <template>
   <div class="content-box">
     <div class="operation-box">
-      <el-button type="primary" @click="downloadCode('api-js')">下载APITS</el-button>
-      <el-button type="primary" @click="downloadCode('api-ts')">下载APIJS</el-button>
-      <el-button type="primary" @click="downloadCode('type-js')">下载TypeJS</el-button>
-      <el-button type="primary" @click="downloadCode('type-ts')">下载TypeTS</el-button>
+      <el-button type="primary" @click="downloadCode('api-ts')">下载API-TS</el-button>
+      <el-button type="primary" @click="downloadCode('api-js')">下载API-JS</el-button>
+      <el-button type="primary" @click="downloadCode('type-js')">下载Type-JS</el-button>
+      <el-button type="primary" @click="downloadCode('type-ts')">下载Type-TS</el-button>
     </div>
+    <CodeBox v-for="item in list" :data="item.data" :header="item.fileName" :key="item.id"></CodeBox>
   </div>
 </template>
 

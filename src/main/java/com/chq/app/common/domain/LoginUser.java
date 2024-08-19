@@ -23,6 +23,8 @@ public class LoginUser {
 
     private Set<Long> roleKeys;
 
+
+
     public boolean isAdmin() {
         return roles.contains(role);
     }

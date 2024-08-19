@@ -3,9 +3,13 @@ package com.chq.app;
 import com.chq.app.pojo.User;
 import com.chq.app.service.IUserService;
 import com.chq.app.util.JavaMailUntil;
+import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.Cursor;
+import org.springframework.data.redis.core.ScanOptions;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.mail.Message;
@@ -23,6 +27,9 @@ class AppApplicationTests {
 
     @Autowired
     private Session smtpSession;
+
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
     @Test
     void contextLoads() {
         User user = new User();
@@ -41,8 +48,17 @@ class AppApplicationTests {
         message.setFrom(new InternetAddress("1097274644@qq.com"));
         message.setRecipient(Message.RecipientType.TO, new InternetAddress("1097274644@qq.com"));
 
-//	发送
+//	发
         Transport.send(message);
+    }
+
+
+    @Test
+    void test1() {
+        Cursor<String> scan = stringRedisTemplate.scan(ScanOptions.scanOptions().match("*").build());
+        while (scan.hasNext()) {
+            System.out.println(scan.next());
+        }
     }
 
 }

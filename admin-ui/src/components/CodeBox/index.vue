@@ -8,6 +8,10 @@ const prop=defineProps({
     type:String,
     default:''
   }
+  ,header:{
+    type:String,
+    default:''
+  }
 })
 const CodeDiv = ref(null)
 
@@ -27,6 +31,7 @@ function copyText() {
 
 <template>
 <div class="code-box" ref="CodeDiv">
+  <div class="header">{{header}}</div>
   <span>{{data}}</span>
   <el-tooltip content="复制" >
     <div class="cb-cp" @click="copyText"> <el-icon><CopyDocument /></el-icon></div>
@@ -47,7 +52,11 @@ function copyText() {
   color: #9bd8ed;
   border: 1px solid #ccc;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin:20px 0;
+  .header {
 
+    color: yellow;
+  }
   .cb-cp {
     position: absolute;
     right: 10px;

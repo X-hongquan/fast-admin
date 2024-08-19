@@ -37,7 +37,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
 
 
     @Override
-    @DataScope(alias = "rm", mainAlias = "m")
+    @DataScope(alias = "rm")
     public List<Menu> getList(Menu menu) {
         List<Menu> list = baseMapper.getMenuList(menu);
         return list;
@@ -65,7 +65,16 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
     }
 
     @Override
-    @DataScope(alias = "rm",mainAlias = "m")
+    public void updateMenu(Menu old, Menu fresh) {
+        if (!old.getSort().equals(fresh.getSort())) {
+            baseMapper.updateMenuAdaptSort(fresh);
+        }
+        updateById(fresh);
+    }
+
+
+    @Override
+    @DataScope(alias = "rm")
     public List<Menu> initMenu(Menu menu) {
         return baseMapper.getInitMenu(menu);
     }

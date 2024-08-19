@@ -36,7 +36,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     private RolePermissionMapper rolePermissionMapper;
 
     @Override
-    @DataScope(alias = "rp", mainAlias = "p")
+    @DataScope(alias = "rp")
     public List<Permission> getList(Permission permission) {
         List<Permission> list = baseMapper.getPermissionList(permission);
         return list;

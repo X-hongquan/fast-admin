@@ -16,4 +16,10 @@ export function generateTypeJSGeneratorAPI(mode) {
         responseType: 'blob'
     })
 }
+export function listGenerateAPI() {
+    return request({
+        url: `/generate/list`,
+        method: 'get',
+    })
+}
 

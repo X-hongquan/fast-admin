@@ -78,17 +78,13 @@ const logEntity = reactive({
 })
 
 function handleDetail(row) {
-  const p={...row}
+  const p = {...row}
   p.operationParam = JSON.stringify(JSON.parse(row.operationParam), null, 2)
   p.jsonResult = JSON.stringify(JSON.parse(row.jsonResult), null, 2)
   Object.assign(logEntity, p)
   mode.value = true
 
 }
-
-
-
-
 
 
 onMounted(() => {
@@ -175,12 +171,10 @@ onMounted(() => {
     <p class="my-h">操作时间: {{ logEntity.operationTime }}</p>
     <p class="my-h">操作类型: {{ logEntity.businessTypeLabel }}</p>
     <p class="my-h">状态: {{ logEntity.status === 0 ? '成功' : '失败' }}</p>
-    <p class="my-h">请求参数</p>
-    <CodeBox :data="logEntity.operationParam"></CodeBox>
-    <p class="my-h">响应数据</p>
-    <CodeBox :data="logEntity.jsonResult"></CodeBox>
-    <p class="my-h">异常信息</p>
-    <CodeBox :data="logEntity.errorMsg"></CodeBox>
+
+    <CodeBox :data="logEntity.operationParam" header="请求参数"></CodeBox>
+    <CodeBox :data="logEntity.jsonResult" header="相应数据"></CodeBox>
+    <CodeBox :data="logEntity.errorMsg" header="异常信息"></CodeBox>
 
   </el-dialog>
 </template>

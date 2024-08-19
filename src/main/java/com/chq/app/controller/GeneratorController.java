@@ -3,6 +3,7 @@ package com.chq.app.controller;
 import com.chq.app.Builder;
 import com.chq.app.FileObj;
 import com.chq.app.GenerateDtoJs;
+import com.chq.app.common.domain.R;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +37,7 @@ public class GeneratorController {
         builder.builderAPI(mode, fileObjs);
         ZipOutputStream zos = new ZipOutputStream(response.getOutputStream());
         for (FileObj fileObj : fileObjs) {
-            String fileName = fileObj.getFileName() + "." + mode;
+            String fileName = fileObj.getFileName();
             ZipEntry zipEntry = new ZipEntry(fileName);
             zos.putNextEntry(zipEntry);
             zos.write(fileObj.getBytes());
@@ -44,4 +45,16 @@ public class GeneratorController {
         }
         zos.close();
     }
+
+    @GetMapping("/list")
+    public R<List<FileObj>> list() {
+        List<FileObj> list = new ArrayList<>();
+        Builder builder = new Builder();
+        list.add(new FileObj(GenerateDtoJs.build(), "type.js"));
+        builder.builderAPI("js",list);
+        list.add(new FileObj(builder.builderType(), "type.d.ts"));
+        builder.builderAPI("ts",list);
+        return R.ok(list);
+    }
+
 }
