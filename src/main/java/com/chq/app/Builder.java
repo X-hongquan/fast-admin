@@ -53,7 +53,7 @@ public class Builder {
                     APIItem apiItem = new APIItem(className);
                     String render = apiItem.render(mode);
                     String s = StringUtils.substringAfterLast(className, ".");
-                    String fileName = s.replace("Controller", "").toLowerCase(Locale.ROOT)+"."+mode;
+                    String fileName = s.replace("Controller", "").toLowerCase(Locale.ROOT) + "." + mode;
                     objs.add(new FileObj(render.getBytes(), fileName));
 
                 }
@@ -244,6 +244,13 @@ public class Builder {
         private String method;
         private String uri;
         private String paramsKey;
+        private boolean isDelete;
+
+        public boolean isDelete() {
+            boolean delete = isDelete;
+            isDelete = false;
+            return delete;
+        }
 
         public String getMethod() {
             String _method = method;
@@ -332,7 +339,8 @@ public class Builder {
         String prefix = "";
         String entityName = "";
         Set<String> types = new LinkedHashSet<>();
-        String importTemplate = "import request from '../utils/request'\n\n\n";
+        String jsImportTemplate = "import request from '@/utils/request.js'\n\n";
+        String tsImportTemplate = "import request from '../utils/request.ts'\n\n";
 
 
         public APIItem(Class<?> clazz) {
@@ -473,7 +481,11 @@ public class Builder {
         @Override
         public String render(@Nullable String s) {
             buildBody(clazz);
-            StringBuilder sb = new StringBuilder(importTemplate);
+            String head = tsImportTemplate;
+            if ("js".equals(s)) {
+                head = jsImportTemplate;
+            }
+            StringBuilder sb = new StringBuilder(head);
             if (!"js".equals(s)) {
                 StringBuilder importType = new StringBuilder("import {");
                 for (String type : types) {

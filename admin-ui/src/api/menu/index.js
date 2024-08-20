@@ -17,8 +17,9 @@ export function getMenuListAPI(params) {
 
 export function getMenuAPI(id) {
     return request({
-        url: `/menu/${id}`,
+        url: `/menu/{id}`,
         method: "get",
+        params: id
     })
 }
 

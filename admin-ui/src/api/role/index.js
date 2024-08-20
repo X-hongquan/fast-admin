@@ -11,8 +11,9 @@ export function getRoleListAPI(params) {
 
 export function getRoleAPI(id) {
     return request({
-        url: `/role/${id}`,
-        method: 'get'
+        url: `/role/{id}`,
+        method: 'get',
+        params: id
     })
 }
 
@@ -34,7 +35,7 @@ export function updateRoleAPI(data) {
 
 export function deleteRoleAPI(ids) {
     return request({
-        url: `/role`,
+        url: `/role/{ids}`,
         method: 'delete',
         params: ids
     })

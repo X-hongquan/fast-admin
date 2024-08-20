@@ -49,8 +49,7 @@ public class LogAspect {
     private static final Logger log = LoggerFactory.getLogger(LogAspect.class);
 
 
-    @Resource
-    private ObjectMapper objectMapper;
+
     /**
      * 排除敏感属性字段
      */

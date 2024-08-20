@@ -16,7 +16,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.TimeZone;
 
 @Configuration
-public class JsonConfig {
+public class JacksonConfig {
 
     @Value("${spring.jackson.time-zone}")
     private String timeZone;

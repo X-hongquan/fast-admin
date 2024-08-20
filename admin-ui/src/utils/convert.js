@@ -9,7 +9,9 @@ export function objToQueryString(obj) {
 
 export function idsToPathVariable(ids) {
     if (ids instanceof Array) {
-        return  ids.join(',')
+        return ids.join(',')
+    } else {
+        return ids
     }
 }
 

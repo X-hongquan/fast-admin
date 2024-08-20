@@ -25,8 +25,9 @@ export function getUserInfoAPI() {
 
 export function sendEmailCodeAPI(val) {
     return request({
-        url: `/user/info/code/${val}`,
-        method: 'get'
+        url: `/user/info/code/{val}`,
+        method: 'get',
+        params: val
     })
 }
 
@@ -98,7 +99,7 @@ export function updateUserAPI(data) {
 }
 export function deleteUserAPI(ids) {
     return request({
-        url: `/user`,
+        url: '/user/{ids}',
         method: 'delete',
         params: ids
     })

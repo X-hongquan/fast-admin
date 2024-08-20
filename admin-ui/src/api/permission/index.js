@@ -11,8 +11,9 @@ export function getPermissionListAPI(params) {
 
 export function getPermissionAPI(id) {
     return request({
-        url: `/permission/${id}`,
-        method: 'get'
+        url: `/permission/{id}`,
+        method: 'get',
+        params: id
     })
 }
 
@@ -34,7 +35,7 @@ export function updatePermissionAPI(data) {
 
 export function deletePermissionAPI(ids) {
     return request({
-        url: `/permission`,
+        url: `/permission/{ids}`,
         method: 'delete',
         params: ids
     })

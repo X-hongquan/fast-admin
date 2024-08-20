@@ -9,6 +9,7 @@ import com.chq.app.common.domain.LoginUser;
 import com.chq.app.common.domain.R;
 
 import com.chq.app.common.enums.ExecuteType;
+import com.chq.app.config.JSONFilter;
 import com.chq.app.config.MinioConfig;
 import com.chq.app.dto.MessageDto;
 import com.chq.app.common.exception.ServiceException;
@@ -101,7 +102,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
         String uuid = IdWorker.get32UUID();
         String jwt = JwtUtil.createJwt(uuid);
-        stringRedisTemplate.opsForValue().set(LOGIN_USER + uuid, JSON.toJSONString(loginUser), ONLINE_TIME, TimeUnit.SECONDS);
+        stringRedisTemplate.opsForValue().set(LOGIN_USER + uuid, JSON.toJSONString(loginUser, JSONFilter.excludePropertyPreFilter()), ONLINE_TIME, TimeUnit.SECONDS);
         return jwt;
 
     }
