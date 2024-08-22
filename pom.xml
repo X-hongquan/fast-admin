@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.chq</groupId>
-    <artifactId>hq-admin</artifactId>
+    <artifactId>fast-admin</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>hq-admin</name>
-    <description>hq-admin</description>
+    <name>fast-admin</name>
+    <description>fast-admin</description>
     <url/>
     <licenses>
         <license/>

@@ -10,9 +10,10 @@ defineProps({
 const router = useRouter()
 
 let documentElement
+
 function goMenu(item) {
-  if (item.link===0)
-  router.push(item.url)
+  if (item.link === 0)
+    router.push(item.url)
   else {
     if (!documentElement) {
       documentElement = document.createElement('a')
@@ -21,6 +22,19 @@ function goMenu(item) {
     }
     documentElement.click()
   }
+}
+
+function checkChildrenHasMenu(children) {
+  if (children && children.length == 0) return true
+  console.log(children)
+  if (children instanceof Array) {
+    for (const child of children) {
+      if (child.type !== 2) {
+        return true
+      }
+    }
+  }
+  return false
 }
 </script>
 
@@ -32,7 +46,7 @@ export default {
 
 <template>
   <template v-for="item in menus">
-    <template v-if="!item.children">
+    <template v-if="!checkChildrenHasMenu(item.children)">
       <el-menu-item v-if="item.type===2?false:true" :index="item.url" @click="goMenu(item)">
         <el-icon>
           <component :is="item.icon"></component>

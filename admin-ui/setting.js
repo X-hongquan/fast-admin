@@ -1,5 +1,5 @@
 const setting = {
-    logoTitle: 'hq-admin',
+    logoTitle: 'fast-admin',
 }
 
 export default setting

@@ -1,5 +1,5 @@
 <script setup>
-import {onMounted, reactive, ref} from "vue";
+import {onMounted, onUnmounted, reactive, ref} from "vue";
 
 import {ArrowRight} from "@element-plus/icons-vue";
 import CodeBox from '@/components/CodeBox/index.vue'
@@ -7,13 +7,10 @@ import CodeBox from '@/components/CodeBox/index.vue'
 import {addCacheAPI, delCacheAPI, infoCacheAPI, listCacheAPI} from "@/api/cache/index.js";
 import {handleConfirmAdd, handleConfirmDel} from "@/utils/confirm.js";
 import {addNotification, deleteNotification} from "@/utils/notification.js";
+import {useRouter} from "vue-router";
 
 
-const cacheDto = reactive({
-  value: undefined,
-  key: undefined,
-  expire: undefined
-})
+const router = useRouter()
 
 const cacheEntity = reactive({
   value: undefined,
@@ -29,40 +26,20 @@ async function getCacheKeys() {
     keysObj.value = res.data
 }
 
-let times
-
-async function getCacheValue(key) {
-  clearInterval(times)
-  const res = await infoCacheAPI(key)
-  if (res.code === 200) {
-    let val = res.data.value
-    try {
-      cacheDto.value = JSON.stringify(JSON.parse(val), null, 2)
-    } catch (e) {
-      cacheDto.value = val
-    }
-    cacheDto.expire = res.data.expire
-    cacheDto.key = key
-    times = setInterval(() => {
-      cacheDto.expire--
-    }, 1000)
-
-  }
-}
 
 const dialog = ref(false)
 
 function handleNodeInfo(data) {
-  if (!data.children)
-    getCacheValue(data.allKey)
+  if (!data.children || data.children.length === 0)
+    router.push({name: 'cacheInfo', params: {key: data.allKey}})
 }
 
 function handleNodeDelete(data) {
   handleConfirmDel(async () => {
-    const res=await delCacheAPI(data)
-     deleteNotification(res, () => {
-       getCacheKeys()
-     })
+    const res = await delCacheAPI(data)
+    deleteNotification(res, () => {
+      getCacheKeys()
+    })
   })
 }
 
@@ -82,10 +59,36 @@ async function addKey() {
   })
 }
 
+const times = ref(2)
+let timesMy
+
+function refresh() {
+  timesMy = setInterval(() => {
+    getCacheKeys()
+  }, 1000 * times.value)
+}
+
+const autoRefresh = ref(true)
+
+function stopRefresh() {
+  if (timesMy) {
+    clearInterval(timesMy)
+    timesMy = undefined
+    autoRefresh.value = false
+  } else {
+    refresh()
+    autoRefresh.value = true
+  }
+
+}
 
 
+refresh()
 onMounted(() => {
   getCacheKeys()
+})
+onUnmounted(() => {
+    clearInterval(timesMy)
 })
 </script>
 
@@ -93,6 +96,15 @@ onMounted(() => {
 
   <div class="mt-box">
     <div class="key-box card-box">
+      <el-form inline>
+        <el-form-item label="自动刷新">
+          <el-input v-model="times" type="number" :disabled="autoRefresh"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="stopRefresh" :type="autoRefresh?'danger':''">{{ autoRefresh ? '停止' : '启动' }}自动刷新
+          </el-button>
+        </el-form-item>
+      </el-form>
       <el-tree
           style="max-width: 600px"
           :data="keysObj"
@@ -104,7 +116,7 @@ onMounted(() => {
         <span class="custom-tree-node" @click="handleNodeInfo(data)">
           <span>{{ node.key }}</span>
           <span>
-            <el-button type="text"  icon="Delete" @click="handleNodeDelete(data)"></el-button>
+            <el-button type="text" icon="Delete" @click="handleNodeDelete(data)"></el-button>
           </span>
         </span>
         </template>
@@ -116,9 +128,7 @@ onMounted(() => {
       </el-icon>
     </div>
     <div class="value-box">
-      <div style="display: flex;align-items: center;justify-content: space-between"><span>TTL: {{ cacheDto.expire }}</span>
-        <el-button type="danger" @click="handleNodeDelete({allKey:cacheDto.key})">删除</el-button></div>
-      <CodeBox :data="cacheDto.value" :header="cacheDto.key"></CodeBox>
+      <router-view></router-view>
     </div>
   </div>
   <el-dialog v-model="dialog" title="新增缓存" width="600">
@@ -186,6 +196,7 @@ onMounted(() => {
 
 
 }
+
 .custom-tree-node {
   flex: 1;
   display: flex;

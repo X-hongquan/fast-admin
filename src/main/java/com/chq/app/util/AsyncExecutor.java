@@ -39,14 +39,19 @@ public class AsyncExecutor {
 
     public static <T> void execute(Runnable runnable, ExecuteType type, T t) {
         switch (type) {
-            case MAIl-> {
+            case MAIl -> {
                 executeSendEmail(runnable, (MessageDto) t);
             }
-            case LOG-> {
+            case LOG -> {
                 executeRecordLog(runnable, (OperationLog) t);
             }
-            default -> {}
+            default -> {
+            }
         }
+    }
+
+    public static void execute(Runnable runnable) {
+        executorService.execute(runnable);
     }
 
 }

@@ -10,7 +10,7 @@ import Main from './main/index.vue'
 const router = useRouter()
 
 function goMenu(item) {
-  router.push(item.index)
+  router.push(item)
 }
 
 const userStore = useUserStore()
@@ -26,7 +26,7 @@ const settingStore = useSettingStore()
       <el-scrollbar class="scrollbar">
         <el-menu background-color="#001529" text-color="#fff" :default-active="$route.path"
                  :collapse="settingStore.fold" :collapse-transition="false">
-          <el-menu-item index="/home" @click="goMenu">
+          <el-menu-item index="/home" @click="goMenu('/home')">
             <el-icon>
               <HomeFilled/>
             </el-icon>

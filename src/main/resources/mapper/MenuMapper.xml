@@ -39,7 +39,7 @@
             group by m.id order by m.level,m.sort
     </select>
     <select id="selectMaxSortBySameParentId" resultType="java.lang.Integer">
-            select max(sort) from menu where parent_id = #{parentId}
+            select ifnull(max(sort),1) from menu where parent_id = #{parentId}
     </select>
 
 
