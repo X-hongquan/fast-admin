@@ -1,4 +1,4 @@
-package com.chq.app;
+package com.chq.app.generator;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

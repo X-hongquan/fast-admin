@@ -68,7 +68,6 @@ public class CacheController {
         if (!prefix.contains(":")) {
             parent.setKey(prefix);
             list.add(parent);
-            return;
         } else {
             transKey(StringUtils.substringBeforeLast(prefix, ":"), parent, map, list);
         }

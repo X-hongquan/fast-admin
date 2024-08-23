@@ -20,12 +20,7 @@ const router = createRouter({
                     path: '/person',
                     name: 'person',
                     component: () => import('@/views/person/index.vue'),
-                    meta: {title: '个人中心',icon: 'User'}
-                },
-                {
-                    path: '/404',
-                    name: '404',
-                    component: () => import('@/views/404/index.vue'),
+                    meta: {title: '个人中心', icon: 'User'}
                 }
             ]
         },
@@ -35,6 +30,11 @@ const router = createRouter({
             component: () => import('@/views/login/index.vue'),
             meta: {title: '登录页面'}
         },
+        {
+            path: '/404',
+            name: '404',
+            component: () => import('@/views/404/index.vue'),
+        }
 
 
     ]

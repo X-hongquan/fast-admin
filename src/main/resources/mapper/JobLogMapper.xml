@@ -16,6 +16,7 @@
             and jl.job_id = #{jobId}
         </if>
         <if test="handleStatus!=null">
+
             and jl.handle_status = #{handleStatus}
         </if>
         <if test="handleTime!=null">

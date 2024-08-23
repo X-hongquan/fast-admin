@@ -2,10 +2,10 @@
 import {onMounted, onUnmounted, reactive, ref} from "vue";
 
 import {ArrowRight} from "@element-plus/icons-vue";
-import CodeBox from '@/components/CodeBox/index.vue'
 
-import {addCacheAPI, delCacheAPI, infoCacheAPI, listCacheAPI} from "@/api/cache/index.js";
-import {handleConfirmAdd, handleConfirmDel} from "@/utils/confirm.js";
+
+import {addCacheAPI, delCacheAPI, listCacheAPI} from "@/api/cache/index.js";
+import {handleConfirmDel} from "@/utils/confirm.js";
 import {addNotification, deleteNotification} from "@/utils/notification.js";
 import {useRouter} from "vue-router";
 
@@ -20,10 +20,26 @@ const cacheEntity = reactive({
 
 const keysObj = ref([])
 
+
+
+/**
+ * 如果key比较多，这个操作可能比较耗时，所以加锁防止重复无限调用，
+ * 如果超过axios配置的timeout 时间，会抛出异常
+ */
+let lock = true
 async function getCacheKeys() {
-  const res = await listCacheAPI()
-  if (res.code === 200)
-    keysObj.value = res.data
+  if (lock) {
+    try {
+      lock = false
+      const res = await listCacheAPI()
+      if (res.code === 200) {
+        keysObj.value = res.data
+      }
+    } catch (e) {
+    } finally {
+      lock = true
+    }
+  }
 }
 
 
@@ -88,7 +104,7 @@ onMounted(() => {
   getCacheKeys()
 })
 onUnmounted(() => {
-    clearInterval(timesMy)
+  clearInterval(timesMy)
 })
 </script>
 

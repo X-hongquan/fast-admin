@@ -13,7 +13,4 @@ public @interface DataScope {
 
     String alias() default "";
 
-    String mainAlias() default "";
-
-
 }

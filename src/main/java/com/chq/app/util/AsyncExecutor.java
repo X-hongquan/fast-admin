@@ -7,6 +7,7 @@ import com.chq.app.service.IOperationLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -20,38 +21,44 @@ public class AsyncExecutor {
     private static final ExecutorService executorService = Executors.newFixedThreadPool(DEFAULT_THREAD_POOL_SIZE);
 
 
-    private static void executeSendEmail(Runnable runnable, MessageDto dto) {
-        try {
-            executorService.execute(runnable);
-        } catch (Exception e) {
-            log.error("发送邮件失败,主题={},内容={},接收人={}", dto.getTheme(), dto.getContent(), dto.getTo());
-        }
-    }
+    private static void executeSendEmail(MessageDto dto) {
 
-    private static void executeRecordLog(Runnable runnable, OperationLog operationLog) {
-        try {
-            executorService.execute(runnable);
-        } catch (Exception e) {
-            log.error("记录日志失败,日志内容={}", operationLog);
-        }
+        executorService.execute(() -> {
+            try {
+                JavaMailUntil.sendMail(dto);
+            } catch (Exception e) {
+                log.error("发送邮件失败,{}", dto);
+            }
+        });
     }
 
 
-    public static <T> void execute(Runnable runnable, ExecuteType type, T t) {
+    private static void executeRecordLog(OperationLog operationLog) {
+
+        executorService.execute(() -> {
+            try {
+                IOperationLogService bean = SpringUtils.getBean(IOperationLogService.class);
+                bean.save(operationLog);
+            } catch (Exception e) {
+                log.error("记录日志失败,{}", operationLog);
+            }
+        });
+
+    }
+
+    public static <T> void execute(ExecuteType type, T t) {
         switch (type) {
             case MAIl -> {
-                executeSendEmail(runnable, (MessageDto) t);
+                executeSendEmail((MessageDto) t);
             }
             case LOG -> {
-                executeRecordLog(runnable, (OperationLog) t);
+                executeRecordLog((OperationLog) t);
             }
             default -> {
             }
         }
     }
 
-    public static void execute(Runnable runnable) {
-        executorService.execute(runnable);
-    }
+
 
 }

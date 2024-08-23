@@ -43,7 +43,6 @@ public class RoleController {
     @GetMapping("/list")
     @PreAuth("system:role:query")
     public TableInfo<List<Role>> list(Role role) {
-        role.getParams().put(NO_CONTROL, null);
         PageUtils.startPage();
         List<Role> list = roleService.getList(role);
         return TableInfo.ok(list);

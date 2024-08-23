@@ -1,9 +1,7 @@
-package com.chq.app;
+package com.chq.app.generator;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.io.ByteArrayInputStream;
 
 @AllArgsConstructor
 @Data

@@ -2,7 +2,6 @@ package com.chq.app.schedule;
 
 public class JobTemplate {
 
-
     @Job("print")
     public void print() {
         System.out.println("我打印一");

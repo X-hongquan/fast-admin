@@ -1,5 +1,5 @@
 export function checkUserName(rule, value, callback) {
-    if (value.length < 4) {
+    if (value.length < 5) {
         callback(new Error('用户名长度不能小于4'))
     } else {
         callback()
@@ -7,8 +7,8 @@ export function checkUserName(rule, value, callback) {
 }
 
 export function checkPassword(rule, value, callback) {
-    if (value.length < 6) {
-        callback(new Error('密码长度不能小于6'))
+    if (value.length < 6 || value.length > 20) {
+        callback(new Error('密码长度不能小于6或大于20'))
     } else {
         callback()
     }

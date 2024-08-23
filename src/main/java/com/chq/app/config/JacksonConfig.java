@@ -25,6 +25,11 @@ public class JacksonConfig {
     private String datePattern;
 
 
+    /**
+     * 前端处理long类型会由精度丢失问题,所以将long类型序列化成
+     * @param builder
+     * @return
+     */
     @Bean
     public ObjectMapper jacksonObjectMapper(Jackson2ObjectMapperBuilder builder) {
         ObjectMapper objectMapper = builder.createXmlMapper(false).build();
@@ -35,6 +40,10 @@ public class JacksonConfig {
         return objectMapper;
     }
 
+    /**
+     * 处理日期类型的序列化和反序列化
+     * @return
+     */
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer customizeLocalDateTimeFormat() {
         return jacksonObjectMapperBuilder -> {

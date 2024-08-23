@@ -24,7 +24,10 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
-
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 50MB
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
@@ -36,6 +39,7 @@ mybatis-plus:
 server:
   servlet:
     context-path: /api
+
 minio:
   proxyUrl: /minio
   url: http://192.168.102.129:9000

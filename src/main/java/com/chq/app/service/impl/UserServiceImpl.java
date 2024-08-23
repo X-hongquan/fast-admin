@@ -174,9 +174,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
 
     private void sendCode(MessageDto dto) {
-        AsyncExecutor.execute(() -> {
-            JavaMailUntil.sendMail(dto);
-        }, ExecuteType.MAIl, dto);
+        AsyncExecutor.execute(ExecuteType.MAIl, dto);
     }
 
     public void sendEmailCode(String email) {

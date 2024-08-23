@@ -29,7 +29,7 @@
                 and m.status = #{status}
             </if>
             ${params.dataScope}
-            group by m.id order by m.level,m.sort
+            group by m.id order by m.level ,m.sort
     </select>
     <select id="getInitMenu" resultType="com.chq.app.pojo.Menu" parameterType="com.chq.app.pojo.Menu">
             select m.* from menu as m

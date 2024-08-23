@@ -2,6 +2,7 @@
 import {generateAPIGeneratorAPI, generateTypeJSGeneratorAPI, listGenerateAPI} from '@/api/generator.js'
 import {onMounted, ref} from "vue";
 import CodeBox from '@/components/CodeBox/index.vue'
+import {ArrowUp} from "@element-plus/icons-vue";
 
 const list = ref([])
 
@@ -56,10 +57,26 @@ onMounted(() => {
       <el-button type="primary" @click="downloadCode('type-js')">下载Type-JS</el-button>
       <el-button type="primary" @click="downloadCode('type-ts')">下载Type-TS</el-button>
     </div>
+    <h1 id="tip"> 请使用CTRL+F搜素</h1>
+    <a href="#tip"><el-icon><ArrowUp/></el-icon></a>
     <CodeBox v-for="item in list" :data="item.data" :header="item.fileName" :key="item.id"></CodeBox>
   </div>
 </template>
 
 <style scoped lang="scss">
+a {
 
+  position: fixed;
+  text-align: center;
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  font-size: 30px;
+  z-index: 10;
+  background-color: #ff4949;
+  right: 0;
+  top: 200px;
+
+
+}
 </style>

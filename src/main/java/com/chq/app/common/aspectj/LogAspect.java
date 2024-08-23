@@ -123,10 +123,7 @@ public class LogAspect {
             // 设置消耗时间
             operationLog.setCostTime(System.currentTimeMillis() - TIME_THREADLOCAL.get());
             // 保存数据库
-            AsyncExecutor.execute(()->{
-                IOperationLogService bean = SpringUtils.getBean(IOperationLogService.class);
-                bean.save(operationLog);
-            }, ExecuteType.LOG, operationLog);
+            AsyncExecutor.execute(ExecuteType.LOG, operationLog);
         } catch (Exception ex) {
             // 记录本地异常日志
             log.error("异常信息:{}", ex.getMessage());

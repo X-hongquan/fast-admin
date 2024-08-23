@@ -1,9 +1,6 @@
-package com.chq.app;
-
-import com.baomidou.mybatisplus.annotation.TableField;
+package com.chq.app.generator;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.Set;
@@ -11,7 +8,7 @@ import java.util.Set;
 public class GenerateDtoJs {
     public static byte[] build() {
         Class<GenerateDtoJs> generateDtoJsClass = GenerateDtoJs.class;
-        URL url = generateDtoJsClass.getResource(".");
+        URL url = generateDtoJsClass.getResource("..");
         String path = url.getFile();
         File file = new File(path);
         StringBuilder sb = new StringBuilder();

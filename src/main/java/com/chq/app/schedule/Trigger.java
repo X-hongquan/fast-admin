@@ -138,7 +138,6 @@ public class Trigger {
     private void run() {
         while (true) {
             for (Map.Entry<String, JobInfo> entry : map.entrySet()) {
-                String key = entry.getKey();
                 JobInfo jobInfo = entry.getValue();
                 if (jobInfo.getJobType() == 1)
                     handleFixedRate(jobInfo);
@@ -148,7 +147,7 @@ public class Trigger {
             try {
                 Thread.sleep(rate);
             } catch (InterruptedException e) {
-
+               //todo
             }
         }
     }

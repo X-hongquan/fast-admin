@@ -3,6 +3,7 @@ package com.chq.app.controller;
 
 import com.alibaba.excel.EasyExcel;
 import com.chq.app.common.annoation.Log;
+import com.chq.app.common.annoation.RepeatSubmit;
 import com.chq.app.common.domain.LoginUser;
 import com.chq.app.common.domain.R;
 import com.chq.app.common.domain.TableInfo;
@@ -22,6 +23,7 @@ import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -71,6 +73,7 @@ public class UserController {
     @PostMapping
     @PreAuth("system:user:add")
     @Log(title = "新增用户", businessType = BusinessType.INSERT, excludeParamNames = {"password"})
+    @RepeatSubmit
     public R<Integer> add(@RequestBody User user) {
         int row = userService.add(user);
         return R.ok(row);
@@ -93,7 +96,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public R<String> login(@RequestBody LoginForm loginForm) {
+    public R<String> login(@Validated @RequestBody LoginForm loginForm) {
         String token = userService.login(loginForm);
         return R.ok(token);
     }

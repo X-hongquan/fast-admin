@@ -1,15 +1,13 @@
 package com.chq.app.controller;
 
-import com.chq.app.Builder;
-import com.chq.app.FileObj;
-import com.chq.app.GenerateDtoJs;
+import com.chq.app.generator.Builder;
+import com.chq.app.generator.FileObj;
+import com.chq.app.generator.GenerateDtoJs;
 import com.chq.app.common.domain.R;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;

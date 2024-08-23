@@ -1,6 +1,5 @@
-package com.chq.app;
+package com.chq.app.generator;
 
-import okio.Path;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +21,7 @@ public class Builder {
 
     public byte[] builderType() {
         Class<? extends Builder> aClass = this.getClass();
-        URL url = aClass.getResource(".");
+        URL url = aClass.getResource("..");
         String path = url.getFile();
         File files = new File(path);
         StringBuilder sb = new StringBuilder();
@@ -33,7 +32,7 @@ public class Builder {
 
     public void builderAPI(String mode, List<FileObj> objs) {
         Class<? extends Builder> aClass = this.getClass();
-        URL url = aClass.getResource(".");
+        URL url = aClass.getResource("..");
         String path = url.getFile();
         File files = new File(path);
         traversAPIFile(files, mode, objs);
@@ -479,7 +478,7 @@ public class Builder {
         }
 
         @Override
-        public String render(@Nullable String s) {
+        public String render(String s) {
             buildBody(clazz);
             String head = tsImportTemplate;
             if ("js".equals(s)) {
