@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
@@ -35,7 +36,6 @@ public class Trigger {
     private Thread trigger;
 
     private Thread checker;
-
 
     private long rate = 1000L;
 
@@ -132,30 +132,35 @@ public class Trigger {
 
     private void run() {
         while (true) {
-           try {
-               for (Map.Entry<String, JobInfo> entry : map.entrySet()) {
-                   JobInfo jobInfo = entry.getValue();
-                   if (jobInfo.getJobType() == 1)
-                       handleFixedRate(jobInfo);
-                   if (jobInfo.getJobType() == 2)
-                       handleCron(jobInfo);
-               }
-               try {
-                   Thread.sleep(rate);
-               } catch (InterruptedException e) {
-                   //todo 线程被打断
-               }
-           }catch (RuntimeException e) {
-               //todo trigger异常
-           }
+            try {
+                for (Map.Entry<String, JobInfo> entry : map.entrySet()) {
+                    JobInfo jobInfo = entry.getValue();
+                    if (jobInfo.getJobType() == 1)
+                        handleFixedRate(jobInfo);
+                    if (jobInfo.getJobType() == 2)
+                        handleCron(jobInfo);
+                }
+                try {
+                    Thread.sleep(rate);
+                } catch (InterruptedException e) {
+                    //todo 线程被打断
+                }
+            } catch (RuntimeException e) {
+                //todo trigger异常
+            }
         }
     }
 
     private void handleCron(JobInfo jobInfo) {
-        Cron cron = jobInfo.getCron();
-        if (cron.isMatch()) {
+        LocalDateTime now = LocalDateTime.now();
+        int dayOfMonth = now.getDayOfMonth();
+        String jobCron = jobInfo.getJobCron();
+        if (jobCron.contains("1L") && dayOfMonth == 1) {
+            jobInfo.getCron().fillDays(jobCron, 1, YearMonth.now().lengthOfMonth());
+        }
+        if (jobInfo.getCron().isMatch()) {
             JobLog jobLog = new JobLog();
-            jobLog.setTriggerTime(LocalDateTime.now());
+            jobLog.setTriggerTime(now);
             jobLog.setJobId(jobInfo.getId());
             Method method = jobInfo.getMethod();
             execute(method, jobLog);

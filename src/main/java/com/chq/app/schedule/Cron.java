@@ -1,5 +1,6 @@
 package com.chq.app.schedule;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -38,12 +39,12 @@ public class Cron {
         this.days = new HashSet<>();
         this.months = new HashSet<>();
         this.weeks = new HashSet<>();
-        fillSeconds(split[0]);
-        fillMinutes(split[1]);
-        fillHours(split[2]);
-        fillDays(split[3]);
-        fillMonths(split[4]);
-        fillWeek(split[5]);
+        fillSeconds(split[0], 0, 59);
+        fillMinutes(split[1], 0, 59);
+        fillHours(split[2], 0, 24);
+        fillDays(split[3], 1, YearMonth.now().lengthOfMonth());
+        fillMonths(split[4], 1, 12);
+        fillWeek(split[5], 1, 7);
     }
 
 
@@ -56,127 +57,82 @@ public class Cron {
             "51", "52", "53", "54", "55", "56", "57", "58", "59"
     );
 
-
-
-    private void fillSeconds(String s) {
+    private void fill(String s, Set<Integer> smh, int finalStart, int finalEnd) {
         if ("*".equals(s)) {
-            for (int i = 0; i < 59; i++) {
-                seconds.add(i);
+            for (int i = finalStart; i < finalEnd; i++) {
+                smh.add(i);
             }
         } else if (s.contains("/")) {
             String[] split = s.split("/");
-            int start = Integer.parseInt(split[0]);
+            int target = Integer.parseInt(split[0]);
             int rate = Integer.parseInt(split[1]);
-            for (int i = start; i <= 59; i += rate) {
-                seconds.add(i);
-            }
-        } else {
-            addOther(s, seconds);
-        }
-
-    }
-
-    private void fillMinutes(String s) {
-        if ("*".equals(s)) {
-            for (int i = 0; i < 59; i++) {
-                minutes.add(i);
-            }
-        } else if (s.contains("/")) {
-            String[] split = s.split("/");
-            int start = Integer.parseInt(split[0]);
-            int rate = Integer.parseInt(split[1]);
-            for (int i = start; i <= 59; i += rate) {
-                minutes.add(i);
-            }
-        } else {
-            addOther(s, minutes);
-        }
-    }
-
-    private void fillHours(String s) {
-        if ("*".equals(s)) {
-            for (int i = 0; i < 23; i++) {
-                hours.add(i);
-            }
-        } else if (s.contains("/")) {
-            String[] split = s.split("/");
-            int start = Integer.parseInt(split[0]);
-            int rate = Integer.parseInt(split[1]);
-            for (int i = start; i <= 23; i += rate) {
-                hours.add(i);
-            }
-        } else {
-            addOther(s, hours);
-        }
-    }
-
-    private void fillDays(String s) {
-        YearMonth now = YearMonth.now();
-        int end = now.lengthOfMonth();
-        if ("*".equals(s)) {
-            for (int i = 1; i <= end; i++) {
-                days.add(i);
-            }
-        } else if ("1L".equals(s)) {
-            days.add(end);
-        } else if (s.contains("/")) {
-            String[] split = s.split("/");
-            int start = Integer.parseInt(split[0]);
-            int rate = Integer.parseInt(split[1]);
-            for (int i = start; i <= end; i += rate) {
-                days.add(i);
-            }
-        } else {
-            addOther(s, days);
-        }
-    }
-
-    private void fillMonths(String s) {
-        if ("*".equals(s)) {
-            for (int i = 1; i <= 12; i++) {
-                months.add(i);
-            }
-        } else if (s.contains("/")) {
-            String[] split = s.split("/");
-            int start = Integer.parseInt(split[0]);
-            int rate = Integer.parseInt(split[1]);
-            for (int i = start; i <= 12; i += rate) {
-                months.add(i);
-            }
-        } else {
-            addOther(s, months);
-        }
-    }
-
-    private void fillWeek(String s) {
-        if ("*".equals(s)) {
-            for (int i = 1; i <= 7; i++) {
-                weeks.add(i);
-            }
-        } else {
-            addOther(s, weeks);
-        }
-    }
-
-
-    private void addOther(String s, Set<Integer> smh) {
-        if (s.contains("-")) {
-            String[] split = s.split("-");
-            int start = Integer.parseInt(split[0]);
-            int end = Integer.parseInt(split[1]);
-            for (int i = start; i <= end; i++) {
+            checkRange(finalStart, finalEnd, target);
+            for (int i = target; i <= finalEnd; i += rate) {
                 smh.add(i);
             }
         } else if (s.contains(",")) {
             String[] split = s.split(",");
             for (String s1 : split) {
-                smh.add(Integer.parseInt(s1));
+                int i = Integer.parseInt(s1);
+                checkRange(finalStart, finalEnd, i);
+                smh.add(i);
             }
-        } else if (smh != weeks && smh != days) {
-            if (!defaultSet.contains(s))
+        } else if (s.contains("-")) {
+            String[] split = s.split("-");
+            int start = Integer.parseInt(split[0]);
+            int end = Integer.parseInt(split[1]);
+            checkRange(finalStart, finalEnd, start);
+            checkRange(finalStart, finalEnd, end);
+            for (int i = start; i <= end; i++) {
+                smh.add(i);
+            }
+        } else if ("?".equals(s)) {
+            if (smh != weeks && smh != days)
                 throw new RuntimeException("cron表达式错误");
-            smh.add(Integer.parseInt(s));
+        } else if ("1L".equals(s)) {
+            if (smh != days)
+                throw new RuntimeException("cron表达式错误");
+            days.clear();
+            smh.add(finalEnd);
+        } else if (defaultSet.contains(s)) {
+            int i = Integer.parseInt(s);
+            checkRange(finalStart, finalEnd, i);
+            smh.add(i);
+        } else {
+            throw new RuntimeException("cron表达式错误");
         }
+    }
+
+    private void checkRange(int finalStart, int finalEnd, int target) {
+        if (target < finalStart || target > finalEnd)
+            throw new RuntimeException("cron表达式错误");
+    }
+
+
+    private void fillSeconds(String s, int finalStart, int finalEnd) {
+        fill(s, seconds, finalStart, finalEnd);
+    }
+
+
+    private void fillMinutes(String s, int finalStart, int finalEnd) {
+        fill(s, minutes, finalStart, finalEnd);
+    }
+
+
+    private void fillHours(String s, int finalStart, int finalEnd) {
+        fill(s, hours, finalStart, finalEnd);
+    }
+
+    public void fillDays(String s, int finalStart, int finalEnd) {
+        fill(s, days, finalStart, finalEnd);
+    }
+
+    private void fillMonths(String s, int finalStart, int finalEnd) {
+        fill(s, months, finalStart, finalEnd);
+    }
+
+    private void fillWeek(String s, int finalStart, int finalEnd) {
+        fill(s, weeks, finalStart, finalEnd);
     }
 
 
