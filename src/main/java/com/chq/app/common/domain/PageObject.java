@@ -21,6 +21,7 @@ public class PageObject {
                 conditions = new String[columns.length];
                 Arrays.fill(conditions, defaultSort);
             } else if (conditions.length < columns.length) {
+                conditions = Arrays.copyOf(conditions, columns.length);
                 Arrays.fill(conditions, conditions.length, columns.length, defaultSort);
             }
             StringBuilder sb = new StringBuilder();
