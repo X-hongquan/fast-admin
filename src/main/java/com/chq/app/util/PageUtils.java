@@ -1,6 +1,7 @@
 package com.chq.app.util;
 
 
+import com.baomidou.mybatisplus.core.toolkit.sql.SqlUtils;
 import com.chq.app.common.domain.PageObject;
 import com.github.pagehelper.PageHelper;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,7 +26,7 @@ public class PageUtils {
         String[] conditions = parameterMap.get("condition");
         pO.setColumns(columns);
         pO.setConditions(conditions);
-
+        //防止order by字段sql注入
         PageHelper.startPage(pO.getPageNum(), pO.getPageSize(), pO.getOrderBy());
     }
 }
