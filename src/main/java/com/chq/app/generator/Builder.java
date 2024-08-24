@@ -21,7 +21,7 @@ public class Builder {
 
     public byte[] builderType() {
         Class<? extends Builder> aClass = this.getClass();
-        URL url = aClass.getResource("..");
+        URL url = aClass.getClassLoader().getResource(".");
         String path = url.getFile();
         File files = new File(path);
         StringBuilder sb = new StringBuilder();
@@ -32,7 +32,7 @@ public class Builder {
 
     public void builderAPI(String mode, List<FileObj> objs) {
         Class<? extends Builder> aClass = this.getClass();
-        URL url = aClass.getResource("..");
+        URL url = aClass.getClassLoader().getResource(".");
         String path = url.getFile();
         File files = new File(path);
         traversAPIFile(files, mode, objs);
@@ -130,6 +130,9 @@ public class Builder {
         @Override
         public boolean filterPackage(String directoryName) {
             Set<String> packageName = Set.of(
+                    "com",
+                    "chq",
+                    "app",
                     "common",
                     "domain",
                     "pojo",
@@ -292,6 +295,9 @@ public class Builder {
         @Override
         public boolean filterPackage(String directoryName) {
             Set<String> packageName = Set.of(
+                    "com",
+                    "chq",
+                    "app",
                     "controller"
             );
             return packageName.contains(directoryName);

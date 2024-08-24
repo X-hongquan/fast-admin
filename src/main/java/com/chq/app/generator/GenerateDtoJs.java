@@ -8,7 +8,7 @@ import java.util.Set;
 public class GenerateDtoJs {
     public static byte[] build() {
         Class<GenerateDtoJs> generateDtoJsClass = GenerateDtoJs.class;
-        URL url = generateDtoJsClass.getResource("..");
+        URL url = generateDtoJsClass.getClassLoader().getResource(".");
         String path = url.getFile();
         File file = new File(path);
         StringBuilder sb = new StringBuilder();
@@ -77,6 +77,9 @@ public class GenerateDtoJs {
 
     public static boolean filterPackage(String name) {
         Set<String> common = Set.of(
+                "com",
+                "chq",
+                "app",
                 "pojo",
                 "dto",
                 "vo",
