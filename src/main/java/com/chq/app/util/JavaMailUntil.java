@@ -1,30 +1,31 @@
 package com.chq.app.util;
 
 
+import com.chq.app.common.annoation.AsyncTask;
 import com.chq.app.dto.MessageDto;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.util.Properties;
 
-import javax.mail.Authenticator;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
+import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 @Slf4j
-public final class JavaMailUntil {
+@Component
+public  class JavaMailUntil {
 
 
-    private static final Session smtpSession;
-
+    private Session smtpSession = null;
 
     private static final String username = "chq1340@qq.com";
     private static final String password = "lmdhejswritkjjif";
 
 
-    static {
+    @PostConstruct
+    public void init() {
 
 
         //	创建一个配置文件，并保存
@@ -51,7 +52,8 @@ public final class JavaMailUntil {
 
     }
 
-    public static boolean sendMail(MessageDto messageDto) {
+    @AsyncTask(title = "发送邮件")
+    public void sendMail(MessageDto messageDto) {
         try {
             MimeMessage message = new MimeMessage(smtpSession);
             message.setSubject(messageDto.getTheme());
@@ -59,10 +61,10 @@ public final class JavaMailUntil {
             message.setFrom(new InternetAddress(username));
             message.setRecipient(MimeMessage.RecipientType.TO, new InternetAddress(messageDto.getTo()));
             Transport.send(message);
-            return true;
-        } catch (Exception e) {
-            log.error("发送邮件失败", e);
-            return false;
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
         }
+
+
     }
 }
