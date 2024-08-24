@@ -27,13 +27,20 @@ public class Cron {
     private Set<Integer> months;
     private Set<Integer> weeks;
 
+
+    private Set<String> defaultSet = Set.of(
+            "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
+            "11", "12", "13", "14", "15", "16", "17", "18", "19", "20",
+            "21", "22", "23", "24", "25", "26", "27", "28", "29", "30",
+            "31", "32", "33", "34", "35", "36", "37", "38", "39", "40",
+            "41", "42", "43", "44", "45", "46", "47", "48", "49", "50",
+            "51", "52", "53", "54", "55", "56", "57", "58", "59"
+
+    );
+
+
     public Cron(String cron) {
-        String[] split = cron.split(" ");
-        if (!cron.contains("?"))
-            throw new RuntimeException("cron表达式错误");
-        if ("?".equals(split[3]) && "?".equals(split[5]))
-            throw new RuntimeException("cron表达式错误");
-        this.seconds = new HashSet<>();
+        String[] split = checkCron(cron);
         this.minutes = new HashSet<>();
         this.hours = new HashSet<>();
         this.days = new HashSet<>();
@@ -47,15 +54,24 @@ public class Cron {
         fillWeek(split[5], 1, 7);
     }
 
+    private int countStr(String corn, char c) {
+        int count = 0;
+        for (int i = 0; i < corn.length(); i++) {
+            if (c == corn.charAt(i)) count++;
+        }
+        return count;
+    }
 
-    private static Set<String> defaultSet = Set.of(
-            "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
-            "11", "12", "13", "14", "15", "16", "17", "18", "19", "20",
-            "21", "22", "23", "24", "25", "26", "27", "28", "29", "30",
-            "31", "32", "33", "34", "35", "36", "37", "38", "39", "40",
-            "41", "42", "43", "44", "45", "46", "47", "48", "49", "50",
-            "51", "52", "53", "54", "55", "56", "57", "58", "59"
-    );
+    private String[] checkCron(String cron) {
+        int count = countStr(cron, '?');
+        if (count != 1)
+            throw new RuntimeException("cron表达式错误");
+        String[] split = cron.split(" ");
+        if (split.length != 6 || (split[3] != "?" && split[5] != "?"))
+            throw new RuntimeException("cron表达式错误");
+        return split;
+    }
+
 
     private void fill(String s, Set<Integer> smh, int finalStart, int finalEnd) {
         if ("*".equals(s)) {
@@ -154,15 +170,8 @@ public class Cron {
             if (!weeks.contains(week))
                 return false;
         }
-        if (!hours.contains(hour)) {
+        if (!hours.contains(hour) || !minutes.contains(minute) || seconds.contains(second))
             return false;
-        }
-        if (!minutes.contains(minute)) {
-            return false;
-        }
-        if (!seconds.contains(second)) {
-            return false;
-        }
         return true;
     }
 
