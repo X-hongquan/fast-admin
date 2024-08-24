@@ -73,6 +73,7 @@ onMounted(() => {
 
 <template>
   <div class="top-right">
+    <a href="https://github.com/X-hongquan/fast-admin" target="_blank" title="Github" class="github"><SvgIcon name="github" height="25px" width="25px"></SvgIcon></a>
     <el-button icon="Refresh" circle @click="settingStore.refresh=!settingStore.refresh"/>
     <el-button icon="FullScreen" circle @click="fullScreen"/>
     <el-popover
@@ -128,6 +129,9 @@ onMounted(() => {
   height: 100%;
   display: flex;
   align-items: center;
+ .github {
+   margin-right: 15px;
+ }
 
   img {
     margin-left: 10px;

@@ -1,0 +1,54 @@
+spring:
+  application:
+    name: fast-admin
+    version: 1.0.0
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/vjs?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
+    username: root
+    password: 123456
+  data:
+    redis:
+      port: 6379
+      host: localhost
+      lettuce:
+        pool:
+          # \u8FDE\u63A5\u6C60\u4E2D\u7684\u6700\u5C0F\u7A7A\u95F2\u8FDE\u63A5
+          min-idle: 0
+          # \u8FDE\u63A5\u6C60\u4E2D\u7684\u6700\u5927\u7A7A\u95F2\u8FDE\u63A5
+          max-idle: 10
+          # \u8FDE\u63A5\u6C60\u7684\u6700\u5927\u6570\u636E\u5E93\u8FDE\u63A5\u6570
+          max-active: 200
+          # #\u8FDE\u63A5\u6C60\u6700\u5927\u963B\u585E\u7B49\u5F85\u65F6\u95F4\uFF08\u4F7F\u7528\u8D1F\u503C\u8868\u793A\u6CA1\u6709\u9650\u5236\uFF09
+          max-wait: -1ms
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 50MB
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  # 搜索指定包别名
+  #  typeAliasesPackage: com.chq.*
+  #  # 配置mapper的扫描，找到所有的mapper.xml映射文件
+  #  mapperLocations: classpath*:mapper/**/*Mapper.xml
+  # 加载全局的配置文件
+server:
+  servlet:
+    context-path: /api
+
+minio:
+  proxyUrl: /minio
+  url: http://localhost:9000
+  access-key: minioadmin
+  secret-key: minioadmin
+  bucket-name: app
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui/index.html
+  show-actuator: true

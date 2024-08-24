@@ -41,6 +41,7 @@ public class Cron {
 
     public Cron(String cron) {
         String[] split = checkCron(cron);
+        this.seconds = new HashSet<>();
         this.minutes = new HashSet<>();
         this.hours = new HashSet<>();
         this.days = new HashSet<>();
@@ -67,7 +68,8 @@ public class Cron {
         if (count != 1)
             throw new RuntimeException("cron表达式错误");
         String[] split = cron.split(" ");
-        if (split.length != 6 || (split[3] != "?" && split[5] != "?"))
+        System.out.println(cron);
+        if (split.length != 6 || ("?".equals(split[3]) && "?".equals(split[5])))
             throw new RuntimeException("cron表达式错误");
         return split;
     }
@@ -75,7 +77,7 @@ public class Cron {
 
     private void fill(String s, Set<Integer> smh, int finalStart, int finalEnd) {
         if ("*".equals(s)) {
-            for (int i = finalStart; i < finalEnd; i++) {
+            for (int i = finalStart; i <= finalEnd; i++) {
                 smh.add(i);
             }
         } else if (s.contains("/")) {
@@ -161,18 +163,18 @@ public class Cron {
         int month = now.getMonthValue();
         DayOfWeek dayOfWeek = now.getDayOfWeek();
         int week = dayOfWeek.getValue();
-        if (!months.contains(month))
-            return false;
-        if (weeks.isEmpty()) {
-            if (!days.contains(day))
-                return false;
-        } else {
-            if (!weeks.contains(week))
-                return false;
+        if (months.contains(month)) {
+            if (weeks.isEmpty()) {
+                if (!days.contains(day))
+                    return false;
+            } else {
+                if (!weeks.contains(week))
+                    return false;
+            }
+            if (hours.contains(hour) && minutes.contains(minute) && seconds.contains(second))
+                return true;
         }
-        if (!hours.contains(hour) || !minutes.contains(minute) || seconds.contains(second))
-            return false;
-        return true;
+        return false;
     }
 
 

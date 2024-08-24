@@ -159,6 +159,7 @@ public class Trigger {
             jobInfo.getCron().fillDays(jobCron, 1, YearMonth.now().lengthOfMonth());
         }
         if (jobInfo.getCron().isMatch()) {
+            System.out.println(jobInfo.getCron());
             JobLog jobLog = new JobLog();
             jobLog.setTriggerTime(now);
             jobLog.setJobId(jobInfo.getId());

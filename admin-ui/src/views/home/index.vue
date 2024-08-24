@@ -17,6 +17,9 @@ const userStore = useUserStore();
       <div class="bottom">
         <h3 class="title">{{ getTimes() }},{{ userStore.userInfo.user.username }}</h3>
         <p class="subtitle">{{setting.logoTitle}}</p>
+        <el-link type="primary" href="https://chqwz.top/" target="_blank" style="font-size: 20px">项目地址</el-link>
+        <p style="height: 20px"></p>
+        <el-link type="primary" href="http://114.132.249.233/" target="_blank" style="font-size: 20px" >文档地址</el-link>
       </div>
     </div>
   </el-card>

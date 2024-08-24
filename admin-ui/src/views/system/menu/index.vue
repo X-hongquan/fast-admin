@@ -215,6 +215,7 @@ onMounted(() => {
         </el-form-item>
         <el-form-item label="父级菜单" required>
           <el-select v-model="menu.parentId" placeholder="请选择父级菜单" :disabled="lock">
+            <el-option label="根目录" :value="0"></el-option>
             <el-option v-for="item in menus" :key="item.id" :label="item.title" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
@@ -228,7 +229,7 @@ onMounted(() => {
           <el-input v-model="menu.url" placeholder="请输入路径"></el-input>
         </el-form-item>
         <el-form-item label="层级" required >
-          <el-input v-model="menu.level" placeholder="请输入层级" disabled></el-input>
+          <el-input v-model="menu.level" placeholder="请输入层级" :disabled="lock"></el-input>
         </el-form-item>
         <el-form-item label="排序" >
           <el-input v-model="menu.sort" placeholder="请输入排序" :disabled="lock"></el-input>

@@ -41,7 +41,7 @@ export function updateMenuAPI(data) {
 
 export function deleteMenuAPI(ids) {
     return request({
-        url: "/menu",
+        url: "/menu/{ids}",
         method: "delete",
         params: ids
     })

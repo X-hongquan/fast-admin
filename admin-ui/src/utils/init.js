@@ -3,10 +3,9 @@ export function preHandleMenu(menus) {
     let arr = []
     for (const menu of menus) {
         map.set(menu.id, menu);
-        if (menu.level === 1) {
+        if (menu.parentId === '0') {
             arr.push(menu)
-        }
-        else {
+        } else {
             const parent = map.get(menu.parentId);
             if (!parent.children) {
                 parent.children = [];
@@ -14,6 +13,6 @@ export function preHandleMenu(menus) {
             parent.children.push(menu);
         }
     }
-    return {map,arr}
+    return {map, arr}
 
 }
