@@ -6,6 +6,8 @@ import com.github.pagehelper.PageHelper;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Map;
+
 public class PageUtils {
 
 
@@ -18,8 +20,11 @@ public class PageUtils {
         if (StringUtils.isNotBlank(request.getParameter("pageSize"))) {
             pO.setPageSize(Integer.valueOf(request.getParameter("pageSize")));
         }
-        pO.setCondition(request.getParameter("column"));
-        pO.setCondition(request.getParameter("condition"));
+        Map<String, String[]> parameterMap = request.getParameterMap();
+        String[] columns = parameterMap.get("column");
+        String[] conditions = parameterMap.get("condition");
+        pO.setColumns(columns);
+        pO.setConditions(conditions);
 
         PageHelper.startPage(pO.getPageNum(), pO.getPageSize(), pO.getOrderBy());
     }
