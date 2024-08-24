@@ -1,11 +1,14 @@
 package com.chq.app.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.chq.app.common.annoation.AsyncTask;
 import com.chq.app.common.exception.ServiceException;
 import com.chq.app.pojo.JobInfo;
 import com.chq.app.pojo.JobLog;
+import com.chq.app.pojo.OperationLog;
 import com.chq.app.service.IJobLogService;
 import com.chq.app.mapper.JobLogMapper;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,6 +34,10 @@ public class JobLogServiceImpl extends ServiceImpl<JobLogMapper, JobLog> impleme
             throw new ServiceException("日志不存在");
         return list.get(0);
     }
+
+
+
+
 }
 
 

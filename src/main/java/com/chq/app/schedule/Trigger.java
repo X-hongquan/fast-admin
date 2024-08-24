@@ -5,13 +5,9 @@ import com.chq.app.pojo.JobLog;
 
 import com.chq.app.service.IJobInfoService;
 import com.chq.app.service.IJobLogService;
-import com.chq.app.util.AsyncExecutor;
 import jakarta.annotation.PostConstruct;
-import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 
@@ -20,7 +16,6 @@ import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.*;
 
 @Component
@@ -129,7 +124,7 @@ public class Trigger {
                         trigger.start();
                     }
                 } catch (InterruptedException e) {
-
+                    //todo 中断检查线程
                 }
             }
         });
@@ -137,18 +132,22 @@ public class Trigger {
 
     private void run() {
         while (true) {
-            for (Map.Entry<String, JobInfo> entry : map.entrySet()) {
-                JobInfo jobInfo = entry.getValue();
-                if (jobInfo.getJobType() == 1)
-                    handleFixedRate(jobInfo);
-                if (jobInfo.getJobType() == 2)
-                    handleCron(jobInfo);
-            }
-            try {
-                Thread.sleep(rate);
-            } catch (InterruptedException e) {
-               //todo
-            }
+           try {
+               for (Map.Entry<String, JobInfo> entry : map.entrySet()) {
+                   JobInfo jobInfo = entry.getValue();
+                   if (jobInfo.getJobType() == 1)
+                       handleFixedRate(jobInfo);
+                   if (jobInfo.getJobType() == 2)
+                       handleCron(jobInfo);
+               }
+               try {
+                   Thread.sleep(rate);
+               } catch (InterruptedException e) {
+                   //todo 线程被打断
+               }
+           }catch (RuntimeException e) {
+               //todo trigger异常
+           }
         }
     }
 

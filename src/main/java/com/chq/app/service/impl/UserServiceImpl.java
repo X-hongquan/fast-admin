@@ -8,7 +8,6 @@ import com.chq.app.common.annoation.DataScope;
 import com.chq.app.common.domain.LoginUser;
 import com.chq.app.common.domain.R;
 
-import com.chq.app.common.enums.ExecuteType;
 import com.chq.app.config.JSONFilter;
 import com.chq.app.config.MinioConfig;
 import com.chq.app.dto.MessageDto;
@@ -68,6 +67,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Resource
     private IRoleService roleService;
+
+    @Resource
+    private JavaMailUntil javaMailUntil;
 
 
     @Override
@@ -174,7 +176,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
 
     private void sendCode(MessageDto dto) {
-        AsyncExecutor.execute(ExecuteType.MAIl, dto);
+       javaMailUntil.sendMail(dto);
     }
 
     public void sendEmailCode(String email) {

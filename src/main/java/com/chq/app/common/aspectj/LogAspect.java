@@ -6,19 +6,14 @@ import com.alibaba.fastjson2.JSONWriter;
 import com.chq.app.common.annoation.Log;
 import com.chq.app.common.domain.LoginUser;
 import com.chq.app.common.enums.BusinessStatus;
-import com.chq.app.common.enums.ExecuteType;
 import com.chq.app.common.filter.PropertyPreExcludeFilter;
 import com.chq.app.pojo.OperationLog;
 import com.chq.app.service.IOperationLogService;
-import com.chq.app.util.AsyncExecutor;
-import com.chq.app.util.SpringUtils;
 import com.chq.app.util.UserHolder;
 import com.chq.app.util.WebUtils;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.websocket.RemoteEndpoint;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
@@ -32,10 +27,8 @@ import org.springframework.core.NamedThreadLocal;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.lang.runtime.ObjectMethods;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Map;
@@ -50,6 +43,8 @@ public class LogAspect {
 
 
 
+    @Resource
+    private IOperationLogService operationLogService;
     /**
      * 排除敏感属性字段
      */
@@ -123,7 +118,7 @@ public class LogAspect {
             // 设置消耗时间
             operationLog.setCostTime(System.currentTimeMillis() - TIME_THREADLOCAL.get());
             // 保存数据库
-            AsyncExecutor.execute(ExecuteType.LOG, operationLog);
+            operationLogService.asyncRecordLog(operationLog);
         } catch (Exception ex) {
             // 记录本地异常日志
             log.error("异常信息:{}", ex.getMessage());

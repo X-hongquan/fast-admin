@@ -1,5 +1,6 @@
 package com.chq.app.service.impl;
 
+import com.chq.app.common.annoation.AsyncTask;
 import com.chq.app.pojo.OperationLog;
 import com.chq.app.mapper.OperationLogMapper;
 import com.chq.app.service.IOperationLogService;
@@ -23,4 +24,12 @@ public class OperationLogServiceImpl extends ServiceImpl<OperationLogMapper, Ope
     public List<OperationLog> getList(OperationLog operationLog) {
         return baseMapper.getOperationList(operationLog);
     }
+
+    @AsyncTask(title = "记录操作日志")
+    @Override
+    public void asyncRecordLog(OperationLog operationLog) {
+        baseMapper.insert(operationLog);
+    }
+
+
 }

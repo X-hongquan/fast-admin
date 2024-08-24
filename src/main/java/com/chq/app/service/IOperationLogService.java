@@ -16,4 +16,7 @@ import java.util.List;
 public interface IOperationLogService extends IService<OperationLog> {
 
     List<OperationLog> getList(OperationLog operationLog);
+
+
+    void asyncRecordLog(OperationLog operationLog);
 }
