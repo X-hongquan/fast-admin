@@ -122,7 +122,7 @@ public class UserController {
         return R.ok();
     }
 
-    @PostMapping("/logout")
+    @GetMapping("/logout")
     public R<String> logout() {
         return userService.logout();
     }
