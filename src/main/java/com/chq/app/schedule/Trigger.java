@@ -13,8 +13,10 @@ import org.springframework.stereotype.Component;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
@@ -156,10 +158,9 @@ public class Trigger {
         int dayOfMonth = now.getDayOfMonth();
         String jobCron = jobInfo.getJobCron();
         if (jobCron.contains("1L") && dayOfMonth == 1) {
-            jobInfo.getCron().fillDays(jobCron, 1, YearMonth.now().lengthOfMonth());
+            jobInfo.getCron().fillDays("1L", 1, YearMonth.now().lengthOfMonth());
         }
-        if (jobInfo.getCron().isMatch()) {
-            System.out.println(jobInfo.getCron());
+        if (jobInfo.getCron().isMatch(now)) {
             JobLog jobLog = new JobLog();
             jobLog.setTriggerTime(now);
             jobLog.setJobId(jobInfo.getId());
@@ -177,7 +178,7 @@ public class Trigger {
             if (match == 0L) {
                 JobLog jobLog = new JobLog();
                 jobLog.setJobId(jobInfo.getId());
-                jobLog.setTriggerTime(LocalDateTime.now());
+                jobLog.setTriggerTime(Instant.ofEpochMilli(now).atZone(ZoneId.systemDefault()).toLocalDateTime());
                 Method method = jobInfo.getMethod();
                 execute(method, jobLog);
             }

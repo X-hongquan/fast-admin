@@ -1,4 +1,4 @@
-package com.chq.app.common.constant;
+package com.chq.app.controller.interceptor;
 
 public interface UrlInterceptor {
 
@@ -9,6 +9,8 @@ public interface UrlInterceptor {
             "/swagger-ui/**",
             "/v3/**",
             "/ws/**",
-            "/cache/**"
+            "/cache/**",
+            "/test/**",
+            "/generate/**"
     };
 }

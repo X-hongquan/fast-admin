@@ -118,7 +118,6 @@ public class UserController {
         } catch (RuntimeException e) {
             throw new ServerException("业务异常");
         }
-        System.out.println(list);
         return R.ok();
     }
 

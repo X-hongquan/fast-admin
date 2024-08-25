@@ -35,7 +35,6 @@ public class SettingServiceImpl extends ServiceImpl<SettingMapper, Setting> impl
 
     @Override
     public int updatePermissionMode(Setting setting) {
-        System.out.println(setting);
         if (setting.getPermissionMode() == null) throw new AuthException();
         if (setting.getPermissionMode() == PermissionModeEnum.KING) {
             updateById(setting);

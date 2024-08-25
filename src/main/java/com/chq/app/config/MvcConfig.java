@@ -12,7 +12,7 @@ import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import static com.chq.app.common.constant.UrlInterceptor.LOGIN_NO_INTERCEPT;
+import static com.chq.app.controller.interceptor.UrlInterceptor.LOGIN_NO_INTERCEPT;
 
 
 @Configuration

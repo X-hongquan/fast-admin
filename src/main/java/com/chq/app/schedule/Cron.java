@@ -68,7 +68,6 @@ public class Cron {
         if (count != 1)
             throw new RuntimeException("cron表达式错误");
         String[] split = cron.split(" ");
-        System.out.println(cron);
         if (split.length != 6 || ("?".equals(split[3]) && "?".equals(split[5])))
             throw new RuntimeException("cron表达式错误");
         return split;
@@ -154,8 +153,7 @@ public class Cron {
     }
 
 
-    public boolean isMatch() {
-        LocalDateTime now = LocalDateTime.now();
+    public boolean isMatch(LocalDateTime now) {
         int second = now.getSecond();
         int minute = now.getMinute();
         int hour = now.getHour();

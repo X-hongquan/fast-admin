@@ -1,28 +1,23 @@
-import request from '@/utils/request.js'
-
-
-export function generateAPIGeneratorAPI(mode) {
+import request from "@/utils/request.js";
+export function listGeneratorAPI() {
     return request({
-        url: `/generate/api/{mode}`,
+        url: '/generate/list',
         method: 'get',
-        params: mode,
+    })
+}
+
+export function exportZipGeneratorAPI() {
+    return request({
+        url: '/generate/api/js',
+        method: 'get',
         responseType: 'blob'
     })
 }
 
-export function generateTypeJSGeneratorAPI(mode) {
+export function exportTypeGeneratorAPI() {
     return request({
-        url: `/generate/type/{mode}`,
+        url: '/generate/type/js',
         method: 'get',
-        params: mode,
         responseType: 'blob'
     })
 }
-
-export function listGenerateAPI() {
-    return request({
-        url: `/generate/list`,
-        method: 'get',
-    })
-}
-

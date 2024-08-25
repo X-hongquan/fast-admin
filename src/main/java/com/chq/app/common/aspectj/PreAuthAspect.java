@@ -19,8 +19,6 @@ public class PreAuthAspect {
         boolean admin = UserHolder.getUser().isAdmin();
         if (admin) return;
         boolean contains = UserHolder.getUser().getPermissions().contains(preAuth.value());
-        System.out.println(preAuth.value());
-        System.out.println(UserHolder.getUser().getPermissions());
         if (!contains) {
             throw new AuthException();
         }
