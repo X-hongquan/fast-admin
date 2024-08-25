@@ -12,6 +12,11 @@ import java.util.Set;
 @Component
 public class TypeBuilder {
 
+    private static final Set<String> defaultFiledFilter = Set.of(
+            "serialVersionUID"
+    );
+
+
     private static final Set<String> filedFilter = Set.of(
             "roleId", "params", "serialVersionUID"
     );
@@ -29,7 +34,7 @@ public class TypeBuilder {
                 StringBuilder sb = new StringBuilder("const " + simpleName + " = reactive({\n");
                 Field[] declaredFields = aClass.getDeclaredFields();
                 for (Field declaredField : declaredFields) {
-                    if (!filedFilter.contains(declaredField.getName()))
+                    if (!defaultFiledFilter.contains(declaredField.getName()))
                         sb.append("\t" + declaredField.getName() + ": undefined,\n");
                 }
                 transSuper(aClass, sb);
