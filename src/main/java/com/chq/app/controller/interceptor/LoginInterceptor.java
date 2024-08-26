@@ -1,6 +1,7 @@
 package com.chq.app.controller.interceptor;
 
 import com.alibaba.fastjson2.JSON;
+import com.chq.app.common.async.FutureHolder;
 import com.chq.app.common.domain.LoginUser;
 import com.chq.app.util.JwtUtil;
 import com.chq.app.util.UserHolder;
@@ -49,5 +50,6 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         UserHolder.removeUser();
+        FutureHolder.remove();
     }
 }

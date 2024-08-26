@@ -1,6 +1,7 @@
 com.chq.app.controller.CacheController
 com.chq.app.controller.GeneratorController
 com.chq.app.controller.JobInfoController
+com.chq.app.controller.LoginLogController
 com.chq.app.controller.MenuController
 com.chq.app.controller.OperationLogController
 com.chq.app.controller.PermissionController

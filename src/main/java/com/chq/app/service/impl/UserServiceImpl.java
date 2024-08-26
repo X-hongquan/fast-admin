@@ -1,9 +1,11 @@
 package com.chq.app.service.impl;
 
 import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
+import com.chq.app.common.annoation.AsyncTask;
 import com.chq.app.common.annoation.DataScope;
 import com.chq.app.common.domain.LoginUser;
 import com.chq.app.common.domain.R;
@@ -21,17 +23,24 @@ import com.chq.app.util.*;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -71,6 +80,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Resource
     private JavaMailUntil javaMailUntil;
 
+    @Resource
+    private RestTemplate restTemplate;
+
+    @Resource
+    private ILoginLogService loginLogService;
+
 
     @Override
     @DataScope(alias = "ur")
@@ -105,8 +120,64 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         String uuid = IdWorker.get32UUID();
         String jwt = JwtUtil.createJwt(uuid);
         stringRedisTemplate.opsForValue().set(LOGIN_USER + uuid, JSON.toJSONString(loginUser, JSONFilter.excludePropertyPreFilter()), ONLINE_TIME, TimeUnit.SECONDS);
+        asyncRecordLoginLog(u, uuid);
+
         return jwt;
 
+    }
+
+    @AsyncTask(title = "记录登录日志")
+    public void asyncRecordLoginLog(User u, String uuid) {
+        String ip = getIp();
+        boolean privateIp = IpUtil.isPrivateIp(ip);
+        LoginLog loginLog = new LoginLog();
+        loginLog.setIp(ip).
+                setLoginTime(LocalDateTime.now())
+                .setLoginUser(u.getUsername())
+                .setToken(uuid);
+        ;
+        if (privateIp) {
+            loginLog.setLocation("内网");
+        } else {
+            String s =
+                    sendGetRequest("http://ip-api.com/json/" + ip + "?lang=zh-CN");
+            if (StringUtils.isNotBlank(s)) {
+                JSONObject jsonObject = JSONObject.parseObject(s);
+                String o = (String) jsonObject.get("regionName");
+                String o1 = (String) jsonObject.get("city");
+                loginLog.setLocation(o + " " + o1);
+            }
+        }
+        loginLogService.save(loginLog);
+    }
+
+    private String getIp() {
+        HttpServletRequest request = WebUtils.getRequest();
+        String xfHeader = request.getHeader("X-Forwarded-For");
+        if (xfHeader == null) {
+            System.out.println(request.getRemoteAddr());
+            return request.getRemoteAddr();
+        }
+        return xfHeader.split(",")[0]; // 多个IP取第一个
+    }
+
+
+    private String sendGetRequest(String url) {
+        // 创建HttpHeaders对象
+        HttpHeaders headers = new HttpHeaders();
+        // 设置请求头
+        headers.add("User-Agent", "Mozilla/5.0");
+        // 创建HttpEntity对象
+        HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
+        // 发送GET请求
+        ResponseEntity<String> response = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                entity,
+                String.class
+        );
+
+        return response.getBody();
     }
 
     @Override
@@ -176,7 +247,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
 
     private void sendCode(MessageDto dto) {
-       javaMailUntil.sendMail(dto);
+        javaMailUntil.sendMail(dto);
     }
 
     public void sendEmailCode(String email) {

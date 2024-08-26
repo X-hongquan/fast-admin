@@ -1,18 +1,17 @@
 package com.chq.app.common.async;
 
-import lombok.Data;
 
+public class Future {
 
-public class GuaredObject<T> {
-
-    private T response;
+    private Object response;
 
     /**
      * 只有两个主线程，和异步线程不存在虚假唤醒
+     *
      * @param timeout
      * @return
      */
-    public T get(long timeout) {
+    public <T> T get(long timeout) {
         synchronized (this) {
             while (response == null) {
                 try {
@@ -22,10 +21,15 @@ public class GuaredObject<T> {
                 }
             }
         }
-        return response;
+        return (T) response;
     }
 
-    public void set(T response) {
+    public <T> T get() {
+        return get(0L);
+    }
+
+
+    public void complete(Object response) {
         synchronized (this) {
             this.response = response;
             this.notifyAll();
