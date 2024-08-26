@@ -3,6 +3,8 @@ package com.chq.app.controller;
 import com.chq.app.common.annoation.AsyncTask;
 import com.chq.app.common.async.FutureHolder;
 import com.chq.app.common.enums.ExecuteType;
+import com.chq.app.pojo.User;
+import com.chq.app.service.ILoginLogService;
 import com.chq.app.util.SpringUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -27,23 +30,15 @@ public class TestController {
 
 
     @Autowired
-    private RestTemplate restTemplate;
-    @GetMapping("/test")
-    public Object test() {
-        SpringUtils.getAopProxy(this).getInt();
-        //遍历文件获取文件名
-        int j= FutureHolder.get().get();
-        return j;
+    private ILoginLogService loginLogService;
+
+    @PostMapping
+    public void testLog(HttpServletRequest request) {
+        loginLogService.recordLoginLog(new User().setUsername("wqeq"),"qweqw",request);
     }
 
 
 
-
-
-    @AsyncTask(title = "测试", executeType = ExecuteType.SYNC)
-    public Integer getInt() {
-        return 10;
-    }
 
 
 }

@@ -80,8 +80,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Resource
     private JavaMailUntil javaMailUntil;
 
-    @Resource
-    private RestTemplate restTemplate;
 
     @Resource
     private ILoginLogService loginLogService;
@@ -120,65 +118,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         String uuid = IdWorker.get32UUID();
         String jwt = JwtUtil.createJwt(uuid);
         stringRedisTemplate.opsForValue().set(LOGIN_USER + uuid, JSON.toJSONString(loginUser, JSONFilter.excludePropertyPreFilter()), ONLINE_TIME, TimeUnit.SECONDS);
-        asyncRecordLoginLog(u, uuid);
-
+        loginLogService.recordLoginLog(u, uuid, WebUtils.getRequest());
         return jwt;
 
     }
 
-    @AsyncTask(title = "记录登录日志")
-    public void asyncRecordLoginLog(User u, String uuid) {
-        String ip = getIp();
-        boolean privateIp = IpUtil.isPrivateIp(ip);
-        LoginLog loginLog = new LoginLog();
-        loginLog.setIp(ip).
-                setLoginTime(LocalDateTime.now())
-                .setLoginUser(u.getUsername())
-                .setToken(uuid);
-        ;
-        if (privateIp) {
-            loginLog.setLocation("内网");
-        } else {
-            String s =
-                    sendGetRequest("http://ip-api.com/json/" + ip + "?lang=zh-CN");
-            if (StringUtils.isNotBlank(s)) {
-                JSONObject jsonObject = JSONObject.parseObject(s);
-                String o = (String) jsonObject.get("regionName");
-                String o1 = (String) jsonObject.get("city");
-                loginLog.setLocation(o + " " + o1);
-            }
-        }
-        loginLogService.save(loginLog);
-    }
-
-    private String getIp() {
-        HttpServletRequest request = WebUtils.getRequest();
-        String xfHeader = request.getHeader("X-Forwarded-For");
-        if (xfHeader == null) {
-            System.out.println(request.getRemoteAddr());
-            return request.getRemoteAddr();
-        }
-        return xfHeader.split(",")[0]; // 多个IP取第一个
-    }
-
-
-    private String sendGetRequest(String url) {
-        // 创建HttpHeaders对象
-        HttpHeaders headers = new HttpHeaders();
-        // 设置请求头
-        headers.add("User-Agent", "Mozilla/5.0");
-        // 创建HttpEntity对象
-        HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
-        // 发送GET请求
-        ResponseEntity<String> response = restTemplate.exchange(
-                url,
-                HttpMethod.GET,
-                entity,
-                String.class
-        );
-
-        return response.getBody();
-    }
 
     @Override
     public R<String> logout() {
