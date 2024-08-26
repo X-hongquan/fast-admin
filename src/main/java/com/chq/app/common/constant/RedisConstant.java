@@ -10,7 +10,6 @@ public interface RedisConstant {
 
     String CODE_EMAIL = "code:email:";
 
-
     Long CODE_TIME = 5 * 60L;
 
     Long RESEND_TIME = 4 * 60L;

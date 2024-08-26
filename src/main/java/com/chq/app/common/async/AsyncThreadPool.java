@@ -1,12 +1,11 @@
 package com.chq.app.common.async;
 
+import com.chq.app.common.exception.ServiceException;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.RejectedExecutionHandler;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 @Component
 @Slf4j
@@ -16,13 +15,14 @@ public class AsyncThreadPool {
     private ThreadPoolExecutor executor;
 
     public AsyncThreadPool() {
-
+        ThreadFactory threadFactory = new ThreadFactoryBuilder().setNameFormat("async-pool-%d").build();
         executor = new ThreadPoolExecutor(
                 Runtime.getRuntime().availableProcessors(),
-                Runtime.getRuntime().availableProcessors()*5,
+                Runtime.getRuntime().availableProcessors() * 5,
                 60,
                 TimeUnit.SECONDS,
                 new ArrayBlockingQueue<>(500),
+                threadFactory,
                 new CustomRejectedExecutionHandler()
         );
 
@@ -37,7 +37,7 @@ public class AsyncThreadPool {
 
         @Override
         public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
-            log.error("线程池满载，拒绝执行任务");
+            throw new ServiceException("异步任务线程池已满");
         }
 
     }

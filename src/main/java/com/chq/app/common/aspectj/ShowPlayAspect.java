@@ -23,6 +23,7 @@ public class ShowPlayAspect {
             "@annotation(org.springframework.web.bind.annotation.DeleteMapping)")
     public void pointCut() {
 
+
     }
 
     @Before("pointCut()")
