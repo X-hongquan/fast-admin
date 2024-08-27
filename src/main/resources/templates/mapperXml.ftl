@@ -3,15 +3,11 @@
 <mapper namespace="${packageName}.mapper.${className}Mapper">
 
     <sql id="base_column">
-   <#compress>
-    <#list columns as c>
-    <#if c_has_next>
-       ${c.dbName}, <#else>${c.dbName}
-        </#if>
-    </#list>
-     </#compress>
-
+     <#list columns as c>
+       ${c.dbName}<#if c_has_next>,</#if>
+   </#list>
     </sql>
+
 
     <select id="get${className}List" resultType="${packageName}.pojo.${className}" parameterType="${packageName}.pojo.${className}">
         select

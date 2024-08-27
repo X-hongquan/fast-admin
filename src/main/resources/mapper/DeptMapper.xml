@@ -3,8 +3,11 @@
 <mapper namespace="com.chq.app.mapper.DeptMapper">
 
     <sql id="base_column">
-id, name, status
+       id,
+       name,
+       status
     </sql>
+
 
     <select id="getDeptList" resultType="com.chq.app.pojo.Dept" parameterType="com.chq.app.pojo.Dept">
         select
