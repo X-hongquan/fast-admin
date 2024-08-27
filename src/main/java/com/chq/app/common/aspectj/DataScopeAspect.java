@@ -5,6 +5,7 @@ import com.chq.app.common.domain.BaseEntity;
 import com.chq.app.common.domain.LoginUser;
 import com.chq.app.common.enums.PermissionModeEnum;
 import com.chq.app.pojo.Role;
+import com.chq.app.pojo.User;
 import com.chq.app.util.UserHolder;
 
 import org.aspectj.lang.JoinPoint;
@@ -66,11 +67,14 @@ public class DataScopeAspect {
 
     private static BaseEntity clearDataScope(JoinPoint joinPoint) {
         Object arg = joinPoint.getArgs()[0];
-        if (arg != null && arg instanceof BaseEntity) {
-            BaseEntity baseEntity = (BaseEntity) arg;
-            baseEntity.getParams().put(DATA_SCOPE, "");
-            return baseEntity;
+        if (arg != null) {
+            if (arg instanceof User || arg instanceof Role) return null;
+            if (arg instanceof BaseEntity) {
+                BaseEntity baseEntity = (BaseEntity) arg;
+                baseEntity.getParams().put(DATA_SCOPE, "");
+                return baseEntity;
+            }
         }
-        return null;
+            return null;
     }
 }

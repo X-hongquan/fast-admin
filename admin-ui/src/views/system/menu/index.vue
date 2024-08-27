@@ -23,6 +23,10 @@ const req = reactive({
   roleId: undefined,
   status: undefined
 })
+function resetReq() {
+  req.status = undefined
+  req.roleId = undefined
+}
 const mode = ref(false)
 const title = ref('')
 const menus = ref([])
@@ -148,7 +152,7 @@ onMounted(() => {
     <div class="search-box">
       <el-form inline>
         <el-form-item label="状态" prop="status" class="input-width">
-          <el-select v-model="req.status" placeholder="请选择状态" clearable @change="getMenuList">
+          <el-select v-model="req.status" placeholder="请选择状态" clearable >
             <el-option label="启用" :value="1"></el-option>
             <el-option label="禁用" :value="0"></el-option>
           </el-select>
@@ -157,7 +161,9 @@ onMounted(() => {
 
     </div>
     <div class="operation-box">
-      <el-button type="primary" @click="handleAdd">新增</el-button>
+      <el-button icon="Search" @click="getMenuList">查询</el-button>
+      <el-button type="info" icon="Refresh" @click="resetReq">重置</el-button>
+      <el-button type="primary" icon="Plus" @click="handleAdd">新增</el-button>
       <el-button type="danger" icon="Delete" @click="deleteBatch">批量删除</el-button>
     </div>
     <el-table :data="tableData" @selection-change="handleSelectionChange" row-key="id">
@@ -204,34 +210,46 @@ onMounted(() => {
     </div>
     <el-dialog v-model="mode" :title="title">
       <el-form :model="menu" label-width="80px">
-        <el-form-item label="标题" prop="title" required>
-          <el-input v-model="menu.title" placeholder="请输入标题"></el-input>
-        </el-form-item>
+        <el-row gutter="30">
+          <el-col :span="12">
+            <el-form-item label="标题" prop="title" required>
+              <el-input v-model="menu.title" placeholder="请输入标题"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col span="12">
+            <el-form-item label="父级菜单" required>
+              <el-select v-model="menu.parentId" placeholder="请选择父级菜单" :disabled="lock" class="input-width">
+                <el-option label="根目录" :value="0"></el-option>
+                <el-option v-for="item in menus" :key="item.id" :label="item.title" :value="item.id"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-form-item label="类型">
           <el-radio-group v-model="menu.link">
             <el-radio :label="0">非外链</el-radio>
             <el-radio :label="1">外链</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="父级菜单" required>
-          <el-select v-model="menu.parentId" placeholder="请选择父级菜单" :disabled="lock">
-            <el-option label="根目录" :value="0"></el-option>
-            <el-option v-for="item in menus" :key="item.id" :label="item.title" :value="item.id"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="组件" >
-          <el-input v-model="menu.component" placeholder="请输入组件路径"></el-input>
-        </el-form-item>
-        <el-form-item label="路由名称" required>
-          <el-input v-model="menu.name" placeholder="请输入名称"></el-input>
-        </el-form-item>
+        <el-row gutter="30">
+          <el-col :span="12">
+            <el-form-item label="组件">
+              <el-input v-model="menu.component" placeholder="请输入组件路径"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="路由名称" required>
+              <el-input v-model="menu.name" placeholder="请输入名称"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-form-item label="路径" required>
           <el-input v-model="menu.url" placeholder="请输入路径"></el-input>
         </el-form-item>
-        <el-form-item label="层级" required >
+        <el-form-item label="层级" required>
           <el-input v-model="menu.level" placeholder="请输入层级" :disabled="lock"></el-input>
         </el-form-item>
-        <el-form-item label="排序" >
+        <el-form-item label="排序">
           <el-input v-model="menu.sort" placeholder="请输入排序" :disabled="lock"></el-input>
         </el-form-item>
         <el-form-item label="重定向">

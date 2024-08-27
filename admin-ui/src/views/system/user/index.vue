@@ -88,12 +88,12 @@ onMounted(() => {
     <div class="search-box">
       <el-form inline>
         <el-form-item label="角色" class="input-width">
-          <el-select v-model="req.roleId" placeholder="请选择" @change="getUserList">
+          <el-select v-model="req.roleId" placeholder="请选择">
             <el-option v-for="(item) in roleList" :key="item.id" :label="item.name" :value="item.id"/>
           </el-select>
         </el-form-item>
         <el-form-item label="状态" class="input-width">
-          <el-select v-model="req.status" placeholder="请选择" @change="getUserList">
+          <el-select v-model="req.status" placeholder="请选择" clearable>
             <el-option label="启用" :value="1"></el-option>
             <el-option label="禁用" :value="0"></el-option>
           </el-select>
@@ -101,7 +101,8 @@ onMounted(() => {
       </el-form>
     </div>
     <div class="operation-box">
-      <el-button type="primary" icon="Refresh" @click="resetReq">重置</el-button>
+      <el-button icon="Search" @click="getUserList">查询</el-button>
+      <el-button type="info" icon="Refresh" @click="resetReq">重置</el-button>
       <el-button type="primary" icon="Plus" @click="$router.push('/system/user/add')">新增用户</el-button>
       <el-button type="danger" icon="Delete" @click="delBatch">批量删除</el-button>
     </div>
@@ -113,7 +114,9 @@ onMounted(() => {
       <el-table-column prop="email" label="邮箱"></el-table-column>
       <el-table-column prop="roles" label="角色">
         <template #default="{row}">
-          <el-tag :type="item.createBy===row.username?'primary':'danger'" v-for="(item) in row.roles" :key="item.id" class="t-box">{{ item.name }}</el-tag>
+          <el-tag :type="item.createBy===row.username?'primary':'danger'" v-for="(item) in row.roles" :key="item.id"
+                  class="t-box">{{ item.name }}
+          </el-tag>
         </template>
       </el-table-column>
       <el-table-column prop="createBy" label="创建人"></el-table-column>

@@ -33,7 +33,7 @@ export default defineConfig({
         proxy: {
             '/api': {
                 target: 'http://localhost:8080',
-                changeOrigin: true,
+                changeOrigin: false
             },
             '/minio': {
                 target: 'http://192.168.102.129:9000',

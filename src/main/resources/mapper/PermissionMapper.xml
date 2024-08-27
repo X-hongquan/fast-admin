@@ -13,7 +13,7 @@
             and rp.role_id = #{roleId}
         </if>
         <if test="code != null">
-            and p.code  like concat('%',#{code},'%')
+            and p.code like concat('%',#{code},'%')
         </if>
         ${params.dataScope}
         group by p.id

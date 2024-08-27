@@ -2,6 +2,7 @@ package com.chq.app.util;
 
 
 import com.chq.app.common.annoation.AsyncTask;
+import com.chq.app.common.exception.ServiceException;
 import com.chq.app.dto.MessageDto;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
@@ -62,7 +63,7 @@ public  class JavaMailUntil {
             message.setRecipient(MimeMessage.RecipientType.TO, new InternetAddress(messageDto.getTo()));
             Transport.send(message);
         } catch (MessagingException e) {
-            throw new RuntimeException(e);
+            throw new ServiceException("发送邮件失败");
         }
 
 

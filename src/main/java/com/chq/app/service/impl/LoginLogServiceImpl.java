@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
 * @author ASUS
@@ -57,10 +58,14 @@ public class LoginLogServiceImpl extends ServiceImpl<LoginLogMapper, LoginLog> i
         save(loginLog);
     }
 
+    @Override
+    public List<LoginLog> getList(LoginLog loginLog) {
+        return  baseMapper.getList(loginLog);
+    }
+
     private String getIp(HttpServletRequest request) {
         String xfHeader = request.getHeader("X-Forwarded-For");
         if (xfHeader == null) {
-            System.out.println(request.getRemoteAddr());
             return request.getRemoteAddr();
         }
         return xfHeader.split(",")[0]; // 多个IP取第一个

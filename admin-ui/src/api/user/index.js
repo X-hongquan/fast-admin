@@ -12,7 +12,7 @@ export function loginAPI(data) {
 export function logoutAPI() {
     return request({
         url: '/user/logout',
-        method: 'post'
+        method: 'get'
     })
 }
 

@@ -102,8 +102,8 @@ onMounted(() => {
             <el-option label="失败" :value="1"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="操作类型">
-          <el-select v-model="req.businessType" placeholder="请选择" class="input-width" clearable>
+        <el-form-item label="操作类型" >
+          <el-select v-model="req.businessType" placeholder="请选择" class="input-width"  clearable>
             <el-option label="其他" :value="0"></el-option>
             <el-option label="新增" :value="1"></el-option>
             <el-option label="修改" :value="2"></el-option>
@@ -117,7 +117,7 @@ onMounted(() => {
       </el-form>
     </div>
     <div class="operation-box">
-      <el-button type="primary" @click="getLogList">查询</el-button>
+      <el-button icon="Search" @click="getLogList">查询</el-button>
       <el-button type="primary" @click="resetReq">重置</el-button>
     </div>
     <el-table :data="tableData">

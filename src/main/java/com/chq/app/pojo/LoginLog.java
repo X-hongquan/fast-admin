@@ -60,4 +60,10 @@ public class LoginLog implements Serializable {
     private String token;
 
 
+    @TableField(exist = false)
+    private String startTime;
+
+    @TableField(exist = false)
+    private String endTime;
+
 }

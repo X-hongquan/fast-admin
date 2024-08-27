@@ -3,10 +3,10 @@
 <mapper namespace="com.chq.app.mapper.UserMapper">
 
 
-
     <select id="getRoleIdsByUserId" resultType="com.chq.app.pojo.Role" parameterType="java.lang.Long">
-        select r.id, r.name,r.create_by from role as r
-        join user_role as ur on r.id=ur.role_id and ur.user_id = #{userId}
+        select r.id, r.name, r.create_by
+        from role as r
+                 join user_role as ur on r.id = ur.role_id and ur.user_id = #{userId}
 
     </select>
 
@@ -20,7 +20,7 @@
         </foreach>
     </select>
 
-    <select id="getUserList" resultType="com.chq.app.pojo.User"  parameterType="com.chq.app.pojo.User">
+    <select id="getUserList" resultType="com.chq.app.pojo.User" parameterType="com.chq.app.pojo.User">
         select
         u.id,
         u.avatar,

@@ -3,7 +3,6 @@ package com.chq.app.mapper;
 import com.chq.app.pojo.Permission;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
-import java.util.LinkedHashSet;
 import java.util.List;
 
 /**

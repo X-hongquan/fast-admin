@@ -13,23 +13,23 @@
 
 
     <select id="getMenuList" resultType="com.chq.app.pojo.Menu" parameterType="com.chq.app.pojo.Menu">
-            select m.* from menu as m
-            left join  role_menu as rm on m.id = rm.menu_id
-            where 1=1
-            <if test="id != null">
-                and m.id = #{id}
-            </if>
-            <if test="name != null">
-                and m.name like concat(#{name},'%')
-            </if>
-            <if test="roleId!=null">
-                and rm.role_id = #{roleId}
-            </if>
-            <if test="status!=null">
-                and m.status = #{status}
-            </if>
-            ${params.dataScope}
-            group by m.id order by m.level ,m.sort
+        select m.* from menu as m
+        left join role_menu as rm on m.id = rm.menu_id
+        where 1=1
+        <if test="id != null">
+            and m.id = #{id}
+        </if>
+        <if test="name != null">
+            and m.name like concat(#{name},'%')
+        </if>
+        <if test="roleId!=null">
+            and rm.role_id = #{roleId}
+        </if>
+        <if test="status!=null">
+            and m.status = #{status}
+        </if>
+        ${params.dataScope}
+        group by m.id order by m.level ,m.sort
     </select>
     <select id="getInitMenu" resultType="com.chq.app.pojo.Menu" parameterType="com.chq.app.pojo.Menu">
             select m.* from menu as m

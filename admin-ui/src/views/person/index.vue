@@ -10,6 +10,7 @@ import {
 } from "@/api/user/index.js";
 import {ElMessage, ElNotification} from "element-plus";
 import {checkEmail} from "@/utils/validate.js";
+import {useRouter} from "vue-router";
 
 const store = useUserStore()
 const changePwdRef = ref(null)
@@ -105,7 +106,6 @@ function confirmResetPassword(rule, value, callback) {
     callback()
   }
 }
-
 
 
 //
@@ -279,6 +279,17 @@ async function changeAvatar(file) {
 function beforeUpload(file) {
 
 }
+
+const router = useRouter()
+
+async function handleLogout() {
+  try {
+    await store.logout()
+    router.push('/login')
+  } catch (e) {
+
+  }
+}
 </script>
 
 <template>
@@ -334,7 +345,7 @@ function beforeUpload(file) {
           </el-form-item>
 
           <el-form-item>
-            <el-button type="primary" @click="store.logout">退出</el-button>
+            <el-button type="primary" @click="handleLogout">退出</el-button>
           </el-form-item>
         </el-form>
       </div>

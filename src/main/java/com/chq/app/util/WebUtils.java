@@ -1,5 +1,6 @@
 package com.chq.app.util;
 
+import com.chq.app.common.exception.ServiceException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,7 +23,7 @@ public class WebUtils {
             return request;
         } else {
             // 如果当前线程不是一个 web 请求线程，无法获取到 HttpServletRequest 对象
-            throw new RuntimeException("服务器异常");
+            throw new ServiceException("服务器异常");
         }
     }
 

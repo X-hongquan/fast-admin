@@ -22,10 +22,6 @@ public class GlobalExceptionHandler {
         return R.fail(e.getBindingResult().getFieldError().getDefaultMessage());
     }
 
-    @ExceptionHandler(RuntimeException.class)
-    public R exceptionHandler(RuntimeException e, HttpServletResponse response) {
-        return R.fail(e.getMessage());
-    }
 
     @ExceptionHandler(AuthException.class)
     public void exceptionHandler(AuthException e, HttpServletResponse response) {

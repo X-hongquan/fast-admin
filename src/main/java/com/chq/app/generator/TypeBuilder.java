@@ -1,5 +1,6 @@
 package com.chq.app.generator;
 
+import com.chq.app.common.exception.ServiceException;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -44,7 +45,7 @@ public class TypeBuilder {
         } catch (IOException e) {
 
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            throw new ServiceException("服务异常");
         }
         return sb1;
 

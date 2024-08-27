@@ -1,6 +1,8 @@
 package com.chq.app.common.async;
 
 
+import com.chq.app.common.exception.ServiceException;
+
 public class Future {
 
     private Object response;
@@ -17,7 +19,7 @@ public class Future {
                 try {
                     this.wait(timeout);
                 } catch (InterruptedException e) {
-                    throw new RuntimeException("服务异常");
+                    throw new ServiceException("异步线程执行超时");
                 }
             }
         }

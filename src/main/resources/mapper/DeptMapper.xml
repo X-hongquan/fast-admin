@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chq.app.mapper.DeptMapper">
+
+    <sql id="base_column">
+id, name, status
+    </sql>
+
+    <select id="getDeptList" resultType="com.chq.app.pojo.Dept" parameterType="com.chq.app.pojo.Dept">
+        select
+        <include refid="base_column"/>
+        from dept
+        where 1=1
+        <if test="id != null">
+            and id = #{id}
+        </if>
+        <if test="name != null and name != '' ">
+            and name like concat('%',#{name}, '%')
+        </if>
+        <if test="status != null">
+            and status = #{status}
+        </if>
+    </select>
+
+    <select id="getDeptById" resultType="com.chq.app.pojo.Dept" >
+        select
+        <include refid="base_column"/>
+        from dept
+        where id = #{id}
+    </select>
+</mapper>

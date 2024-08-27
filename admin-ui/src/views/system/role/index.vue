@@ -20,9 +20,14 @@ const tableData = ref([])
 const req = reactive({
   pageNum: 1,
   pageSize: 10,
+  name: undefined,
   roleId: undefined,
   status: undefined
 })
+
+function resetReq() {
+  req.name = undefined
+}
 
 const menuProps = {
   children: 'children',
@@ -40,6 +45,7 @@ const role = reactive({
   updateBy: undefined,
   updateTime: undefined
 })
+
 
 const total = ref(0)
 
@@ -262,9 +268,18 @@ onMounted(() => {
 
 <template>
   <div class="content-box">
+    <div class="search-box">
+      <el-form inline>
+        <el-form-item label="角色">
+          <el-input v-model="req.name" placeholder="请输入角色名"></el-input>
+        </el-form-item>
+      </el-form>
+    </div>
     <div class="operation-box">
-      <el-button type="primary" @click="handleAdd">新增</el-button>
-      <el-button type="primary" icon="Delete" @click="deleteBatch">批量删除</el-button>
+      <el-button icon="Search" @click="getRoleList">查询</el-button>
+      <el-button type="info" icon="Refresh" @click="resetReq">重置</el-button>
+      <el-button type="primary" icon="Plus" @click="handleAdd">新增</el-button>
+      <el-button type="danger" icon="Delete" @click="deleteBatch">批量删除</el-button>
     </div>
     <el-table :data="tableData" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55"></el-table-column>

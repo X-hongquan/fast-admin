@@ -1,6 +1,7 @@
 package com.chq.app.schedule;
 
 
+import com.chq.app.common.exception.ServiceException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -66,10 +67,10 @@ public class Cron {
     private String[] checkCron(String cron) {
         int count = countStr(cron, '?');
         if (count != 1)
-            throw new RuntimeException("cron表达式错误");
+            throw new ServiceException("cron表达式错误");
         String[] split = cron.split(" ");
         if (split.length != 6 || ("?".equals(split[3]) && "?".equals(split[5])))
-            throw new RuntimeException("cron表达式错误");
+            throw new ServiceException("cron表达式错误");
         return split;
     }
 
@@ -105,10 +106,10 @@ public class Cron {
             }
         } else if ("?".equals(s)) {
             if (smh != weeks && smh != days)
-                throw new RuntimeException("cron表达式错误");
+                throw new ServiceException("cron表达式错误");
         } else if ("1L".equals(s)) {
             if (smh != days)
-                throw new RuntimeException("cron表达式错误");
+                throw new ServiceException("cron表达式错误");
             days.clear();
             smh.add(finalEnd);
         } else if (defaultSet.contains(s)) {
@@ -116,13 +117,13 @@ public class Cron {
             checkRange(finalStart, finalEnd, i);
             smh.add(i);
         } else {
-            throw new RuntimeException("cron表达式错误");
+            throw new ServiceException("cron表达式错误");
         }
     }
 
     private void checkRange(int finalStart, int finalEnd, int target) {
         if (target < finalStart || target > finalEnd)
-            throw new RuntimeException("cron表达式错误");
+            throw new ServiceException("cron表达式错误");
     }
 
 

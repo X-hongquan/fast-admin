@@ -133,9 +133,7 @@ public class UserController {
 
     @PutMapping("/info/avatar")
     public R changeAvatar(@RequestParam("file") MultipartFile file) {
-
         return userService.changeAvatar(file);
-
     }
 
     @GetMapping("/info/code/password")
