@@ -73,6 +73,7 @@ onMounted(() => {
 
 <template>
   <div class="top-right">
+    <a href="http://114.132.249.233/" target="_blank" title="文档" class="github"><SvgIcon name="document" height="25px" width="25px"></SvgIcon></a>
     <a href="https://github.com/X-hongquan/fast-admin" target="_blank" title="Github" class="github"><SvgIcon name="github" height="25px" width="25px"></SvgIcon></a>
     <el-button icon="Refresh" circle @click="settingStore.refresh=!settingStore.refresh"/>
     <el-button icon="FullScreen" circle @click="fullScreen"/>

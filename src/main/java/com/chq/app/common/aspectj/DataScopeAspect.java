@@ -72,7 +72,7 @@ public class DataScopeAspect {
             baseEntity.getParams().put(DATA_SCOPE, "");
             return baseEntity;
         }
-    }
+
         return null;
-}
+    }
 }
