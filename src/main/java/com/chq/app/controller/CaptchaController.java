@@ -17,6 +17,9 @@ import java.io.IOException;
 import java.util.Base64;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
+import static com.chq.app.common.constant.RedisConstant.CAPTCHA_TIME;
 
 @RestController
 @RequestMapping("/captcha")
@@ -64,7 +67,7 @@ public class CaptchaController {
         try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
             ImageIO.write(bufferedImage, "png", os);
             String s = Base64.getEncoder().encodeToString(os.toByteArray());
-            stringRedisTemplate.opsForValue().set(key, captcha);
+            stringRedisTemplate.opsForValue().set(key, captcha, CAPTCHA_TIME, TimeUnit.SECONDS);
             Map<String, String> map = Map.of("key", key, "img", s);
             return R.ok(map);
         } catch (IOException e) {
