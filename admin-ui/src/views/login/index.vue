@@ -1,17 +1,21 @@
 <script setup>
-import {reactive, ref} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import {useUserStore} from "@/store/user.js";
 import {ElNotification} from "element-plus";
 import {useRoute, useRouter} from "vue-router";
 import {getTimes} from '@/utils/time';
 import {checkPassword, checkUserName} from "@/utils/validate.js";
-import  setting from '@/../setting'
+import setting from '@/../setting'
+import {getCaptChaAPI} from "@/api/captcha.js";
+
 const userStore = useUserStore();
 const router = useRouter();
 const route = useRoute()
 const loginForm = reactive({
   username: 'admin',
-  password: '123456'
+  password: '123456',
+  key: '',
+  captcha: ''
 })
 const loginComponent = ref(null)
 const loading = ref(false)
@@ -23,6 +27,9 @@ const rules = reactive({
   password: [
     {validator: checkPassword, trigger: 'change'},
   ],
+  captcha: [
+    {required: true, message: '请输入验证码', trigger: 'change'},
+  ]
 })
 
 
@@ -52,6 +59,18 @@ async function login() {
   }
 }
 
+const baseImg = ref('')
+
+async function getCaptCha() {
+  const res = await getCaptChaAPI()
+  if (res.code === 200)
+    loginForm.key = res.data.key
+    baseImg.value = "data:image/png;base64," +res.data.img
+}
+
+onMounted(() => {
+  getCaptCha()
+})
 </script>
 
 <template>
@@ -62,7 +81,7 @@ async function login() {
 
         <el-form class="login-form" :model="loginForm" :rules="rules" ref="loginComponent">
           <h1>登录</h1>
-          <h2>{{setting.logoTitle}}</h2>
+          <h2>{{ setting.logoTitle }}</h2>
           <el-form-item prop="username">
             <el-input prefix-icon="user" class="input-height" type="text" placeholder="请输入用户名"
                       v-model="loginForm.username"></el-input>
@@ -71,6 +90,19 @@ async function login() {
             <el-input prefix-icon="lock" class="input-height" type="password" placeholder="请输入密码"
                       v-model="loginForm.password" show-password></el-input>
           </el-form-item>
+          <el-row :gutter="50">
+
+              <el-col :span="12">
+                <el-form-item prop="captcha">
+                <el-input class="input-width" prefix-icon="CircleCheck" placeholder="验证码" v-model="loginForm.captcha"></el-input>
+                </el-form-item>
+              </el-col>
+
+              <el-col :span="12">
+                <img :src="baseImg" @click="getCaptCha" style="cursor: pointer">
+              </el-col>
+
+          </el-row>
           <el-form-item>
             <el-button :loading="loading" class="login-btn input-box" type="primary" @click="login">登录
             </el-button>

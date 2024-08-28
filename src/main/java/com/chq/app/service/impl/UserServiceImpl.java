@@ -98,6 +98,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Override
     public String login(LoginForm loginForm) {
+        String s = stringRedisTemplate.opsForValue().get(loginForm.getKey());
+        if (!loginForm.getCaptcha().equalsIgnoreCase(s))
+            throw new ServiceException("验证码错误");
         User u = getOne(new LambdaQueryWrapper<User>().eq(User::getUsername, loginForm.getUsername()));
         if (u == null) {
             throw new ServiceException("用户名或密码错误");

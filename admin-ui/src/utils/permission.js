@@ -7,7 +7,7 @@ import {removeToken} from "@/utils/token.js";
 
 
 //引入所有views下.vue文件
-
+nprogress.configure({ showSpinner: false });
 const modules = import.meta.glob("../views/**/**.vue")
 
 export const routerPackage = function (routers, routeName) {
