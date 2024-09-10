@@ -51,7 +51,7 @@ public class AsyncTaskAspect {
                     sb.append(String.format("参数%d=%s ", i + 1, args[i]));
                 }
                 FutureHolder.set(null);
-                log.error(sb.deleteCharAt(sb.length() - 1).toString());
+                log.error(sb.deleteCharAt(sb.length() - 1).toString(),e);
             }
         });
 
@@ -67,7 +67,7 @@ public class AsyncTaskAspect {
                 for (int i = 0; i < args.length; i++) {
                     sb.append(String.format("参数%d=%s ", i + 1, args[i]));
                 }
-                log.error(sb.deleteCharAt(sb.length() - 1).toString());
+                log.error(sb.deleteCharAt(sb.length() - 1).toString(),e);
             }
         });
     }
