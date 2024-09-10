@@ -28,9 +28,9 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 50MB
-mybatis-plus:
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#mybatis-plus:
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   # 搜索指定包别名
   #  typeAliasesPackage: com.chq.*
   #  # 配置mapper的扫描，找到所有的mapper.xml映射文件

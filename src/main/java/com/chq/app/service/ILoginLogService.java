@@ -15,7 +15,7 @@ import java.util.List;
 public interface ILoginLogService extends IService<LoginLog> {
 
 
-    public void recordLoginLog(User user, String token,HttpServletRequest request);
+    public void recordLoginLog(User user, String token,String ip);
 
     List<LoginLog> getList(LoginLog loginLog);
 }

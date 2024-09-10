@@ -34,8 +34,7 @@ public class LoginLogServiceImpl extends ServiceImpl<LoginLogMapper, LoginLog> i
     private RestTemplate restTemplate;
 
     @AsyncTask(title = "记录登录日志")
-    public void recordLoginLog(User u, String uuid,HttpServletRequest request) {
-        String ip = getIp(request);
+    public void recordLoginLog(User u, String uuid,String ip) {
         boolean privateIp = IpUtil.isPrivateIp(ip);
         LoginLog loginLog = new LoginLog();
         loginLog.setIp(ip).
@@ -63,13 +62,7 @@ public class LoginLogServiceImpl extends ServiceImpl<LoginLogMapper, LoginLog> i
         return  baseMapper.getList(loginLog);
     }
 
-    private String getIp(HttpServletRequest request) {
-        String xfHeader = request.getHeader("X-Forwarded-For");
-        if (xfHeader == null) {
-            return request.getRemoteAddr();
-        }
-        return xfHeader.split(",")[0]; // 多个IP取第一个
-    }
+
 
 
     private String sendGetRequest(String url) {
