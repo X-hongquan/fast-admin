@@ -121,18 +121,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         String uuid = IdWorker.get32UUID();
         String jwt = JwtUtil.createJwt(uuid);
         stringRedisTemplate.opsForValue().set(LOGIN_USER + uuid, JSON.toJSONString(loginUser, JSONFilter.excludePropertyPreFilter()), ONLINE_TIME, TimeUnit.SECONDS);
-        loginLogService.recordLoginLog(u, uuid, getIp(WebUtils.getRequest()));
+        loginLogService.recordLoginLog(u, uuid, WebUtils.getIp());
         return jwt;
 
     }
 
-    private String getIp(HttpServletRequest request) {
-        String xfHeader = request.getHeader("X-Forwarded-For");
-        if (xfHeader == null) {
-            return request.getRemoteAddr();
-        }
-        return xfHeader.split(",")[0]; // 多个IP取第一个
-    }
 
     @Override
     public R<String> logout() {

@@ -39,6 +39,16 @@ public class WebUtils {
         return null;
     }
 
+    public static String getIp() {
+        HttpServletRequest request = WebUtils.getRequest();
+        String xfHeader = request.getHeader("X-Forwarded-For");
+        if (xfHeader == null) {
+            return request.getRemoteAddr();
+        }
+        return xfHeader.split(",")[0]; // 多个IP取第一个
+    }
+
+
     public static Map<String, String> getParamMap(ServletRequest request) {
         Map<String, String> params = new HashMap<>();
         for (Map.Entry<String, String[]> entry : getParams(request).entrySet()) {

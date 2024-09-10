@@ -6,6 +6,7 @@ import com.chq.app.common.enums.ExecuteType;
 import com.chq.app.pojo.User;
 import com.chq.app.service.ILoginLogService;
 import com.chq.app.util.SpringUtils;
+import com.chq.app.util.WebUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -34,7 +35,7 @@ public class TestController {
 
     @PostMapping
     public void testLog(HttpServletRequest request) {
-        loginLogService.recordLoginLog(new User().setUsername("wqeq"),"qweqw",request);
+        loginLogService.recordLoginLog(new User().setUsername("wqeq"),"qweqw", WebUtils.getIp());
     }
 
 
