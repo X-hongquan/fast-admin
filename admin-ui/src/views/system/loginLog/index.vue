@@ -111,6 +111,7 @@ onMounted(() => {
       <el-table-column prop="ip" label="ip地址"></el-table-column>
       <el-table-column prop="location" label="地理位置"></el-table-column>
       <el-table-column prop="loginUser" label="登录用户"></el-table-column>
+      <el-table-column prop="loginTime" label="登录时间"></el-table-column>
       <el-table-column prop="token" label="token"></el-table-column>
     </el-table>
     <div class="pagination-box">

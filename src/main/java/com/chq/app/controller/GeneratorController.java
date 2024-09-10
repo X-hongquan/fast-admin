@@ -25,13 +25,13 @@ public class GeneratorController {
 
     @GetMapping("/type/js")
     public void exportType(HttpServletResponse response) throws IOException {
-        StringBuilder build = typeBuilder.build();
+        StringBuilder build = typeBuilder.buildJS();
         response.getWriter().write(build.toString());
     }
 
     @GetMapping("/api/js")
     public void exportZip(HttpServletResponse response) throws IOException {
-        List<FileItem> fileItems = controllerBuilder.build();
+        List<FileItem> fileItems = controllerBuilder.buildJS();
         ZipOutputStream zos = new ZipOutputStream(response.getOutputStream());
         for (FileItem item : fileItems) {
             String fileName = item.getName();
@@ -46,9 +46,15 @@ public class GeneratorController {
     @GetMapping("/list")
     public R<List<FileItem>> list() {
 
-        StringBuilder build = typeBuilder.build();
-        List<FileItem> build1 = controllerBuilder.build();
+        StringBuilder build = typeBuilder.buildJS();
+        List<FileItem> build1 = controllerBuilder.buildJS();
         build1.addFirst(new FileItem(build.toString(), "dto.js"));
+        StringBuilder builder = typeBuilder.buildTS();
+        build1.add(new FileItem(builder.toString(), "model.ts"));
+        List<FileItem> fileItems = controllerBuilder.buildTS();
+        for (FileItem item : fileItems) {
+            build1.add(item);
+        }
         return R.ok(build1);
 
 

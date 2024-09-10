@@ -33,9 +33,7 @@ public class Role extends BaseEntity implements Serializable {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
-    /**
-     * 角色名称
-     */
+
     private String name;
 
 

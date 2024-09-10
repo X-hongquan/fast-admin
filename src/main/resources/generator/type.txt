@@ -1,3 +1,8 @@
+com.chq.app.common.domain.BaseEntity
+com.chq.app.common.domain.LoginUser
+com.chq.app.common.domain.PageObject
+com.chq.app.common.domain.R
+com.chq.app.common.domain.TableInfo
 com.chq.app.dto.CacheDto
 com.chq.app.dto.CacheKeyDto
 com.chq.app.dto.form.EmailForm
