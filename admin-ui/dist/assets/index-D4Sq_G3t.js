@@ -1,0 +1,1 @@
+import{D as t}from"./index-C_vwRkRb.js";function r(e){return t({url:"/cache",method:"post",data:e})}function c(){return t({url:"/cache/list",method:"get"})}function n(e){return t({url:"/cache",method:"delete",data:e})}function o(e){return t({url:"/cache/info/{key}",method:"get",params:e})}export{r as a,n as d,o as i,c as l};
