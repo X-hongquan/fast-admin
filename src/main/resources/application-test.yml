@@ -52,3 +52,6 @@ springdoc:
   swagger-ui:
     path: /swagger-ui/index.html
   show-actuator: true
+logging:
+  level:
+    root: error
