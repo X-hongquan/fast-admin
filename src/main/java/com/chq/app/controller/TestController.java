@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
+import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -36,6 +37,11 @@ public class TestController {
     @PostMapping
     public void testLog(HttpServletRequest request) {
         loginLogService.recordLoginLog(new User().setUsername("wqeq"),"qweqw", WebUtils.getIp());
+    }
+
+    @GetMapping("weq")
+    public String hello() {
+        return "你好我们";
     }
 
 

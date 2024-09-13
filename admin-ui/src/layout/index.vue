@@ -25,7 +25,7 @@ const settingStore = useSettingStore()
       </div>
       <el-scrollbar class="scrollbar">
         <el-menu background-color="#001529" text-color="#fff" :default-active="$route.path"
-                 :collapse="settingStore.fold" :collapse-transition="false">
+                 :collapse="settingStore.fold" :collapse-transition="true">
           <el-menu-item index="/home" @click="goMenu('/home')">
             <el-icon>
               <HomeFilled/>
@@ -64,7 +64,7 @@ const settingStore = useSettingStore()
     width: $base-menu-width;
     height: 100vh;
     background: $base-menu-background;
-    transition: all .3s;
+    
 
     &.fold {
       width: $base-menu-min-width;
@@ -93,7 +93,7 @@ const settingStore = useSettingStore()
     left: $base-menu-width;
     width: calc(100vw - $base-menu-width);
     height: calc(100vh - $base-tabBar-height);
-    transition: all .3s;
+    //transition: all .3s;
     overflow-x: hidden;
 
     &.fold {

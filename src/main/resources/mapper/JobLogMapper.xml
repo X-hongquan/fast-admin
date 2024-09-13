@@ -4,7 +4,10 @@
 
 
     <select id="getList" resultType="com.chq.app.pojo.JobLog">
-        select jl.*,ji.job_name from job_log as jl join job_info as ji on jl.job_id=ji.id
+        select
+        jl.id, jl.job_id, jl.trigger_time, jl.handle_time, jl.handle_status, jl.error_msg, jl.trigger_msg,
+        ji.job_name
+        from job_log as jl join job_info as ji on jl.job_id=ji.id
         where 1=1
         <if test="jobId!=null">
             and jl.id=#{id}

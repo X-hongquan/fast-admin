@@ -3,7 +3,9 @@
 <mapper namespace="com.chq.app.mapper.RoleMapper">
 
     <select id="getList" resultType="com.chq.app.pojo.Role" parameterType="com.chq.app.pojo.Role">
-        select * from role as r
+        select
+        r.id, r.name,r.create_by, r.create_time, r.update_by, r.update_time
+        from role as r
         where 1=1
         <if test="id != null">
             and r.id = #{id}

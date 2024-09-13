@@ -3,7 +3,9 @@
 <mapper namespace="com.chq.app.mapper.OperationLogMapper">
 
     <select id="getOperationList" resultType="com.chq.app.pojo.OperationLog">
-            select * from sys_operation_log as l
+            select
+            l.id, l.title, l.business_type, l.method, l.request_method, l.operator_type, l.operation_name, l.operation_param, l.json_result, l.error_msg, l.cost_time, l.operation_time
+            from sys_operation_log as l
             where 1=1
             <if test="operationName != null and operationName != ''">
                 and l.operation_name = #{operationName}

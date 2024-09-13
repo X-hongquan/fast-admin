@@ -154,10 +154,11 @@ async function handleAssignMenu(row) {
     const d = arr.map(item => item.id)
     selectionMenus.value = d
     console.log(selectionMenus.value)
-    await nextTick()
     let that = menuTree.value
     //todo没展开问题
     that.setCheckedKeys(selectionMenus.value)
+    await nextTick()
+
 
   }
 }

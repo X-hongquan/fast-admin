@@ -3,7 +3,9 @@
 <mapper namespace="com.chq.app.mapper.PermissionMapper">
 
     <select id="getPermissionList" resultType="com.chq.app.pojo.Permission" parameterType="com.chq.app.pojo.Permission">
-        select p.* from permission as p
+        select
+        p.id, p.code, p.description
+        from permission as p
         left join role_permission as rp on p.id = rp.permission_id
         where 1=1
         <if test="id != null">

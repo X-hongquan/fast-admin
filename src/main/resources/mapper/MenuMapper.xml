@@ -13,7 +13,9 @@
 
 
     <select id="getMenuList" resultType="com.chq.app.pojo.Menu" parameterType="com.chq.app.pojo.Menu">
-        select m.* from menu as m
+        select
+        m.id, m.name, m.parent_id, m.component, m.url, m.sort, m.title, m.level, m.type, m.icon, m.status, m.redirect,m.link
+        from menu as m
         left join role_menu as rm on m.id = rm.menu_id
         where 1=1
         <if test="id != null">
@@ -32,7 +34,9 @@
         group by m.id order by m.level ,m.sort
     </select>
     <select id="getInitMenu" resultType="com.chq.app.pojo.Menu" parameterType="com.chq.app.pojo.Menu">
-            select m.* from menu as m
+            select
+            m.id, m.name, m.parent_id, m.component, m.url, m.sort, m.title, m.level, m.type, m.icon, m.status, m.redirect,m.link
+            from menu as m
             left join  role_menu as rm on m.id = rm.menu_id
             where 1=1
             ${params.dataScope}
