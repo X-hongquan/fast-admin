@@ -9,27 +9,9 @@ const userStore = useUserStore();
 const wsUrl = ref(`ws://localhost:8080/api/ws?token=`)
 const editMode = ref(false)
 
-function createSocket() {
-  const socket = new WebSocket(wsUrl.value + userStore.token)
-  socket.onopen = function (event) {
-    console.log('连接初始化')
-  }
-  socket.onmessage = function (event) {
-    console.log(event.data)
-  }
-  socket.onclose = function (event) {
-    console.log('连接关闭')
-    if (socket.CLOSED)
-      setTimeout(createSocket, 5000)
-  }
-  socket.onerror = function (event) {
-    console.log('连接错误')
-  }
-}
 
-onMounted(() => {
-  createSocket()
-})
+
+
 </script>
 
 

@@ -4,6 +4,7 @@ import 'nprogress/nprogress.css'
 import setting from '../../setting.js'
 import {useUserStore} from "@/store/user.js";
 import {removeToken} from "@/utils/token.js";
+import {closeSocket, createSocket} from "@/utils/socket.js";
 
 
 //引入所有views下.vue文件
@@ -68,6 +69,7 @@ router.beforeEach(async (to, from) => {
                 removeToken()
                 return '/login'
             }
+            await createSocket()
             if (!userStore.menus)
                 await userStore.getMenuList();
             if (!router.hasRoute(to.path)) {
@@ -75,12 +77,13 @@ router.beforeEach(async (to, from) => {
                 routerPackage(menus)
                 return to.path
             }
+
         }
         if (to.path === '/login') {
             return '/'
         }
     } else {
-        console.log(2)
+        closeSocket()
         if (to.path !== '/login') {
             return '/login'
         }
