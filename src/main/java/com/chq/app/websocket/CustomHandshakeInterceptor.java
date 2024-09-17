@@ -30,8 +30,11 @@ public class CustomHandshakeInterceptor extends HttpSessionHandshakeInterceptor 
 
     @Override
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
-        String token = UserHolder.getUser().getToken();
-        String s = stringRedisTemplate.opsForValue().get(LOGIN_USER + token);
+        URI uri = request.getURI();
+        String query = uri.getQuery();
+        String jwt= StringUtils.substringAfter(query, "token=");
+        String token = JwtUtil.parser(jwt);
+        System.out.println(token);
         attributes.put("token", token);
         return super.beforeHandshake(request, response, wsHandler, attributes);
     }

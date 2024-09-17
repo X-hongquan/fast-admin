@@ -1,6 +1,5 @@
 com.chq.app.controller.CacheController
 com.chq.app.controller.CaptchaController
-com.chq.app.controller.DeptController
 com.chq.app.controller.GeneratorController
 com.chq.app.controller.JobInfoController
 com.chq.app.controller.LoginLogController

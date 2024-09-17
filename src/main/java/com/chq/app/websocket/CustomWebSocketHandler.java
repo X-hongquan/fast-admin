@@ -27,7 +27,13 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) {
         String token = (String) session.getAttributes().get("token");
+        log.info("连接成功", token);
         sessionMap.put(token, session);
+        try {
+            session.sendMessage(new TextMessage("连接成功"));
+        } catch (IOException e) {
+            log.error("发送消息失败", e);
+        }
     }
 
     /**
@@ -38,7 +44,6 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
     protected void handleTextMessage(WebSocketSession session, TextMessage message) {
         // 获得客户端传来的消息
         String payload = message.getPayload();
-        System.out.println("收到消息 = " + payload);
 
     }
 
@@ -47,7 +52,7 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
      */
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
-        System.out.println("IMWebSocketHandler.afterConnectionClosed");
+        //todo
     }
 
     /**
@@ -55,15 +60,12 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
      */
     @Override
     public void handleTransportError(WebSocketSession session, Throwable exception) {
-        System.out.println("IMWebSocketHandler.handleTransportError");
+         //todo
     }
 
-    public static void sendMsg(Long toId, String msg) throws IOException {
-        String userId = String.valueOf(toId);
-
-        if (sessionMap.containsKey(userId) && sessionMap.get(userId).isOpen()) {
-
-            sessionMap.get(userId).sendMessage(new TextMessage(msg));
+    public static void sendMsg(String token, String msg) throws IOException {
+        if (sessionMap.containsKey(token) && sessionMap.get(token).isOpen()) {
+            sessionMap.get(token).sendMessage(new TextMessage(msg));
         }
     }
 

@@ -20,8 +20,8 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(customWebSocketHandler, "/ws")//添加自定义处理器
-                .addInterceptors(customHandshakeInterceptor);//添加自定义WebSocket拦截器
+                .addInterceptors(customHandshakeInterceptor)//添加自定义WebSocket拦截器
                 //设置跨域
-//                .setAllowedOrigins("*");
+             .setAllowedOrigins("*");
     }
 }

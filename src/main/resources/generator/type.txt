@@ -12,7 +12,6 @@ com.chq.app.dto.MessageDto
 com.chq.app.dto.Resp
 com.chq.app.dto.RoleMenuDto
 com.chq.app.dto.RolePermissionDto
-com.chq.app.pojo.Dept
 com.chq.app.pojo.JobInfo
 com.chq.app.pojo.JobLog
 com.chq.app.pojo.LoginLog

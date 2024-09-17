@@ -1,7 +1,4 @@
-package com.chq.app.config;
-
-import com.chq.app.common.filter.PropertyPreExcludeFilter;
-import org.apache.commons.lang3.ArrayUtils;
+package com.chq.app.common.filter;
 
 public class JSONFilter {
 

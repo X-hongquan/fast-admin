@@ -8,7 +8,6 @@ public interface UrlInterceptor {
             "/user/login",
             "/swagger-ui/**",
             "/v3/**",
-            "/ws/**",
             "/cache/**",
             "/test/**",
             "/generate/**",
