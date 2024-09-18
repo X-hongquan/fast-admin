@@ -30,7 +30,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("user")
-public class User extends BaseEntity implements Serializable {
+public class    User extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

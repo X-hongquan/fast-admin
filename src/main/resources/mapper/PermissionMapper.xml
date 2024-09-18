@@ -4,7 +4,7 @@
 
     <select id="getPermissionList" resultType="com.chq.app.pojo.Permission" parameterType="com.chq.app.pojo.Permission">
         select
-        p.id, p.code, p.description
+        p.id, p.code, p.description, p.create_by, p.create_time, p.update_by, p.update_time
         from permission as p
         left join role_permission as rp on p.id = rp.permission_id
         where 1=1

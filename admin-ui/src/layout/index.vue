@@ -64,7 +64,7 @@ const settingStore = useSettingStore()
     width: $base-menu-width;
     height: 100vh;
     background: $base-menu-background;
-    
+
 
     &.fold {
       width: $base-menu-min-width;

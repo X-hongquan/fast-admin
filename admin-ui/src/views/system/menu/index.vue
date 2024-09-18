@@ -179,8 +179,6 @@ onMounted(() => {
       </el-table-column>
       <el-table-column label="路径" prop="url"></el-table-column>
       <el-table-column label="组件" prop="component"></el-table-column>
-      <el-table-column prop="createBy" label="创建人"></el-table-column>
-      <el-table-column prop="createTime" label="创建时间"></el-table-column>
       <el-table-column label="图标" prop="icon">
         <template #default="{row}">
           <el-icon size="large">

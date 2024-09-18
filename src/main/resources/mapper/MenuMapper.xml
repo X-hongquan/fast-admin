@@ -14,7 +14,8 @@
 
     <select id="getMenuList" resultType="com.chq.app.pojo.Menu" parameterType="com.chq.app.pojo.Menu">
         select
-        m.id, m.name, m.parent_id, m.component, m.url, m.sort, m.title, m.level, m.type, m.icon, m.status, m.redirect,m.link
+        m.id, m.name, m.parent_id, m.component, m.url, m.sort, m.title, m.level, m.type, m.icon, m.status, m.redirect,m.link,
+        m.create_by, m.create_time, m.update_by, m.update_time
         from menu as m
         left join role_menu as rm on m.id = rm.menu_id
         where 1=1
@@ -35,7 +36,8 @@
     </select>
     <select id="getInitMenu" resultType="com.chq.app.pojo.Menu" parameterType="com.chq.app.pojo.Menu">
             select
-            m.id, m.name, m.parent_id, m.component, m.url, m.sort, m.title, m.level, m.type, m.icon, m.status, m.redirect,m.link
+            m.id, m.name, m.parent_id, m.component, m.url, m.sort, m.title, m.level, m.type, m.icon, m.status, m.redirect,m.link,
+            m.create_by, m.create_time, m.update_by, m.update_time
             from menu as m
             left join  role_menu as rm on m.id = rm.menu_id
             where 1=1

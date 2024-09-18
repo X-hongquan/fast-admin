@@ -24,6 +24,8 @@ export function checkEmail(rule, value, callback) {
 }
 
 export function checkArray(rule, value, callback) {
+    if (!value)
+        callback(new Error("选项不能为空"))
     if (value.length === 0) {
         callback(new Error("选项不能为空"))
     }

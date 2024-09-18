@@ -11,6 +11,7 @@ const goHome = () => {
 <template>
   <div class="box">
      <div>
+       <el-button type="primary" @click="goHome" style="height: 100px;width: 200px">返回首页</el-button>
      </div>
   </div>
 

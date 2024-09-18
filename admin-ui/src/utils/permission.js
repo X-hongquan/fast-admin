@@ -70,9 +70,8 @@ router.beforeEach(async (to, from) => {
                 return '/login'
             }
             await createSocket()
-            if (!userStore.menus)
+            if (!userStore.menus) {
                 await userStore.getMenuList();
-            if (!router.hasRoute(to.path)) {
                 const menus = userStore.menus
                 routerPackage(menus)
                 return to.path

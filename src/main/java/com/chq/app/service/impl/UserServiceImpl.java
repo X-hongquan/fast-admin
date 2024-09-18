@@ -149,7 +149,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
+    @Transactional
     public int edit(User user) {
+
+        if (StringUtils.isNotBlank(user.getPassword()))
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
         int row = baseMapper.updateById(user);
         userRoleService.remove(new LambdaQueryWrapper<UserRole>().eq(UserRole::getUserId, user.getId()));
         Set<Role> roles = user.getRoles();

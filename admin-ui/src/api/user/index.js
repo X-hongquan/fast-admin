@@ -90,7 +90,7 @@ export function addUserAPI(data) {
         data
     })
 }
-export function updateUserAPI(data) {
+export function editUserAPI(data) {
     return request({
         url: '/user',
         method: 'put',
