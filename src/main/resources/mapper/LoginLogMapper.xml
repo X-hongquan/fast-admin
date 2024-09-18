@@ -19,5 +19,14 @@
             and login_time between str_to_date(#{startTime},'%Y-%m-%d %H:%i:%s') and str_to_date(#{endTime},'%Y-%m-%d
             %H:%i:%s')
         </if>
+        <if test="loginTime != null and startTime==null">
+            and date_format(login_time,'%Y-%m-%d') == date_format(#{loginTime},'%Y-%m-%d')
+        </if>
     </select>
+
+
+
+
+
+
 </mapper>

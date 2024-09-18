@@ -9,6 +9,7 @@ com.chq.app.dto.form.EmailForm
 com.chq.app.dto.form.LoginForm
 com.chq.app.dto.form.PasswordForm
 com.chq.app.dto.MessageDto
+com.chq.app.dto.MsgDto
 com.chq.app.dto.Resp
 com.chq.app.dto.RoleMenuDto
 com.chq.app.dto.RolePermissionDto

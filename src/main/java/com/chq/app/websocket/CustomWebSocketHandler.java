@@ -1,8 +1,13 @@
 package com.chq.app.websocket;
 
 
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
+import com.chq.app.dto.MsgDto;
+import com.chq.app.dto.enums.MsgTypeEnum;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -21,6 +26,14 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
     private static final Map<String, WebSocketSession> sessionMap = new ConcurrentHashMap<>();
 
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    public static int getOnlineCount() {
+        return sessionMap.size();
+    }
+
+
     /**
      * socket 建立成功事件
      */
@@ -30,7 +43,12 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
         log.info("连接成功", token);
         sessionMap.put(token, session);
         try {
-            session.sendMessage(new TextMessage("连接成功"));
+            for (Map.Entry<String, WebSocketSession> map : sessionMap.entrySet()) {
+                MsgDto msgDto = new MsgDto();
+                msgDto.setId(IdWorker.getId()).setType(MsgTypeEnum.ONLINE).setData(sessionMap.size());
+                String s = objectMapper.writeValueAsString(msgDto);
+                sendMsg(map.getKey(),s);
+            }
         } catch (IOException e) {
             log.error("发送消息失败", e);
         }
@@ -53,6 +71,18 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
         //todo
+        String token =(String) session.getAttributes().get("token");
+        sessionMap.remove(token);
+        try {
+            for (Map.Entry<String, WebSocketSession> map : sessionMap.entrySet()) {
+                MsgDto msgDto = new MsgDto();
+                msgDto.setId(IdWorker.getId()).setType(MsgTypeEnum.ONLINE).setData(sessionMap.size());
+                String s = objectMapper.writeValueAsString(msgDto);
+                sendMsg(map.getKey(),s);
+            }
+        } catch (IOException e) {
+            log.error("发送消息失败", e);
+        }
     }
 
     /**

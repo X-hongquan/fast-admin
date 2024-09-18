@@ -8,5 +8,6 @@ com.chq.app.controller.OperationLogController
 com.chq.app.controller.PermissionController
 com.chq.app.controller.RoleController
 com.chq.app.controller.SettingController
+com.chq.app.controller.StatisticsController
 com.chq.app.controller.TestController
 com.chq.app.controller.UserController

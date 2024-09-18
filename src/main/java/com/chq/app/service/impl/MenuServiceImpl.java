@@ -66,10 +66,10 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
 
     @Override
     public void updateMenu(Menu old, Menu fresh) {
-        if (old.getSort().equals(fresh.getSort()) && old.getParentId().equals(fresh.getParentId())) {
-            updateById(fresh);
+        updateById(fresh);
+        if (!old.getSort().equals(fresh.getSort()) || !old.getParentId().equals(fresh.getParentId())) {
+            baseMapper.updateMenuAdaptSort(fresh);
         }
-        baseMapper.updateMenuAdaptSort(fresh);
     }
 
 
@@ -84,6 +84,8 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
         int max = baseMapper.selectMaxSortBySameParentId(menu);
         int sort = max + 1;
         menu.setSort(sort);
+        Menu m = getById(menu.getParentId());
+        menu.setLevel(m.getLevel() + 1);
         return baseMapper.insert(menu);
     }
 

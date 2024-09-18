@@ -63,8 +63,6 @@ public class LoginLogServiceImpl extends ServiceImpl<LoginLogMapper, LoginLog> i
     }
 
 
-
-
     private String sendGetRequest(String url) {
         // 创建HttpHeaders对象
         HttpHeaders headers = new HttpHeaders();

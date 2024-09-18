@@ -1,12 +1,13 @@
 import {getToken} from "@/utils/token.js";
-import {getUserInfoAPI} from "@/api/user/index.js";
+import {useSocketStore} from "@/store/socket.js";
+
 
 let socket
 
 const baseUrl = import.meta.env.VITE_APP_BASE_WS_URL
 
 export async function createSocket() {
-
+    const store = useSocketStore()
     socket = new WebSocket(baseUrl + getToken())
     socket.onopen = function (event) {
         console.log('连接初始化')
@@ -19,7 +20,17 @@ export async function createSocket() {
     socket.onerror = function (event) {
         console.log('连接错误')
     }
+
+    socket.onmessage = function (e) {
+        console.log(e.data);
+        let p = JSON.parse(e.data)
+        if (p.type === 1) {
+            store.onlineCount = p.data
+        }
+    }
 }
+
+
 
 export function closeSocket() {
     if (socket !== undefined) {

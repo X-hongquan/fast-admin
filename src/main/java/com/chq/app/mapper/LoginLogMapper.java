@@ -14,6 +14,7 @@ import java.util.List;
 public interface LoginLogMapper extends BaseMapper<LoginLog> {
 
     List<LoginLog> getList(LoginLog loginLog);
+
 }
 
 
