@@ -105,10 +105,10 @@ onMounted(() => {
     <el-col :span="10">
       <el-form label-width="100" :model="user" :rules="userRule" ref="userRef">
         <el-form-item label="用户名" prop="username">
-          <el-input v-model="user.username" :disabled="mode==='detail'"></el-input>
+          <el-input v-model="user.username" :disabled="mode!=='add'"></el-input>
         </el-form-item>
         <el-form-item label="头像">
-          <el-avatar :src="user.avatar" :disabled="mode==='detail'"></el-avatar>
+          <el-avatar :src="user.avatar" :disabled="mode!=='add'"></el-avatar>
         </el-form-item>
         <el-form-item label="角色" prop="roles">
           <el-select v-model="user.roles" multiple placeholder="Select" style="width: 240px"
