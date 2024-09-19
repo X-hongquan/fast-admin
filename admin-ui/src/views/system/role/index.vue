@@ -51,6 +51,7 @@ const total = ref(0)
 
 const selections = ref([])
 
+
 /**
  * 选定函数
  * @param {role[]} val
@@ -115,7 +116,6 @@ async function handleUpdate(row) {
   title.value = '编辑角色'
   const res = await getRoleAPI(row.id)
   Object.assign(role, res.data)
-
 }
 
 //权限抽屉
@@ -127,7 +127,6 @@ const direction = ref('rtl')
 
 
 function handleChangeGroupAll(val, key) {
-
   const arr = permissions.value[key]
   if (val) {
     //如果没有选上，直接选全部
@@ -197,7 +196,6 @@ async function handleAssignPermission(row) {
   if (res.code === 200) {
     permissions.value = res.data
   }
-
   const r = await listPermissionAPI({pageSize: 500, roleId: row.id == 1 ? undefined : row.id})
   if (r.code === 200) {
     const arr = r.data
