@@ -51,7 +51,7 @@ public class JobInfo extends BaseEntity implements Serializable {
     private String jobDesc;
 
     /**
-     * 1:fixed_rate :cron
+     *执行方式 (1fixed_rate 2cron)
      */
     private Integer jobType;
 
@@ -61,7 +61,7 @@ public class JobInfo extends BaseEntity implements Serializable {
     private Long jobNextTime;
 
     /**
-     * 周期单位（ms）
+     * 周期单位
      */
     private Long jobRate;
 
@@ -71,7 +71,7 @@ public class JobInfo extends BaseEntity implements Serializable {
     private String jobCron;
 
     /**
-     * 触发状态,1正常运行 0停止
+     * 触发状态 (1运行 0停止)
      */
     private Integer triggerStatus;
 

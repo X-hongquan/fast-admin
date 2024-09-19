@@ -1,5 +1,8 @@
 package com.chq.app.common.enums;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public enum ExecuteType {
 
     SYNC("sync"),
@@ -7,10 +10,6 @@ public enum ExecuteType {
     ASYNC("async");
 
     private String value;
-
-    ExecuteType(String value) {
-        this.value = value;
-    }
 
     public String getValue() {
         return value;

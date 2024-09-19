@@ -11,6 +11,12 @@ const prop=defineProps({
   ,header:{
     type:String,
     default:''
+  },
+  width:{
+    type:String,
+  }
+  ,height:{
+    type:String,
   }
 })
 const CodeDiv = ref(null)
@@ -30,7 +36,7 @@ function copyText() {
 </script>
 
 <template>
-<div class="code-box" ref="CodeDiv">
+<div class="code-box" ref="CodeDiv" :style="{width:width,height:height}">
   <div class="header">{{header}}</div>
   <span>{{data}}</span>
   <el-tooltip content="复制" >

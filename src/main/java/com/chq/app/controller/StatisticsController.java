@@ -1,6 +1,7 @@
 package com.chq.app.controller;
 
 
+import com.chq.app.common.annoation.PreAuth;
 import com.chq.app.common.domain.R;
 
 import com.chq.app.service.IStatisticsService;
@@ -30,6 +31,7 @@ public class StatisticsController {
      */
 
     @GetMapping("/login/today")
+    @PreAuth(value = "system:statistics:query",description = "查询统计权限")
     public R<Integer> getLoginCountByToday() {
         LocalDate now = LocalDate.now();
         LocalDateTime start = LocalDateTime.of(now, LocalTime.MIN);
@@ -45,6 +47,7 @@ public class StatisticsController {
      * @return
      */
     @GetMapping("/login/month")
+    @PreAuth(value = "system:statistics:query",description = "查询统计权限")
     public R<Integer> getLoginCountByMonth() {
         DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM");
         LocalDate currentDate = LocalDate.now();
@@ -70,11 +73,11 @@ public class StatisticsController {
      * @return
      */
     @GetMapping("/login/year")
+    @PreAuth(value = "system:statistics:query",description = "查询统计权限")
     public R<Integer> getLoginCountByYear() {
         LocalDate currentDate = LocalDate.now();
         LocalDate firstDay = currentDate.withDayOfYear(1);
         LocalDate lastDay = currentDate.withDayOfYear(currentDate.lengthOfYear());
-
         LocalDateTime start = LocalDateTime.of(firstDay, LocalTime.MIN);
         LocalDateTime end = LocalDateTime.of(lastDay, LocalTime.MAX);
         int loginCount = statisticsService.getLoginCount(start, end);

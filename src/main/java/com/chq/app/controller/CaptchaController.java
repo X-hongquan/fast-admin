@@ -35,6 +35,11 @@ public class CaptchaController {
     @Resource
     private StringRedisTemplate stringRedisTemplate;
 
+
+    /**
+     * 获取验证码
+     * @return
+     */
     @GetMapping
     public R<Map<String, String>> get() {
 
@@ -76,6 +81,11 @@ public class CaptchaController {
         return R.fail();
     }
 
+    /**
+     * 生成随机字符串
+     * @param length 长度
+     * @return
+     */
     private static String generateRandomString(int length) {
         Random random = new Random();
         StringBuilder sb = new StringBuilder(length);

@@ -4,6 +4,11 @@ package com.chq.app.builder;
 
 import java.sql.*;
 
+
+/**
+ *
+ */
+
 public class TableInfoFetcher {
 
     /**
@@ -32,7 +37,7 @@ public class TableInfoFetcher {
     public static void main(String[] args) {
         Config config = new Config();
         config
-                .setTableName("dept")
+                .setTableName("operation_log")
                 .setAuthor("chq")
                 .setJdbcUrl("jdbc:mysql://192.168.102.129:3306/vjs?")
                 .setUsername("root")

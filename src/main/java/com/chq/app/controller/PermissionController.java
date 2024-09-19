@@ -12,11 +12,11 @@ import com.chq.app.service.IRoleService;
 import com.chq.app.util.PageUtils;
 import com.chq.app.util.UserHolder;
 import jakarta.annotation.Resource;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static com.chq.app.common.aspectj.DataScopeAspect.CONTROL;
 
@@ -41,21 +41,43 @@ public class PermissionController {
 
 
     @GetMapping("/list")
-    @PreAuth("system:permission:query")
+    @PreAuth(value = "system:permission:query", description = "查询权限权限")
     public TableInfo<List<Permission>> list(Permission permission) {
         PageUtils.startPage();
         List<Permission> list = permissionService.getList(permission);
         return TableInfo.ok(list);
     }
 
+    /**
+     * 根据角色id查询权限
+     * 并进行分组
+     * @param permission
+     * @return
+     */
+    @GetMapping("/groupByRoleId")
+    @PreAuth(value = "system:permission:query", description = "查询权限权限")
+    public R<Map<String, List<Permission>>> listGroup(Permission permission) {
+        List<Permission> list = permissionService.getList(permission);
+        Map<String, List<Permission>> map = new HashMap();
+        for (Permission p : list) {
+            String code = p.getCode();
+            String key = StringUtils.substringBeforeLast(code, ":");
+            List<Permission> arr = map.getOrDefault(key, new ArrayList<Permission>());
+            arr.add(p);
+            map.put(key, arr);
+        }
+        return R.ok(map);
+    }
+
+
     @GetMapping("/{id}")
-    @PreAuth("system:permission:query")
+    @PreAuth(value = "system:permission:query", description = "查询权限权限")
     public Permission get(@PathVariable Long id) {
         return permissionService.getPermissionById(id);
     }
 
     @PostMapping
-    @PreAuth("system:permission:add")
+    @PreAuth(value = "system:permission:add", description = "新增权限权限")
     public R add(@RequestBody Permission permission) {
         LambdaQueryWrapper<Permission> lqw = new LambdaQueryWrapper<Permission>().eq(Permission::getCode, permission.getCode());
         if (permissionService.getOne(lqw) != null) {
@@ -66,7 +88,7 @@ public class PermissionController {
     }
 
     @PutMapping
-    @PreAuth("system:permission:edit")
+    @PreAuth(value = "system:permission:edit", description = "编辑权限权限")
     public R edit(@RequestBody Permission permission) {
         Permission p = permissionService.getPermissionById(permission.getId());
         UserHolder.getUser().checkHasControl(p.getCreateBy());
@@ -79,7 +101,7 @@ public class PermissionController {
     }
 
     @DeleteMapping("/{ids}")
-    @PreAuth("system:permission:remove")
+    @PreAuth(value = "system:permission:remove", description = "删除权限权限")
     public R<Integer> delete(@PathVariable Long[] ids) {
         int row = permissionService.removePermissionByIds(ids);
         return R.ok(row);

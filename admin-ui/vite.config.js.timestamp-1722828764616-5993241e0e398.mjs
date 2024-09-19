@@ -1,5 +1,5 @@
 // vite.config.js
-import { defineConfig } from "file:///D:/WebProject/v-3-v/node_modules/.pnpm/vite@5.3.5_@types+node@22.0.0_sass@1.77.8/node_modules/vite/dist/node/index.js";
+import { defineConfig } from "file:///D:/WebProject/v-3-v/node_modules/.pnpm/vite@5.3.5_@types+node@22.0.0_sass@1.77.8/node_modules/vite/dist/node/user.js";
 import vue from "file:///D:/WebProject/v-3-v/node_modules/.pnpm/@vitejs+plugin-vue@5.1.1_vite@5.3.5_@types+node@22.0.0_sass@1.77.8__vue@3.4.34/node_modules/@vitejs/plugin-vue/dist/index.mjs";
 import path from "path";
 import { createSvgIconsPlugin } from "file:///D:/WebProject/v-3-v/node_modules/.pnpm/vite-plugin-svg-icons@2.0.1_vite@5.3.5_@types+node@22.0.0_sass@1.77.8_/node_modules/vite-plugin-svg-icons/dist/index.mjs";

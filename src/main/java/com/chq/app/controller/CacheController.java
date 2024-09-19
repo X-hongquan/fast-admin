@@ -1,5 +1,6 @@
 package com.chq.app.controller;
 
+import com.chq.app.common.annoation.PreAuth;
 import com.chq.app.common.domain.R;
 import com.chq.app.dto.CacheDto;
 import com.chq.app.dto.CacheKeyDto;
@@ -27,6 +28,7 @@ public class CacheController {
     private StringRedisTemplate stringRedisTemplate;
 
     @GetMapping("/list")
+    @PreAuth(value = "system:cache:query",description = "缓存查询权限")
     public R<List<CacheKeyDto>> list() {
         Cursor<String> scan = stringRedisTemplate.scan(ScanOptions.scanOptions().build());
         List<CacheKeyDto> list = new ArrayList<>();
@@ -75,6 +77,7 @@ public class CacheController {
 
 
     @GetMapping("/info/{key}")
+    @PreAuth(value = "system:cache:query",description = "缓存查询权限")
     public R<CacheDto> info(@PathVariable("key") String key) {
         String value = stringRedisTemplate.opsForValue().get(key);
         Long expire = stringRedisTemplate.getExpire(key, TimeUnit.SECONDS);
@@ -83,12 +86,14 @@ public class CacheController {
     }
 
     @PostMapping
+    @PreAuth(value = "system:cache:add",description = "缓存添加权限")
     public R<String> add(@RequestBody CacheDto dto) {
         stringRedisTemplate.opsForValue().set(dto.getKey(), dto.getValue(), dto.getExpire(), TimeUnit.SECONDS);
         return R.ok();
     }
 
     @DeleteMapping
+    @PreAuth(value = "system:cache:remove",description = "缓存删除权限")
     public R<String> del(@RequestBody CacheKeyDto cacheKeyDto) {
         transDto(cacheKeyDto);
         return R.ok();

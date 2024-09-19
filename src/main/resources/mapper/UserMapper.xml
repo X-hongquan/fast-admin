@@ -22,14 +22,8 @@
 
     <select id="getUserList" resultType="com.chq.app.pojo.User" parameterType="com.chq.app.pojo.User">
         select
-        u.id,
-        u.avatar,
-        u.create_by,
-        u.create_time,
-        u.email,
-        u.status,
-        u.update_time,
-        u.username
+        u.id, u.username, u.phone, u.gender, u.avatar, u.status, u.email,u.nick_name,
+        u.create_by, u.create_time, u.update_by, u.update_time
         from user as u
         left join user_role as ur on u.id = ur.user_id
         where 1=1

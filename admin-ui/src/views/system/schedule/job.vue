@@ -9,10 +9,11 @@ import {
   listJobInfoAPI,
   startJobInfoAPI,
   stopJobInfoAPI
-} from "@/api/job.js";
+} from "@/api/jobInfo.js";
 import {handleConfirmDel} from "@/utils/confirm.js";
 import {addNotification, deleteNotification, updateNotification} from "@/utils/notification.js";
 import {useRouter} from "vue-router";
+import {job_info$job_typeMap, job_info$trigger_statusMap} from "@/utils/dictMap.js";
 
 const tableData = ref([])
 const req = reactive({
@@ -227,20 +228,17 @@ onMounted(() => {
         </el-form-item>
         <el-form-item label="触发状态">
           <el-select v-model="jobInfo.triggerStatus" placeholder="请选择触发状态" clearable class="input-width">
-            <el-option label="正常" :value="1"></el-option>
-            <el-option label="暂停" :value="0"></el-option>
+            <el-option v-for="(value,key) in job_info$trigger_statusMap" :value="Number(key)" :label="value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="模式" required>
           <el-select v-model="jobInfo.jobType" placeholder="请选择触发模式" clearable class="input-width">
-            <el-option label="fixedRate" :value="1"></el-option>
-            <el-option label="cron" :value="2"></el-option>
+            <el-option v-for="(value,key) in job_info$job_typeMap" :value="Number(key)" :label="value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="开始时间" v-if="jobInfo.jobType==1">
           <el-date-picker v-model="jobInfo.nextTime" type="datetime" placeholder="选择日期时间" clearable
                           value-format="YYYY-MM-DD HH:mm:ss">
-
           </el-date-picker>
         </el-form-item>
         <el-form-item label="周期(s)" required v-if="jobInfo.jobType==1">

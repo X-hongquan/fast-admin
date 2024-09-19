@@ -66,12 +66,12 @@ public class Menu extends BaseEntity implements Serializable {
     private String title;
 
     /**
-     * 菜单层级 1 一级菜单 2 二级菜单 3 三级菜单
+     * 菜单层级
      */
     private Integer level;
 
     /**
-     * 菜单类型 0目录 1菜单 2其他
+     * 菜单类型 (0目录 1菜单 2其他)
      */
     private Integer type;
 
@@ -81,7 +81,7 @@ public class Menu extends BaseEntity implements Serializable {
     private String icon;
 
     /**
-     * 状态 1正常 0禁用
+     * 状态 (1正常 0禁用)
      */
     private Integer status;
 
@@ -93,7 +93,7 @@ public class Menu extends BaseEntity implements Serializable {
 
 
     /**
-     * 是否外链 0非外链 1外链
+     * 是否外链 (0非外链 1外链)
      */
     private Integer link;
 

@@ -42,6 +42,7 @@ public class MenuController {
     }
 
     @GetMapping("/list")
+    @PreAuth(value ="system:menu:query",description = "查询菜单权限")
     public R<List<Menu>> list(Menu menu) {
         List<Menu> list = menuService.getList(menu);
         return R.ok(list);
@@ -49,21 +50,21 @@ public class MenuController {
 
 
     @GetMapping("/{id}")
-    @PreAuth("system:menu:query")
+    @PreAuth(value ="system:menu:query",description = "查询菜单权限")
     public R<Menu> get(@PathVariable Long id) {
         Menu menu = menuService.getMenuById(id);
         return R.ok(menu);
     }
 
     @PostMapping
-    @PreAuth("system:menu:add")
+    @PreAuth(value = "system:menu:add",description = "新增菜单权限")
     public R add(@RequestBody Menu menu) {
         int row = menuService.add(menu);
         return R.ok(row);
     }
 
     @PutMapping
-    @PreAuth("system:menu:edit")
+    @PreAuth(value = "system:menu:edit",description = "编辑菜单权限")
     public R edit(@RequestBody Menu menu) {
         Menu m = menuService.getMenuById(menu.getId());
         UserHolder.getUser().checkHasControl(m.getCreateBy());
@@ -72,7 +73,7 @@ public class MenuController {
     }
 
     @DeleteMapping("/{ids}")
-    @PreAuth("system:menu:remove")
+    @PreAuth(value = "system:menu:remove",description = "删除菜单权限")
     public R<Integer> delete(@PathVariable Long[] ids) {
         int row = menuService.removeMenuByIds(ids);
         return R.ok(row);

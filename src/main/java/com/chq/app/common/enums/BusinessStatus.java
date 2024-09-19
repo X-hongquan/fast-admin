@@ -2,19 +2,28 @@ package com.chq.app.common.enums;
 
 /**
  * 操作状态
- * 
- * @author ruoyi
  *
+ * @author ruoyi
  */
-public enum BusinessStatus
-{
+public enum BusinessStatus {
     /**
      * 成功
      */
-    SUCCESS,
+    SUCCESS(1),
 
     /**
      * 失败
      */
-    FAIL,
+    FAIL(0);
+
+
+    int value;
+
+    public int value() {
+        return value;
+    }
+
+    BusinessStatus(int value) {
+        this.value = value;
+    }
 }

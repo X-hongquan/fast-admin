@@ -31,3 +31,13 @@ export function checkArray(rule, value, callback) {
     }
     callback()
 }
+
+export function checkPhone(rule, value, callback) {
+    const regex = /^1[3456789]\d{9}$/;
+    if (regex.test(value)) {
+        callback()
+    } else {
+        callback(new Error('手机号格式不正确'))
+    }
+
+}

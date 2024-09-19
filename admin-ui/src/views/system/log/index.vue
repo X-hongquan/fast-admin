@@ -1,7 +1,7 @@
 <script setup>
 
 import {ref, onMounted, reactive} from "vue";
-import {getLogListAPI} from "@/api/log/index.js";
+import {listOperationLogAPI} from "@/api/operationLog.js";
 import CodeBox from '@/components/CodeBox/index.vue'
 
 const tableData = ref([])
@@ -26,7 +26,7 @@ function resetReq() {
 
 
 async function getLogList() {
-  const res = await getLogListAPI(req)
+  const res = await listOperationLogAPI(req)
   if (res.code === 200) {
     const arr = res.data
     arr.forEach(item => {

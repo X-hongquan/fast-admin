@@ -10,10 +10,14 @@ import org.springframework.context.annotation.Configuration;
 @MapperScan("com.chq.app.mapper")
 public class MybatisPlusConfig {
 
-    @Bean
+    /**
+     * 阻塞全表更新操作
+     * @return
+     */
+/*    @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
         interceptor.addInnerInterceptor(new BlockAttackInnerInterceptor());
         return interceptor;
-    }
+    }*/
 }

@@ -1,17 +1,18 @@
 <script setup>
 import {ref, reactive, onMounted} from "vue";
 import {
-  getMenuListAPI,
+  listMenuAPI,
   deleteMenuAPI,
   getMenuAPI,
-  updateMenuAPI,
+  editMenuAPI,
   addMenuAPI
-} from "@/api/menu/index.js";
+} from "@/api/menu.js";
 import {handleConfirmDel} from "@/utils/confirm.js";
 import {addNotification, deleteNotification, updateNotification} from "@/utils/notification.js";
 import {ElMessage} from "element-plus";
 import {preHandleMenu} from "@/utils/init.js";
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+import {menu$linkMap, menu$statusMap, menu$typeMap} from "@/utils/dictMap.js";
 
 let icons = Object.keys(ElementPlusIconsVue)
 
@@ -56,7 +57,7 @@ async function handleSelectionChange(val) {
 }
 
 async function getMenuList() {
-  const res = await getMenuListAPI(req)
+  const res = await listMenuAPI(req)
   if (res.code === 200) {
     menus.value = res.data
     const {arr} = preHandleMenu(res.data)
@@ -128,7 +129,7 @@ async function handleUpdate(row) {
 
 async function submit() {
   if (menu.id) {
-    const res = await updateMenuAPI(menu)
+    const res = await editMenuAPI(menu)
     updateNotification(res, () => {
       getMenuList()
       mode.value = false
@@ -153,8 +154,7 @@ onMounted(() => {
       <el-form inline>
         <el-form-item label="状态" prop="status" class="input-width">
           <el-select v-model="req.status" placeholder="请选择状态" clearable >
-            <el-option label="启用" :value="1"></el-option>
-            <el-option label="禁用" :value="0"></el-option>
+            <v-for v-for="(value,key) in menu$statusMap" :value="Number(key)" :label="value" :key="key"/>
           </el-select>
         </el-form-item>
       </el-form>
@@ -172,9 +172,7 @@ onMounted(() => {
       <el-table-column label="标题" prop="title"></el-table-column>
       <el-table-column label="类型" prop="type">
         <template #default="{row}">
-          <el-tag v-if="row.type === 0" type="success">目录</el-tag>
-          <el-tag v-else-if="row.type === 1" type="danger">菜单</el-tag>
-          <el-tag v-else type="warning">其他</el-tag>
+         <el-tag>{{menu$typeMap[row.type]}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="路径" prop="url"></el-table-column>
@@ -225,8 +223,7 @@ onMounted(() => {
         </el-row>
         <el-form-item label="类型">
           <el-radio-group v-model="menu.link">
-            <el-radio :label="0">非外链</el-radio>
-            <el-radio :label="1">外链</el-radio>
+           <el-radio v-for="(value,key) in menu$linkMap" :label="value" :key="key" :value="Number(key)"/>
           </el-radio-group>
         </el-form-item>
         <el-row gutter="30">
@@ -261,9 +258,7 @@ onMounted(() => {
         </el-form-item>
         <el-form-item label="类型">
           <el-radio-group v-model="menu.type">
-            <el-radio :label="0">目录</el-radio>
-            <el-radio :label="1">菜单</el-radio>
-            <el-radio :label="2">其他</el-radio>
+           <el-radio v-for="(value,key) in menu$typeMap" :label="value" :key="key" :value="Number(key)"/>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="图标">

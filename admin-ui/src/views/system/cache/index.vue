@@ -4,7 +4,7 @@ import {onMounted, onUnmounted, reactive, ref} from "vue";
 import {ArrowRight} from "@element-plus/icons-vue";
 
 
-import {addCacheAPI, delCacheAPI, listCacheAPI} from "@/api/cache/index.js";
+import {addCacheAPI, delCacheAPI, listCacheAPI} from "@/api/cache.js";
 import {handleConfirmDel} from "@/utils/confirm.js";
 import {addNotification, deleteNotification} from "@/utils/notification.js";
 import {useRouter} from "vue-router";

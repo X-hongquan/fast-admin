@@ -6,10 +6,11 @@ import {
   deleteLogJobInfoAPI,
   listLogJobInfoAPI,
 
-} from "@/api/job.js";
+} from "@/api/jobInfo.js";
 import {handleConfirmDel} from "@/utils/confirm.js";
 import {addNotification, deleteNotification, updateNotification} from "@/utils/notification.js";
 import {useRoute} from "vue-router";
+import {job_log$handle_statusMap} from "@/utils/dictMap.js";
 
 const tableData = ref([])
 //时间间隔
@@ -34,6 +35,7 @@ function reset() {
   req.endTime = undefined
   req.startTime = undefined
   value2.value = []
+  getJobLogList()
 }
 
 async function getJobLogList() {
@@ -94,7 +96,7 @@ onMounted(() => {
 <template>
   <div class="content-box">
     <div class="search-box">
-      <el-form inline>
+      <el-form inline @keyup.enter="getJobLogList">
         <el-form-item label="任务名称">
           <el-input v-model="req.jobName" placeholder="请输入任务名称" clearable></el-input>
         </el-form-item>
@@ -103,8 +105,7 @@ onMounted(() => {
         </el-form-item>
         <el-form-item label="执行状态">
           <el-select v-model="req.handleStatus" placeholder="请选择触发状态" clearable class="input-width">
-            <el-option label="成功" :value="1"></el-option>
-            <el-option label="失败" :value="0"></el-option>
+            <el-option v-for="(value,key) in job_log$handle_statusMap" :value="Number(key)" :label="value" :key="key"/>
           </el-select>
         </el-form-item>
         <el-form-item label="调度时间">
@@ -134,8 +135,7 @@ onMounted(() => {
       <el-table-column prop="triggerTime" label="调度时间"></el-table-column>
       <el-table-column prop="handleStatus" label="处理状态">
         <template v-slot="{row}">
-          <el-tag v-if="row.handleStatus === 0" type="info">失败</el-tag>
-          <el-tag v-else type="success">成功</el-tag>
+          <el-tag>{{ job_log$handle_statusMap[row.handleStatus] }}</el-tag>
         </template>
       </el-table-column>
 

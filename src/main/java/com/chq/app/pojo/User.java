@@ -48,12 +48,24 @@ public class    User extends BaseEntity implements Serializable {
     private String password;
 
     /**
+     * 手机号码
+     */
+    private String phone;
+
+
+    /**
+     * 性别 (1男 2女 3其它)
+     */
+    private Integer gender;
+
+
+    /**
      * 头像
      */
     private String avatar;
 
     /**
-     * 状态 1正常 0禁用
+     * 状态 (1正常 0停用)
      */
     private Integer status;
 
@@ -61,6 +73,12 @@ public class    User extends BaseEntity implements Serializable {
      * 邮箱
      */
     private String email;
+
+
+    /**
+     * 昵称
+     */
+    private String nickName;
 
 
     @TableField(exist = false)

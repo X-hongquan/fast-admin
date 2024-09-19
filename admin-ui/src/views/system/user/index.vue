@@ -1,11 +1,13 @@
 <script setup>
 
 import {onMounted, ref, reactive} from "vue";
-import {deleteUserAPI, getUserListAPI} from "@/api/user/index.js";
-import {getRoleListAPI} from "@/api/role/index.js";
+import {deleteUserAPI, listUserAPI} from "@/api/user.js";
+import {listRoleAPI} from "@/api/role.js";
 import {handleConfirmDel} from "@/utils/confirm.js";
 import {deleteNotification} from "@/utils/notification.js";
 import {ElMessage} from "element-plus";
+import {user$genderMap, user$statusMap} from "@/utils/dictMap.js";
+
 
 const tableData = ref([])
 const req = reactive({
@@ -54,7 +56,7 @@ function resetReq() {
 }
 
 async function getUserList() {
-  const res = await getUserListAPI(req)
+  const res = await listUserAPI(req)
   if (res.code === 200) {
     tableData.value = res.data
     total.value = Number(res.total)
@@ -62,7 +64,7 @@ async function getUserList() {
 }
 
 async function getRoleList() {
-  const res = await getRoleListAPI()
+  const res = await listRoleAPI()
   if (res.code === 200) {
     roleList.value = res.data
   }
@@ -77,6 +79,8 @@ function handleCurrentChange(val) {
   getUserList()
 }
 
+
+
 onMounted(() => {
   getUserList()
   getRoleList()
@@ -86,7 +90,7 @@ onMounted(() => {
 <template>
   <div class="content-box">
     <div class="search-box">
-      <el-form inline>
+      <el-form inline @keyup.enter="getUserList">
         <el-form-item label="角色" class="input-width">
           <el-select v-model="req.roleId" placeholder="请选择">
             <el-option v-for="(item) in roleList" :key="item.id" :label="item.name" :value="item.id"/>
@@ -94,8 +98,7 @@ onMounted(() => {
         </el-form-item>
         <el-form-item label="状态" class="input-width">
           <el-select v-model="req.status" placeholder="请选择" clearable>
-            <el-option label="启用" :value="1"></el-option>
-            <el-option label="禁用" :value="0"></el-option>
+            <el-option v-for="(value,key) in user$statusMap" :label="value" :key="key" :value="key"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -111,7 +114,7 @@ onMounted(() => {
       <el-table-column type="selection" width="55"/>
       <el-table-column type="index" label="序号" width="80"></el-table-column>
       <el-table-column prop="username" label="用户名"></el-table-column>
-      <el-table-column prop="email" label="邮箱"></el-table-column>
+      <el-table-column prop="nickName" label="昵称"></el-table-column>
       <el-table-column prop="roles" label="角色">
         <template #default="{row}">
           <el-tag :type="item.createBy===row.username?'primary':'danger'" v-for="(item) in row.roles" :key="item.id"
@@ -119,7 +122,12 @@ onMounted(() => {
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="createBy" label="创建人"></el-table-column>
+      <el-table-column prop="gender" label="性别">
+        <template #default="{row}">
+          {{ user$genderMap[row.gender] }}
+        </template>
+      </el-table-column>
+
       <el-table-column prop="createTime" label="创建时间"></el-table-column>
 
       <el-table-column label="操作">

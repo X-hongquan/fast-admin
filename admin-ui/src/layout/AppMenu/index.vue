@@ -26,7 +26,6 @@ function goMenu(item) {
 
 function checkChildrenHasMenu(children) {
   if (children && children.length == 0) return true
-  console.log(children)
   if (children instanceof Array) {
     for (const child of children) {
       if (child.type !== 2) {

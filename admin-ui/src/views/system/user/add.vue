@@ -1,9 +1,11 @@
 <script setup>
 import {onMounted, reactive, ref} from "vue";
-import {checkArray, checkEmail, checkPassword, checkUserName} from "@/utils/validate.js";
-import {getRoleListAPI} from "@/api/role/index.js";
+import {checkArray, checkEmail, checkPassword, checkPhone, checkUserName} from "@/utils/validate.js";
+import {listRoleAPI} from "@/api/role.js";
 import {addNotification} from "@/utils/notification.js";
-import {addUserAPI} from "@/api/user/index.js";
+import {addUserAPI} from "@/api/user.js";
+import {user$genderMap} from "@/utils/dictMap.js";
+
 
 const user = reactive({
   id: undefined,
@@ -11,6 +13,9 @@ const user = reactive({
   password: undefined,
   avatar: "/minio/app/4823f861852d17ec03b15fa165416b36.avif",
   status: 1,
+  phone:undefined,
+  gender: undefined,
+  nickName: undefined,
   email: undefined,
   roles: [],
   createBy: undefined,
@@ -39,13 +44,16 @@ const userRule = reactive({
   ],
   roles: [
     {validator: checkArray, trigger: 'change'}
+  ],
+  phone: [
+    {validator: checkPhone, trigger: 'change'}
   ]
 })
 
 const roleList = ref([])
 
 async function getRoleList() {
-  const res = await getRoleListAPI()
+  const res = await listRoleAPI()
   if (res.code === 200) {
     roleList.value = res.data
   }
@@ -90,8 +98,19 @@ onMounted(() => {
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="邮箱">
+      <el-form-item label="邮箱" prop="email">
         <el-input v-model="user.email"></el-input>
+      </el-form-item>
+      <el-form-item label="性别" prop="gender" required>
+        <el-radio-group v-model="user.gender">
+          <el-radio v-for="(value,key) in user$genderMap" :key="key" :value="Number(key)">{{value}}</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item label="手机号码" prop="phone" required>
+        <el-input v-model="user.phone"></el-input>
+      </el-form-item>
+      <el-form-item label="昵称" prop="nickName" required>
+        <el-input v-model="user.nickName"></el-input>
       </el-form-item>
       <el-form-item label="状态" required>
         <el-switch :active-value="1" inactive-value="0" v-model="user.status"

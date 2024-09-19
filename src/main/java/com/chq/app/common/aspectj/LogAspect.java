@@ -42,7 +42,6 @@ public class LogAspect {
     private static final Logger log = LoggerFactory.getLogger(LogAspect.class);
 
 
-
     @Resource
     private IOperationLogService operationLogService;
     /**
@@ -54,8 +53,6 @@ public class LogAspect {
      * 计算操作消耗时间
      */
     private static final ThreadLocal<Long> TIME_THREADLOCAL = new NamedThreadLocal<Long>("Cost Time");
-
-
 
 
     /**
@@ -96,7 +93,7 @@ public class LogAspect {
             // *========数据库日志=========*//
             OperationLog operationLog = new OperationLog();
             operationLog.setOperationTime(LocalDateTime.now());
-            operationLog.setStatus(BusinessStatus.SUCCESS.ordinal());
+            operationLog.setStatus(BusinessStatus.SUCCESS.value());
             // 请求的地址
 
             if (loginUser != null) {
@@ -104,7 +101,7 @@ public class LogAspect {
             }
 
             if (e != null) {
-                operationLog.setStatus(BusinessStatus.FAIL.ordinal());
+                operationLog.setStatus(BusinessStatus.FAIL.value());
                 operationLog.setErrorMsg(StringUtils.substring(e.getMessage(), 0, 2000));
             }
             // 设置方法名称
@@ -118,10 +115,10 @@ public class LogAspect {
             // 设置消耗时间
             operationLog.setCostTime(System.currentTimeMillis() - TIME_THREADLOCAL.get());
             // 保存数据库
-            operationLogService.asyncRecordLog(operationLog);
+            operationLogService.addOperationLog(operationLog);
         } catch (Exception ex) {
             // 记录本地异常日志
-            log.error("异常信息:{}", ex.getMessage());
+            log.error("异常信息:{}", ex);
             ex.printStackTrace();
         } finally {
             TIME_THREADLOCAL.remove();
@@ -137,11 +134,11 @@ public class LogAspect {
      */
     public void getControllerMethodDescription(JoinPoint joinPoint, Log log, OperationLog operationLog, Object jsonResult) throws Exception {
         // 设置action动作
-        operationLog.setBusinessType(log.businessType().ordinal());
+        operationLog.setBusinessType(log.businessType().value());
         // 设置标题
         operationLog.setTitle(log.title());
         // 设置操作人类别
-        operationLog.setOperatorType(log.operatorType().ordinal());
+        operationLog.setOperatorType(log.operatorType().value());
         // 是否需要保存request，参数和值
         if (log.isSaveRequestData()) {
             // 获取参数的信息，传入到数据库中。
@@ -161,14 +158,21 @@ public class LogAspect {
      */
     private void setRequestValue(JoinPoint joinPoint, OperationLog operationLog, String[] excludeParamNames) throws Exception {
 
-        Map<String, String> paramsMap = WebUtils.getParamMap(WebUtils.getRequest());
+        HttpServletRequest request = WebUtils.getRequest();
+        Map<String, String[]> paramsMap = WebUtils.getParams(request);
         String requestMethod = operationLog.getRequestMethod();
-        if (paramsMap.isEmpty()
-                && (HttpMethod.PUT.name().equals(requestMethod) || HttpMethod.POST.name().equals(requestMethod))) {
+        if (HttpMethod.PUT.name().equals(requestMethod) || HttpMethod.POST.name().equals(requestMethod)) {
             String params = argsArrayToString(joinPoint.getArgs(), excludeParamNames);
             operationLog.setOperationParam(StringUtils.substring(params, 0, 2000));
-        } else {
-            operationLog.setOperationParam(StringUtils.substring(JSON.toJSONString(paramsMap, excludePropertyPreFilter(excludeParamNames), JSONWriter.Feature.WriteLongAsString), 0, 2000));
+        } else if (HttpMethod.DELETE.name().equals(requestMethod)) {
+            String requestURI = request.getRequestURI();
+            String s = StringUtils.substringAfterLast(requestURI, "/");
+            if (StringUtils.isNotBlank(s)) {
+                String[] split = s.split(",");
+                operationLog.setOperationParam(JSON.toJSONString(split));
+            }
+        } else if (HttpMethod.GET.name().equals(requestMethod) && !paramsMap.isEmpty()) {
+            operationLog.setOperationParam(StringUtils.substring(paramsMap.toString(), 0, 2000));
         }
     }
 
@@ -181,7 +185,7 @@ public class LogAspect {
             for (Object o : paramsArray) {
                 if (o != null && !isFilterObject(o)) {
                     try {
-                        String jsonObj = JSON.toJSONString(o, excludePropertyPreFilter(excludeParamNames),JSONWriter.Feature.WriteLongAsString);
+                        String jsonObj = JSON.toJSONString(o, excludePropertyPreFilter(excludeParamNames), JSONWriter.Feature.WriteLongAsString);
                         params += jsonObj.toString() + " ";
                     } catch (Exception e) {
                     }

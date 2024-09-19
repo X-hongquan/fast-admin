@@ -13,10 +13,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
@@ -39,9 +36,17 @@ public class TestController {
         loginLogService.recordLoginLog(new User().setUsername("wqeq"),"qweqw", WebUtils.getIp());
     }
 
-    @GetMapping("weq")
+    @GetMapping("/weq")
     public String hello() {
         return "你好我们";
+    }
+
+    /**
+     * 测试@RequstParam
+     */
+    @RequestMapping("/test")
+    public void test(@RequestParam("name") String name) {
+        System.out.println(name);
     }
 
 

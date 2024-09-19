@@ -24,7 +24,7 @@ public class SettingController {
     private ISettingService settingService;
 
     @PutMapping
-    @PreAuth("system:admin:edit")
+    @PreAuth(value = "system:setting:edit",description = "编辑用户模式")
     public R<Integer> updatePermissionMode(@RequestBody Setting setting) {
         int row = settingService.updatePermissionMode(setting);
         return R.ok(row);
@@ -32,7 +32,7 @@ public class SettingController {
 
 
     @GetMapping
-    @PreAuth("system:admin:query")
+    @PreAuth(value = "system:setting:query",description = "查询设置权限")
     public R<Setting> get(Setting setting) {
         Setting byId = settingService.getById(setting.getId());
         return R.ok(byId);

@@ -49,12 +49,12 @@ public class JobLog implements Serializable {
     private LocalDateTime triggerTime;
 
     /**
-     * 处理时间(ms)
+     * 处理时间ms
      */
     private Long handleTime;
 
     /**
-     * 处理状态,1成功,2失败
+     * 处理状态 (1成功 0失败)
      */
     private Integer handleStatus;
 

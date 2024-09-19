@@ -4,14 +4,11 @@ public interface UrlInterceptor {
 
     String[] LOGIN_NO_INTERCEPT = {
             "/user/hello",
-            "user/text",
+            "/user/text",
             "/user/login",
             "/swagger-ui/**",
             "/v3/**",
-            "/statistics/**",
-            "/cache/**",
             "/test/**",
-            "/generate/**",
             "/captcha/**"
     };
 }

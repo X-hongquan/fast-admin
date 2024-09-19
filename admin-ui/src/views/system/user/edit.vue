@@ -1,10 +1,12 @@
 <script setup>
 import {onMounted, reactive, ref, watch} from "vue";
-import {checkArray, checkEmail, checkPassword, checkUserName} from "@/utils/validate.js";
-import {getRoleListAPI} from "@/api/role/index.js";
+import {checkArray, checkEmail, checkPassword, checkPhone, checkUserName} from "@/utils/validate.js";
+import {listRoleAPI} from "@/api/role.js";
 import {updateNotification} from "@/utils/notification.js";
-import {editUserAPI, getUserAPI,} from "@/api/user/index.js";
+import {editUserAPI, getUserAPI,} from "@/api/user.js";
 import {useRoute, useRouter} from "vue-router";
+import {user$genderMap} from "@/utils/dictMap.js";
+
 
 const router=useRouter()
 const route=useRoute()
@@ -19,6 +21,9 @@ const user = reactive({
   createBy: undefined,
   createTime: undefined,
   updateBy: undefined,
+  phone: undefined,
+  gender: undefined,
+  nickName:undefined,
   updateTime: undefined
 })
 
@@ -39,13 +44,16 @@ const userRule = reactive({
   ],
   roles: [
     {validator: checkArray, trigger: 'change'}
+  ],
+  phone: [
+    {validator: checkPhone, trigger: 'change'}
   ]
 })
 
 const roleList = ref([])
 
 async function getRoleList() {
-  const res = await getRoleListAPI()
+  const res = await listRoleAPI()
   if (res.code === 200) {
     roleList.value = res.data
   }
@@ -112,6 +120,17 @@ onMounted(() => {
       <el-form-item label="状态" required>
         <el-switch :active-value="1" inactive-value="0" v-model="user.status"
         ></el-switch>
+      </el-form-item>
+      <el-form-item label="性别" prop="gender" required>
+        <el-radio-group v-model="user.gender">
+          <el-radio v-for="(value,key) in user$genderMap" :key="key" :value="Number(key)" >{{value}}</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item label="昵称" prop="nickName" required>
+        <el-input v-model="user.nickName"></el-input>
+      </el-form-item>
+      <el-form-item label="手机号码" prop="phone" required>
+        <el-input v-model="user.phone"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="password" >
         <el-input type="password" v-model="user.password" show-password></el-input>

@@ -1,18 +1,18 @@
 <script setup>
 import {ref, reactive, onMounted, nextTick} from "vue";
 import {
-  getRoleListAPI,
+  listRoleAPI,
   deleteRoleAPI,
   getRoleAPI,
-  updateRoleAPI,
+  editRoleAPI,
   addRoleAPI,
-  assignRolePermissionsAPI, assignRoleMenusAPI
-} from "@/api/role/index.js";
+  assignPermissionRoleAPI, assignMenuRoleAPI
+} from "@/api/role.js";
 import {handleConfirmDel} from "@/utils/confirm.js";
 import {addNotification, deleteNotification, updateNotification} from "@/utils/notification.js";
 import {ElMessage} from "element-plus";
-import {getPermissionListAPI} from "@/api/permission/index.js";
-import {getMenuListAPI} from "@/api/menu/index.js";
+import {listGroupPermissionAPI, listPermissionAPI} from "@/api/permission.js";
+import {listMenuAPI} from "@/api/menu.js";
 import {preHandleMenu} from "@/utils/init.js";
 
 let roleId
@@ -61,7 +61,7 @@ async function handleSelectionChange(val) {
 }
 
 async function getRoleList() {
-  const res = await getRoleListAPI(req)
+  const res = await listRoleAPI(req)
   if (res.code === 200) {
     tableData.value = res.data
     total.value = Number(res.total)
@@ -126,54 +126,80 @@ const drawTitle = ref('')
 const direction = ref('rtl')
 
 
-const permissions = ref([])
-const selectionPermissions = ref([])
+function handleChangeGroupAll(val, key) {
 
+  const arr = permissions.value[key]
+  if (val) {
+    //如果没有选上，直接选全部
+    let flag = false;
+    for (let i = 0; i < arr.length; i++) {
+      for (let j = 0; j < selectionPermissions.value.length; j++) {
+        if (arr[i].id === selectionPermissions.value[j]) {
+          flag = true
+          break;
+        }
+      }
+      if (!flag) {
+        selectionPermissions.value.push(arr[i].id)
+      }
+    }
 
-const selectionMenus = ref([])
-const menus = ref([])
+  } else {
+
+    selectionPermissions.value = selectionPermissions.value.filter(item => {
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i].id === item) {
+          return false
+        }
+      }
+      return true
+    })
+  }
+}
+
 
 const menuTree = ref(null)
 
 let menuMap
-
+let selectionMenus = []
+const menus = ref([])
 
 async function handleAssignMenu(row) {
   menuDrawer.value = true
   drawTitle.value = '分配菜单'
   roleId = row.id
-  const res = await getMenuListAPI({pageSize: 500})
+  const res = await listMenuAPI({pageSize: 500})
   if (res.code === 200) {
     const {arr, map} = preHandleMenu(res.data)
     menus.value = arr
     menuMap = map
   }
-  const r = await getMenuListAPI({pageSize: 500, roleId: row.id == 1 ? undefined : row.id})
+  const r = await listMenuAPI({pageSize: 500, roleId: row.id == 1 ? undefined : row.id})
   if (res.code === 200) {
     const arr = r.data
     const d = arr.map(item => item.id)
-    selectionMenus.value = d
-    console.log(selectionMenus.value)
+    selectionMenus = d
     let that = menuTree.value
     //todo没展开问题
-    that.setCheckedKeys(selectionMenus.value)
+    that.setCheckedKeys(selectionMenus)
     await nextTick()
-
-
   }
 }
+
+const permissions = ref({})
+const selectionPermissions = ref({})
 
 async function handleAssignPermission(row) {
   roleId = row.id
   permissionDrawer.value = true
   drawTitle.value = '分配权限'
-  const res = await getPermissionListAPI({pageSize: 500})
+  const res = await listGroupPermissionAPI({pageSize: 500})
   if (res.code === 200) {
     permissions.value = res.data
   }
 
-  const r = await getPermissionListAPI({pageSize: 500, roleId: row.id == 1 ? undefined : row.id})
-  if (res.code === 200) {
+  const r = await listPermissionAPI({pageSize: 500, roleId: row.id == 1 ? undefined : row.id})
+  if (r.code === 200) {
     const arr = r.data
     selectionPermissions.value = arr.map(item => item.id)
   }
@@ -185,7 +211,7 @@ async function submitAssignPermission() {
     roleId: roleId,
     permissionIds: selectionPermissions.value
   }
-  const res = await assignRolePermissionsAPI(p)
+  const res = await assignPermissionRoleAPI(p)
   updateNotification(res, () => {
     permissionDrawer.value = false
   })
@@ -195,9 +221,9 @@ async function submitAssignPermission() {
 async function submitAssignMenu() {
   let p = {
     roleId: roleId,
-    menuIds: selectionMenus.value
+    menuIds: selectionMenus
   }
-  const res = await assignRoleMenusAPI(p)
+  const res = await assignMenuRoleAPI(p)
   updateNotification(res, () => {
     menuDrawer.value = false
   })
@@ -206,7 +232,7 @@ async function submitAssignMenu() {
 async function submit() {
   if (role.name && role.name.trim()) {
     if (role.id) {
-      const res = await updateRoleAPI(role)
+      const res = await editRoleAPI(role)
       updateNotification(res, () => {
         getRoleList()
         mode.value = false
@@ -227,9 +253,9 @@ function makeParentChecked(val) {
   if (val.parentId === '0')
     return
   const menu = menuMap.get(val.parentId)
-  let find = selectionMenus.value.find(item => item === menu.id);
+  let find = selectionMenus.find(item => item === menu.id);
   if (!find) {
-    selectionMenus.value.push(menu.id)
+    selectionMenus.push(menu.id)
     makeParentChecked(menu)
   }
 }
@@ -237,7 +263,7 @@ function makeParentChecked(val) {
 function makeSonUnChecked(val) {
   const menu = menuMap.get(val.id)
   if (menu.children && menu.children.length > 0) {
-    selectionMenus.value = selectionMenus.value.filter(item => {
+    selectionMenus = selectionMenus.filter(item => {
       const m = menuMap.get(item)
       return item !== menu.id && m.parentId !== menu.id
     })
@@ -248,16 +274,16 @@ function makeSonUnChecked(val) {
 }
 
 async function handleCheckMenu(val, data) {
-  if (data.checkedKeys.length > selectionMenus.value.length) {
+  if (data.checkedKeys.length > selectionMenus.length) {
     makeParentChecked(val)
-    selectionMenus.value.push(val.id)
+    selectionMenus.push(val.id)
   } else {
     if (val.children)
       makeSonUnChecked(val)
     else
-      selectionMenus.value = data.checkedKeys
+      selectionMenus = data.checkedKeys
   }
-  menuTree.value.setCheckedKeys(selectionMenus.value)
+  menuTree.value.setCheckedKeys(selectionMenus)
 
 }
 
@@ -329,13 +355,17 @@ onMounted(() => {
       <h4>{{ drawTitle }}</h4>
     </template>
     <template #default>
-      <div>
+      <div v-for="(value,key) in permissions" :key="key" style="margin-top: 20px">
+        <el-checkbox
+            :label="key"
+            @change="(e)=>handleChangeGroupAll(e,key)"
+        >
+        </el-checkbox>
         <el-checkbox-group v-model="selectionPermissions" size="large">
-          <el-checkbox :value="item.id" :label="item.description" size="large"
+          <el-checkbox :value="val.id" :label="val.description" size="large"
                        border
-                       v-for="item in permissions" :key="item.id"/>
+                       v-for="val in value" :key="val.id"/>
         </el-checkbox-group>
-
       </div>
     </template>
     <template #footer>

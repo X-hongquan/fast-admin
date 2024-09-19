@@ -27,6 +27,8 @@ function reset() {
   <#list columns as c>
   req.${c.name} = undefined
   </#list>
+    get${className}List()
+
 }
 
 const total = ref(0)

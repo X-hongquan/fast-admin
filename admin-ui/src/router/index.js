@@ -35,11 +35,6 @@ const router = createRouter({
             name: '404',
             component: () => import('@/views/404/index.vue'),
         },
-        {
-            path: '/:pathMatch(.*)*',
-            name: 'notFound',
-            redirect: '/404'
-        }
     ]
 })
 

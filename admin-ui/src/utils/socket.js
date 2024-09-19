@@ -22,7 +22,6 @@ export async function createSocket() {
     }
 
     socket.onmessage = function (e) {
-        console.log(e.data);
         let p = JSON.parse(e.data)
         if (p.type === 1) {
             store.onlineCount = p.data

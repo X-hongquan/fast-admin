@@ -1,12 +1,12 @@
 <script setup>
 import {ref, reactive, onMounted} from "vue";
 import {
-  getPermissionListAPI,
+  listPermissionAPI,
   deletePermissionAPI,
   getPermissionAPI,
-  updatePermissionAPI,
+  editPermissionAPI,
   addPermissionAPI
-} from "@/api/permission/index.js";
+} from "@/api/permission.js";
 import {handleConfirmDel} from "@/utils/confirm.js";
 import {addNotification, deleteNotification, updateNotification} from "@/utils/notification.js";
 import {ElMessage} from "element-plus";
@@ -45,7 +45,7 @@ const formRules = reactive({
 })
 
 async function getPermissionList() {
-  const res = await getPermissionListAPI(req)
+  const res = await listPermissionAPI(req)
   if (res.code === 200) {
     tableData.value = res.data
     total.value = Number(res.total)
@@ -107,7 +107,7 @@ async function handleUpdate(row) {
 async function submit() {
   await formRef.value.validate()
   if (permission.id) {
-    const res = await updatePermissionAPI(permission)
+    const res = await editPermissionAPI(permission)
     updateNotification(res, () => {
       getPermissionList()
       mode.value = false

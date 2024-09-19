@@ -1,5 +1,6 @@
 package com.chq.app.controller;
 
+import com.chq.app.common.annoation.PreAuth;
 import com.chq.app.common.domain.R;
 import com.chq.app.generator.ControllerBuilder;
 import com.chq.app.generator.FileItem;
@@ -14,7 +15,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 @RestController
-@RequestMapping("/generate")
+@RequestMapping("/generator")
 public class GeneratorController {
 
     @Resource
@@ -24,12 +25,14 @@ public class GeneratorController {
     private TypeBuilder typeBuilder;
 
     @GetMapping("/type/js")
+    @PreAuth(value = "system:generator:export", description = "导出生成代码权限")
     public void exportType(HttpServletResponse response) throws IOException {
         StringBuilder build = typeBuilder.buildJS();
         response.getWriter().write(build.toString());
     }
 
     @GetMapping("/api/js")
+    @PreAuth(value = "system:generator:export", description = "导出生成代码权限")
     public void exportZip(HttpServletResponse response) throws IOException {
         List<FileItem> fileItems = controllerBuilder.buildJS();
         ZipOutputStream zos = new ZipOutputStream(response.getOutputStream());
@@ -44,8 +47,8 @@ public class GeneratorController {
     }
 
     @GetMapping("/list")
+    @PreAuth(value = "system:generator:query", description = "查询生成代码权限")
     public R<List<FileItem>> list() {
-
         StringBuilder build = typeBuilder.buildJS();
         List<FileItem> build1 = controllerBuilder.buildJS();
         build1.addFirst(new FileItem(build.toString(), "dto.js"));

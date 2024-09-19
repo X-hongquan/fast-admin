@@ -55,7 +55,7 @@ public class UserController {
     private IRoleService roleService;
 
     @GetMapping("/list")
-    @PreAuth("system:user:query")
+    @PreAuth(value = "system:user:query", description = "查询用户权限")
     public TableInfo<List<User>> list(User user) {
         PageUtils.startPage();
         List<User> list = userService.getList(user);
@@ -63,7 +63,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    @PreAuth("system:user:query")
+    @PreAuth(value = "system:user:query", description = "查询用户权限")
     public R<User> get(@PathVariable Long id) {
         User user = userService.getUserById(id);
         return R.ok(user);
@@ -71,8 +71,8 @@ public class UserController {
 
 
     @PostMapping
-    @PreAuth("system:user:add")
-    @Log(title = "新增用户", businessType = BusinessType.INSERT, excludeParamNames = {"password"})
+    @PreAuth(value = "system:user:add", description = "新增用户权限")
+    @Log(title = "用户管理", businessType = BusinessType.INSERT)
     @RepeatSubmit
     public R<Integer> add(@RequestBody User user) {
         int row = userService.add(user);
@@ -80,7 +80,7 @@ public class UserController {
     }
 
     @PutMapping
-    @PreAuth("system:user:edit")
+    @PreAuth(value = "system:user:edit", description = "编辑用户权限")
     public R<Integer> edit(@RequestBody User user) {
         User u = userService.getUserById(user.getId());
         UserHolder.getUser().checkHasControl(u.getCreateBy());
@@ -89,7 +89,8 @@ public class UserController {
     }
 
     @DeleteMapping("/{ids}")
-    @PreAuth("system:user:remove")
+    @Log(title = "删除用户", businessType = BusinessType.DELETE)
+    @PreAuth(value = "system:user:remove", description = "删除用户权限")
     public R<Integer> delete(@PathVariable Long[] ids) {
         int row = userService.del(ids);
         return R.ok(row);
@@ -103,14 +104,16 @@ public class UserController {
 
 
     @GetMapping("/export")
-    @PreAuth("system:user:export")
+    @PreAuth(value = "system:user:export", description = "导出用户权限")
+    @Log(title = "导出用户", businessType = BusinessType.EXPORT, isSaveRequestData = false)
     public void export(HttpServletResponse response) throws IOException {
         EasyExcel.write(response.getOutputStream(), User.class).sheet("模板").doWrite(userService.list());
     }
 
 
     @PostMapping("/import")
-    @PreAuth("system:user:import")
+    @PreAuth(value = "system:user:import", description = "导入用户权限")
+    @Log(title = "导入用户", businessType = BusinessType.IMPORT, isSaveRequestData = false)
     public R upload(MultipartFile file) throws IOException {
         List<User> list = new ArrayList<>();
         try {
@@ -165,7 +168,7 @@ public class UserController {
     }
 
     @PutMapping("/info/email/reset")
-    public R restEmail(@RequestBody EmailForm form) {
+    public R resetEmail(@RequestBody EmailForm form) {
         String email = form.getNewEmail();
         String code = form.getCode();
         return userService.resetEmail(email, code);

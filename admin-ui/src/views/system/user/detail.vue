@@ -1,17 +1,22 @@
 <script setup>
 import {useRoute, useRouter} from "vue-router";
 import {reactive, ref, watch} from "vue";
-import {getUserAPI} from "@/api/user/index.js";
+import {getUserAPI} from "@/api/user.js";
+import {user$genderMap} from "@/utils/dictMap.js";
+
 
 const route = useRoute()
 const user = reactive({
   id: undefined,
   username: undefined,
+  nickName: undefined,
   password: undefined,
   avatar: undefined,
   status: undefined,
   email: undefined,
   roles: undefined,
+  gender: undefined,
+  phone: undefined,
   createBy: undefined,
   createTime: undefined,
   updateBy: undefined,
@@ -25,6 +30,7 @@ async function getUser(id) {
     Object.assign(user, res.data)
   }
 }
+
 
 watch(() => route.params.userId, () => {
   if (route.params.userId) {
@@ -60,6 +66,17 @@ watch(() => route.params.userId, () => {
         </el-form-item>
         <el-form-item label="密码" prop="password">
           <el-input type="password" v-model="user.password" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="性别" prop="gender" required >
+          <el-radio-group v-model="user.gender">
+            <el-radio v-for="(value,key) in user$genderMap" :key="key" :value="Number(key)" >{{value}}</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="手机号码" prop="phone" required>
+          <el-input v-model="user.phone"></el-input>
+        </el-form-item>
+        <el-form-item label="昵称" prop="nickName" required>
+          <el-input v-model="user.nickName"></el-input>
         </el-form-item>
         <el-form-item label="创建时间">
           <el-input v-model="user.createTime" disabled></el-input>

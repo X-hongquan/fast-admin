@@ -24,10 +24,8 @@ request.interceptors.request.use(config => {
     }
     if (config.method === 'delete') {
         if (config.url.includes("{")) {
-            console.log(config.params)
             let s = idsToPathVariable(config.params);
             config.url = config.url.split("{")[0] + s
-            console.log(config.url)
         }
     }
     config.params = undefined

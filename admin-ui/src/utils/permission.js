@@ -8,14 +8,14 @@ import {closeSocket, createSocket} from "@/utils/socket.js";
 
 
 //引入所有views下.vue文件
-nprogress.configure({ showSpinner: false });
+nprogress.configure({showSpinner: false});
 const modules = import.meta.glob("../views/**/**.vue")
 
 export const routerPackage = function (routers, routeName) {
     if (routers) {
         routers.forEach((itemRouter) => {
             if (routeName) {
-                if (itemRouter.link===0) {
+                if (itemRouter.link === 0) {
                     router.addRoute(routeName, {
                         path: itemRouter.url,
                         name: itemRouter.name,
@@ -32,7 +32,7 @@ export const routerPackage = function (routers, routeName) {
                     })
                 }
             } else {
-                if (itemRouter.link===0) {
+                if (itemRouter.link === 0) {
                     router.addRoute({
                         path: itemRouter.url,
                         name: itemRouter.name,
@@ -81,6 +81,7 @@ router.beforeEach(async (to, from) => {
         if (to.path === '/login') {
             return '/'
         }
+
     } else {
         closeSocket()
         if (to.path !== '/login') {
