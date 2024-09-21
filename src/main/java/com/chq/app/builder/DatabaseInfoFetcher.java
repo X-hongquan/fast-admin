@@ -39,33 +39,37 @@ public class DatabaseInfoFetcher {
                     int columnSize = columns.getInt("COLUMN_SIZE");
 
                     String pattern
-                           ="/**\n" +
+                            = "/**\n" +
                             " * %s字典\n" +
                             " */\n" +
                             "export const %s$%sMap = {\n";
                     String columnComment = columns.getString("REMARKS"); // 获取注释
-                   if (StringUtils.isNotBlank(columnComment)&&columnComment.contains("(")) {
+                    if (StringUtils.isNotBlank(columnComment) && columnComment.contains("(")) {
 
-                       String trim = columnComment.trim();
-                       String[] split = StringUtils.split(trim, "(");
-                       String first = split[0].trim();
-                       String format = String.format(pattern, first, tableName, columnName);
-                       String desc= split[1].substring(0, split[1].length()-1);
-                       String[] items=desc.split(" ");
-                       sb.append(format);
-                       for (String item : items) {
-                           String substring = item.substring(1);
-                           sb.append("  ").append(item.charAt(0)).append(": '").append(substring).append("',").append("\n");
-                       }
-                       sb.deleteCharAt(sb.length()-2);
-                       sb.append("}\n");
-                   }
+                        String trim = columnComment.trim();
+                        String[] split = StringUtils.split(trim, "(");
+                        String first = split[0].trim();
+                        String format = String.format(pattern, first, tableName, columnName);
+                        String content = split[1].trim();
+                        String desc = content.substring(0, content.length() - 1);
+                        String[] items = desc.split(",");
+                        sb.append(format);
+                        for (String item : items) {
+                            String[] values = item.split(":");
+                            String key = values[0].trim();
+                            String value = values[1].trim();
+                            sb.append("  ").append(key).append(": '").append(value).append("',").append("\n");
+                        }
+                        sb.deleteCharAt(sb.length() - 2);
+                        sb.append("}\n");
+                    }
 
                 }
                 // 关闭列结果集
                 columns.close();
             }
-            try (FileWriter fileWriter= new FileWriter("D:\\IdeaProject\\fast-admin\\admin-ui\\src\\utils\\dictMap.js")){
+            System.out.println(sb);
+            try (FileWriter fileWriter = new FileWriter("D:\\IdeaProject\\fast-admin\\admin-ui\\src\\utils\\dictMap.js")) {
                 fileWriter.write(sb.toString());
             } catch (IOException e) {
                 throw new RuntimeException(e);
