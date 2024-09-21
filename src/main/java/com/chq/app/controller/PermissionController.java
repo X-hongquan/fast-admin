@@ -13,12 +13,11 @@ import com.chq.app.util.PageUtils;
 import com.chq.app.util.UserHolder;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
-import static com.chq.app.common.aspectj.DataScopeAspect.CONTROL;
+
 
 /**
  * <p>
@@ -36,8 +35,6 @@ public class PermissionController {
     @Resource
     private IPermissionService permissionService;
 
-    @Resource
-    private IRoleService roleService;
 
 
     @GetMapping("/list")

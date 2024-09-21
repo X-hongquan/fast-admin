@@ -4,7 +4,13 @@ import {onMounted, reactive, ref} from "vue";
 import {useUserStore} from "@/store/user.js";
 import {Calendar, Message, Phone, User, UserFilled} from "@element-plus/icons-vue";
 import {user$genderMap} from "@/utils/dictMap.js";
-import {changePasswordUserAPI, editUserAPI, resetPasswordUserAPI, sendPasswordCodeUserAPI} from "@/api/user.js";
+import {
+  changeAvatarUserAPI,
+  changePasswordUserAPI,
+  editUserAPI,
+  resetPasswordUserAPI,
+  sendPasswordCodeUserAPI
+} from "@/api/user.js";
 import {useRouter} from "vue-router";
 import {ElMessage} from "element-plus";
 import {updateNotification} from "@/utils/notification.js";
@@ -58,7 +64,7 @@ async function changePassword() {
   updateNotification(
       res,
       async () => {
-       await userStore.logout()
+        await userStore.logout()
         router.replace("/login")
         ElMessage.success("修改成功,请重新登录")
       }
@@ -92,13 +98,64 @@ function closeSetting() {
   router.push('/')
 }
 
+const avatarDialog = ref(false)
 const activeName = ref('first')
+
+
+
+function beforeAvatarUpload(file) {
+  const isJPG = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/gif' || file.type === 'image/avif'
+  const isLt2M = file.size / 1024 / 1024 < 2
+  if (!isJPG) {
+    ElMessage.error('上传头像图片只能是 JPG 格式!')
+  }
+  if (!isLt2M) {
+    ElMessage.error('上传头像图片大小不能超过 2MB!')
+  }
+}
+
+const imageUrl = ref('')
+
+async function handleUploadAvatar(files) {
+  const formData = new FormData();
+  formData.append('file', files.file)
+  const res=await changeAvatarUserAPI(formData)
+  if (res.code===200) {
+    ElMessage.success("修改成功")
+    await userStore.getUserInfo()
+    imageUrl.value=userStore.userInfo.user.avatar
+  } else {
+    ElMessage.error(res.msg)
+  }
+}
+
 onMounted(() => {
   copy()
 })
 </script>
 
 <template>
+  <el-dialog title="修改头像" v-model="avatarDialog" width="30%">
+    <el-upload
+        class="avatar-uploader"
+        action="void"
+        :http-request="handleUploadAvatar"
+        accept="image/*"
+        :show-file-list="false"
+        :before-upload="beforeAvatarUpload"
+    >
+      <img v-if="imageUrl" :src="imageUrl" class="avatar"/>
+      <el-icon v-else class="avatar-uploader-icon">
+        <Plus/>
+      </el-icon>
+    </el-upload>
+    <template footer>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="avatarDialog=false">取 消</el-button>
+        <el-button type="primary" @click="avatarDialog=false">确 定</el-button>
+      </span>
+    </template>
+  </el-dialog>
   <el-row :gutter="20">
     <el-col :span="7">
       <el-card class="private-box">
@@ -109,7 +166,8 @@ onMounted(() => {
         </template>
         <ul>
           <div class="avatar-box">
-            <el-avatar :src="userStore.userInfo.user.avatar" :size="110"/>
+            <el-avatar :src="userStore.userInfo.user.avatar" :size="110" style="cursor: pointer"
+                       @click="avatarDialog=true"/>
           </div>
           <el-divider class="split-box"/>
           <li>
@@ -264,6 +322,33 @@ onMounted(() => {
   .split-box {
     margin: 12px 0;
   }
+}
+
+.avatar-uploader .el-upload {
+  border: 1px dashed var(--el-border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: var(--el-transition-duration-fast);
+}
+
+.avatar-uploader .el-upload:hover {
+  border-color: var(--el-color-primary);
+}
+
+.el-icon.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  text-align: center;
+}
+
+.avatar-uploader .avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
 }
 
 </style>

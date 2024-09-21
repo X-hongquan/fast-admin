@@ -11,19 +11,16 @@ import com.chq.app.common.enums.BusinessType;
 import com.chq.app.dto.RoleMenuDto;
 import com.chq.app.dto.RolePermissionDto;
 import com.chq.app.pojo.Role;
-import com.chq.app.pojo.UserRole;
 import com.chq.app.service.IRoleService;
-import com.chq.app.service.IUserRoleService;
 import com.chq.app.util.PageUtils;
 import com.chq.app.util.UserHolder;
-import jakarta.annotation.Resource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 
-import static com.chq.app.common.aspectj.DataScopeAspect.NO_CONTROL;
+
 
 /**
  * <p>

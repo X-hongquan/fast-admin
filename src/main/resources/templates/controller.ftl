@@ -29,7 +29,7 @@ public class ${className}Controller {
 
 
     @GetMapping("/list")
-    @PreAuth("system:${paramsName}:query")
+    @PreAuth(value="system:${paramsName}:query", description = "查询${tableInfo.comment}权限")
     public TableInfo<List<${className}>> list(${className} ${paramsName}) {
         PageUtils.startPage();
         List<${className}> list =${paramsName}Service.getList(${paramsName});
@@ -37,28 +37,28 @@ public class ${className}Controller {
     }
 
     @GetMapping("/{id}")
-    @PreAuth("system:${paramsName}:query")
+    @PreAuth(value="system:${paramsName}:query", description = "查询${tableInfo.comment}权限")
     public R<${className}> get(@PathVariable Long id) {
         ${className} ${paramsName} = ${paramsName}Service.get${className}ById(id);
         return R.ok(${paramsName});
     }
 
     @PostMapping
-    @PreAuth("system:${paramsName}:add")
+    @PreAuth(value="system:${paramsName}:add", description = "新增${tableInfo.comment}权限")
     public R add(@RequestBody ${className} ${paramsName}) {
         ${paramsName}Service.add${className}(${paramsName});
         return R.ok();
     }
 
     @PutMapping
-    @PreAuth("system:${paramsName}:edit")
+    @PreAuth(value="system:${paramsName}:edit", description = "编辑${tableInfo.comment}权限")
     public R edit(@RequestBody ${className} ${paramsName}) {
         ${paramsName}Service.edit${className}(${paramsName});
         return R.ok();
     }
 
     @DeleteMapping("/{ids}")
-    @PreAuth("system:${paramsName}:remove")
+    @PreAuth(value="system:${paramsName}:remove", description = "删除${tableInfo.comment}权限")
     public R delete(@PathVariable Long[] ids) {
         ${paramsName}Service.delete${className}ByIds(ids);
         return R.ok();

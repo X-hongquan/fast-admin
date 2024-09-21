@@ -1,12 +1,8 @@
 package com.chq.app;
 
 import com.chq.app.common.annoation.PreAuth;
-import com.chq.app.pojo.Permission;
-import com.chq.app.pojo.RolePermission;
-import com.chq.app.pojo.User;
-import com.chq.app.service.IPermissionService;
-import com.chq.app.service.IRolePermissionService;
-import com.chq.app.service.IUserService;
+import com.chq.app.pojo.*;
+import com.chq.app.service.*;
 import com.chq.app.util.JavaMailUntil;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
@@ -29,6 +25,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @SpringBootTest
 class AppApplicationTests {
@@ -65,9 +62,45 @@ class AppApplicationTests {
         }
     }
 
+    /**
+     *初始化查询权限
+     */
+    @Test
+    void initQuery() {
+        rolePermissionService.remove(null);
+        Long i=1L;
+        List<Permission> list = permissionService.list();
+        for (Permission permission : list) {
+            if (permission.getCode().contains("query")) {
+                rolePermissionService.save(new RolePermission().setPermissionId(permission.getId()).setRoleId(2L).setId(i++));
+            }
+        }
+    }
+
+    @Autowired
+    private IRoleMenuService roleMenuService;
+
+    @Autowired
+    private IMenuService menuService;
+    /**
+     * 初始化role——menu
+     */
+    @Test
+    public void initRoleMenu() {
+        roleMenuService.remove(null);
+        List<Menu> list = menuService.list();
+        Long id=1L;
+        for (Menu menu : list) {
+            roleMenuService.save(new RoleMenu().setMenuId(menu.getId()).setRoleId(2L).setId(id++));
+        }
+    }
+
+
+
+
 
     /**
-     * 初始化权限
+     * 初始化权限数据表
      */
     @Test
     void test2() throws IOException, ClassNotFoundException {

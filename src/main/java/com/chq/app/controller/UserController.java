@@ -33,7 +33,6 @@ import java.rmi.ServerException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.chq.app.common.aspectj.DataScopeAspect.CONTROL;
 
 /**
  * <p>

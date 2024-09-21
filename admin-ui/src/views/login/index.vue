@@ -79,7 +79,7 @@ onMounted(() => {
       <el-col :span="12" :xs="0"></el-col>
       <el-col :span="12" :xs="24">
 
-        <el-form class="login-form" :model="loginForm" :rules="rules" ref="loginComponent">
+        <el-form class="login-form" :model="loginForm" :rules="rules" ref="loginComponent" @keyup.enter="login">
           <h1>登录</h1>
           <h2>{{ setting.logoTitle }}</h2>
           <el-form-item prop="username">

@@ -5,20 +5,22 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@Getter
+
 @AllArgsConstructor
 public enum PermissionModeEnum {
 
 
+    ALL(0, "公开"),
 
-    CAPITALIST(0, "0 - 资本家模式, 我的附庸可以拥有我全部权力"),
-
-    KING(1, "1 - 封建者模式, 我的附庸只能拥有我创建的权力");
+    SELF(1, "私有");
 
     @EnumValue
     @JsonValue
     private int value;
 
+    public int value() {
+        return value;
+    }
 
     private String description;
 

@@ -30,18 +30,18 @@ public class SettingServiceImpl extends ServiceImpl<SettingMapper, Setting> impl
     @PostConstruct
     public void initSetting() {
         Setting setting = baseMapper.selectById(1);
-        dataScopeAspect.setMode(setting.getPermissionMode());
+        dataScopeAspect.setPermissionModeEnum(setting.getPermissionMode());
     }
 
     @Override
     public int updatePermissionMode(Setting setting) {
         if (setting.getPermissionMode() == null) throw new AuthException();
-        if (setting.getPermissionMode() == PermissionModeEnum.KING) {
+        if (setting.getPermissionMode() == PermissionModeEnum.SELF) {
             updateById(setting);
-            dataScopeAspect.setMode(setting.getPermissionMode());
-        } else if (setting.getPermissionMode() == PermissionModeEnum.CAPITALIST) {
+            dataScopeAspect.setPermissionModeEnum(setting.getPermissionMode());
+        } else if (setting.getPermissionMode() == PermissionModeEnum.ALL) {
             updateById(setting);
-            dataScopeAspect.setMode(setting.getPermissionMode());
+            dataScopeAspect.setPermissionModeEnum(setting.getPermissionMode());
         }
         return 1;
     }

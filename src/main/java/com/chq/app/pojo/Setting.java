@@ -30,7 +30,7 @@ public class Setting implements Serializable {
     private Long id;
 
     /**
-     * 0 - 资本家模式, 我的附庸可以拥有我全部权力;  1 - 封建模式, 我的附庸只能拥有我创建的权力 
+     * 数据权限模式 (1私有 0完全公开)
      */
     private PermissionModeEnum permissionMode;
 

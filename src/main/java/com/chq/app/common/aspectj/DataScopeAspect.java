@@ -4,15 +4,17 @@ import com.chq.app.common.annoation.DataScope;
 import com.chq.app.common.domain.BaseEntity;
 import com.chq.app.common.domain.LoginUser;
 import com.chq.app.common.enums.PermissionModeEnum;
+import com.chq.app.pojo.Permission;
 import com.chq.app.pojo.Role;
-import com.chq.app.pojo.User;
+
 import com.chq.app.util.UserHolder;
 
+import jakarta.annotation.PostConstruct;
+import lombok.AllArgsConstructor;
+import lombok.Setter;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.bouncycastle.math.raw.Mod;
-import org.simpleframework.xml.stream.Mode;
 import org.springframework.stereotype.Component;
 
 
@@ -20,24 +22,15 @@ import java.util.Set;
 
 @Aspect
 @Component
+@Setter
 public class DataScopeAspect {
 
 
     public static final String DATA_SCOPE = "dataScope";
 
-    public static final String CONTROL = "control";
+    private PermissionModeEnum permissionModeEnum;
 
-    public static final String NO_CONTROL = "noControl";
 
-    public static final String DATA_SCOPE_SELF = "2";
-
-    public static final String DATA_SCOPE_ALL = "1";
-
-    private PermissionModeEnum mode;
-
-    public void setMode(PermissionModeEnum mode) {
-        this.mode = mode;
-    }
 
 
     @Before("@annotation(dataScope)")
@@ -50,18 +43,19 @@ public class DataScopeAspect {
     private void handleDataScope(DataScope dataScope, BaseEntity entity) {
         LoginUser loginUser = UserHolder.getUser();
         if (loginUser.isAdmin()) return;
-        Set<Role> roles = loginUser.getRoles();
-        StringBuilder sb = new StringBuilder("(");
-        for (Role role : roles) {
-            sb.append(role.getId()).append(",");
+        if (permissionModeEnum == PermissionModeEnum.SELF) {
+            Set<Role> roles = loginUser.getRoles();
+            StringBuilder sb = new StringBuilder("(");
+            for (Role role : roles) {
+                sb.append(role.getId()).append(",");
+            }
+            sb.deleteCharAt(sb.length() - 1).append(")");
+            String sql = null;
+            sql = String.format("and  %s.%s in %s",
+                    dataScope.alias(), dataScope.value(), sb);
+
+            entity.getParams().put(DATA_SCOPE, sql);
         }
-        sb.deleteCharAt(sb.length() - 1).append(")");
-        String sql = null;
-        sql = String.format("and  %s.%s in %s",
-                dataScope.alias(), dataScope.value(), sb);
-
-
-        entity.getParams().put(DATA_SCOPE, sql);
 
     }
 

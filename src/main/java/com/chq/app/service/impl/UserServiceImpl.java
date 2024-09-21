@@ -105,8 +105,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         loginUser.setRoles(roles);
         if (!roles.isEmpty()) {
             Set<Long> roleIds = roles.stream().map(item -> item.getId()).collect(Collectors.toSet());
-            Set<String> permissions = getBaseMapper().getPermissionsByRoleIds(roleIds);
-            loginUser.setPermissions(permissions);
+            if(roleIds.contains(1L)) {
+                loginUser.setPermissions(Set.of("*"));
+            }else {
+                Set<String> permissions = getBaseMapper().getPermissionsByRoleIds(roleIds);
+                loginUser.setPermissions(permissions);
+            }
         }
 
         String uuid = IdWorker.get32UUID();
@@ -279,7 +283,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         update(new LambdaUpdateWrapper<User>().set(User::getAvatar, s).eq(User::getId, user.getId()));
         user.setAvatar(s);
         stringRedisTemplate.opsForValue().set(LOGIN_USER + loginUser.getToken(), JSON.toJSONString(loginUser));
-        return R.ok();
+        return R.ok(s);
 
 
     }

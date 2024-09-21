@@ -93,7 +93,7 @@ onMounted(() => {
           </el-form-item>
           <el-form-item label="权限模式">
             <el-switch v-model="settingStore.setting.permissionMode" :active-value="1" :inactive-value="0"
-                       active-text="封建家"  inactive-text="资本家"  style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
+                       active-text="资本主义"  inactive-text="社会主义"  style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
                        @change="updateSetting"
             >
             </el-switch>
