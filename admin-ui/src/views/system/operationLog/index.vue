@@ -3,7 +3,7 @@ import {ref, reactive, onMounted, nextTick} from "vue";
 import {
   listOperationLogAPI,
   deleteOperationLogAPI,
-} from "@/api/operationLog.js";
+} from "@/api/system/operationLog.js";
 import {handleConfirmDel} from "@/utils/confirm.js";
 import {deleteNotification} from "@/utils/notification.js";
 import {ElMessage} from "element-plus";
@@ -125,11 +125,13 @@ onMounted(() => {
     <div class="search-box">
       <el-form inline @keyup.enter="getOperationLogList">
         <el-form-item label="模块标题">
-          <el-input v-model="req.title" placeholder="请输入title" clearable class="input-width"></el-input>
+          <el-input v-model="req.title" placeholder="请输入标题" clearable class="input-width"></el-input>
         </el-form-item>
-        <el-form-item label="业务类型（1其它  2新增 3更改 4删除 5授权 6导出 7导入 8强退）">
-          <el-input v-model="req.businessType" placeholder="请输入businessType" clearable
-                    class="input-width"></el-input>
+        <el-form-item label="业务类型">
+          <el-select v-model="req.businessType" placeholder="请选择日志类型" clearable
+                    class="input-width">
+            <el-option v-for="(val,key) in operation_log$business_typeMap" :key="key" :label="val" :value="Number(key)"/>
+          </el-select>
         </el-form-item>
         <el-form-item label="方法名称">
           <el-input v-model="req.method" placeholder="请输入method" clearable class="input-width"></el-input>
@@ -138,34 +140,26 @@ onMounted(() => {
           <el-input v-model="req.requestMethod" placeholder="请输入requestMethod" clearable
                     class="input-width"></el-input>
         </el-form-item>
-        <el-form-item label="操作类别（1后台用户 2其他 3手机端用户）">
-          <el-input v-model="req.operatorType" placeholder="请输入operatorType" clearable
-                    class="input-width"></el-input>
+        <el-form-item label="操作类别">
+          <el-select v-model="req.operatorType" placeholder="请选择操作类型" clearable
+                    class="input-width">
+            <el-option v-for="(val,key) in operation_log$operator_typeMap" :key="key" :label="val" :value="Number(key)"/>
+          </el-select>
         </el-form-item>
         <el-form-item label="操作人员">
-          <el-input v-model="req.operationName" placeholder="请输入operationName" clearable
+          <el-input v-model="req.operationName" placeholder="请输入操作者" clearable
                     class="input-width"></el-input>
         </el-form-item>
-        <el-form-item label="请求参数">
-          <el-input v-model="req.operationParam" placeholder="请输入operationParam" clearable
-                    class="input-width"></el-input>
-        </el-form-item>
-        <el-form-item label="返回参数">
-          <el-input v-model="req.jsonResult" placeholder="请输入jsonResult" clearable class="input-width"></el-input>
-        </el-form-item>
-        <el-form-item label="操作状态（1正常 0异常）">
-          <el-input v-model="req.status" placeholder="请输入status" clearable class="input-width"></el-input>
+
+        <el-form-item label="操作状态">
+          <el-select v-model="req.status" class="input-width">
+            <el-option v-for="(val,key) in operation_log$statusMap" :key="key" :label="val" :value="Number(key)"/>
+          </el-select>
         </el-form-item>
         <el-form-item label="错误消息">
           <el-input v-model="req.errorMsg" placeholder="请输入errorMsg" clearable class="input-width"></el-input>
         </el-form-item>
-        <el-form-item label="操作时间">
-          <el-input v-model="req.operationTime" placeholder="请输入operationTime" clearable
-                    class="input-width"></el-input>
-        </el-form-item>
-        <el-form-item label="消耗时间,单位ms">
-          <el-input v-model="req.costTime" placeholder="请输入costTime" clearable class="input-width"></el-input>
-        </el-form-item>
+
       </el-form>
     </div>
     <div class="operation-box">

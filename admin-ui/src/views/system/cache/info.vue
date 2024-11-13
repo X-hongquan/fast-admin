@@ -2,7 +2,7 @@
 import CodeBox from "@/components/CodeBox/index.vue";
 import {onUnmounted, reactive, watch} from "vue";
 import {useRoute} from "vue-router";
-import {infoCacheAPI} from "@/api/cache.js";
+import {infoCacheAPI} from "@/api/system/cache.js";
 
 const route = useRoute()
 let times

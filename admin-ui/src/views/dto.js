@@ -1,3 +1,5 @@
+import {reactive} from "vue";
+
 const EmailForm = reactive({
     newEmail: undefined,
     code: undefined

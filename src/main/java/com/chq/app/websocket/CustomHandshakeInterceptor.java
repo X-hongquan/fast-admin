@@ -1,11 +1,8 @@
 package com.chq.app.websocket;
 
 
-import com.alibaba.fastjson2.JSON;
-
 import com.chq.app.common.domain.LoginUser;
-import com.chq.app.util.JwtUtil;
-import com.chq.app.util.UserHolder;
+import com.chq.app.common.util.JwtUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -34,7 +31,9 @@ public class CustomHandshakeInterceptor extends HttpSessionHandshakeInterceptor 
         String query = uri.getQuery();
         String jwt= StringUtils.substringAfter(query, "token=");
         String token = JwtUtil.parser(jwt);
-        System.out.println(token);
+        String s = stringRedisTemplate.opsForValue().get(LOGIN_USER + token);
+        if (StringUtils.isBlank(s))
+            return false;
         attributes.put("token", token);
         return super.beforeHandshake(request, response, wsHandler, attributes);
     }

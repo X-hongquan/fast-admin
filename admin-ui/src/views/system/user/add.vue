@@ -1,9 +1,9 @@
 <script setup>
 import {onMounted, reactive, ref} from "vue";
 import {checkArray, checkEmail, checkPassword, checkPhone, checkUserName} from "@/utils/validate.js";
-import {listRoleAPI} from "@/api/role.js";
+import {listRoleAPI} from "@/api/system/role.js";
 import {addNotification} from "@/utils/notification.js";
-import {addUserAPI} from "@/api/user.js";
+import {addUserAPI} from "@/api/system/user.js";
 import {user$genderMap} from "@/utils/dictMap.js";
 
 

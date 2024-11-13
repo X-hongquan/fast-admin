@@ -1,9 +1,8 @@
 package com.chq.app.common.aspectj;
 
 import com.chq.app.common.annoation.PreAuth;
-import com.chq.app.common.domain.LoginUser;
 import com.chq.app.common.exception.AuthException;
-import com.chq.app.util.UserHolder;
+import com.chq.app.common.util.UserHolder;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;

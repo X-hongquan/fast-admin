@@ -1,8 +1,8 @@
 <script setup>
 
 import {onMounted, ref, reactive} from "vue";
-import {deleteUserAPI, listUserAPI} from "@/api/user.js";
-import {listRoleAPI} from "@/api/role.js";
+import {deleteUserAPI, exportUserAPI, listUserAPI} from "@/api/system/user.js";
+import {listRoleAPI} from "@/api/system/role.js";
 import {handleConfirmDel} from "@/utils/confirm.js";
 import {deleteNotification} from "@/utils/notification.js";
 import {ElMessage} from "element-plus";
@@ -79,7 +79,17 @@ function handleCurrentChange(val) {
   getUserList()
 }
 
-
+async function exportUser() {
+  const data = await exportUserAPI()
+  //下载文件
+  const url = URL.createObjectURL(data)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = '用户列表.xlsx'
+  a.click()
+  URL.revokeObjectURL(url)
+  ElMessage.success('导出成功')
+}
 
 onMounted(() => {
   getUserList()
@@ -108,6 +118,8 @@ onMounted(() => {
       <el-button type="info" icon="Refresh" @click="resetReq">重置</el-button>
       <el-button type="primary" icon="Plus" @click="$router.push('/system/user/add')">新增用户</el-button>
       <el-button type="danger" icon="Delete" @click="delBatch">批量删除</el-button>
+      <el-button type="info" @click="exportUser">导出</el-button>
+
     </div>
 
     <el-table :data="tableData" @selection-change="handleSelectionChange">

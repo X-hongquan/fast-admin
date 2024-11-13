@@ -1,25 +1,30 @@
 package com.chq.app.common.domain;
 
+import com.alibaba.excel.annotation.ExcelIgnore;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
 @Data
+@Accessors(chain = true)
 public class BaseEntity {
 
 
     @JsonIgnore
     @TableField(exist = false)
+    @ExcelIgnore
     private Map<String, Object> params;
 
 
     @TableField(exist = false)
+    @ExcelIgnore
     @JsonIgnore
     private Long roleId;
 

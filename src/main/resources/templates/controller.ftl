@@ -1,13 +1,19 @@
 package ${packageName}.controller;
 
-import ${packageName}.common.domain.R;
-import ${packageName}.common.domain.TableInfo;
-import ${packageName}.common.annoation.PreAuth;
+import ${commonPackage}.common.domain.R;
+import ${commonPackage}.common.domain.TableInfo;
+import ${commonPackage}.common.annoation.PreAuth;
+import ${commonPackage}.common.util.PageUtils;
 import ${packageName}.pojo.${className};
 import ${packageName}.service.I${className}Service;
-import ${packageName}.util.PageUtils;
+
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
+<#list columns as c>
+<#if c.img== 'y'>
+import org.springframework.web.multipart.MultipartFile;
+</#if>
+</#list>
 import java.util.List;
 
 
@@ -63,4 +69,19 @@ public class ${className}Controller {
         ${paramsName}Service.delete${className}ByIds(ids);
         return R.ok();
     }
+
+
+   <#list columns as c>
+   <#if c.img== 'y'>
+    /**
+     * 上传接口
+     */
+    @PostMapping("/upload")
+    @PreAuth(value="system:${paramsName}:add", description = "删除${tableInfo.comment}权限")
+    public R upload(@RequestParam("file") MultipartFile file) {
+        String url=${paramsName}Service.upload(file);
+        return R.ok(url);
+    }
+   </#if>
+   </#list>
 }

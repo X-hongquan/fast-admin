@@ -6,7 +6,7 @@ import {
   getPermissionAPI,
   editPermissionAPI,
   addPermissionAPI
-} from "@/api/permission.js";
+} from "@/api/system/permission.js";
 import {handleConfirmDel} from "@/utils/confirm.js";
 import {addNotification, deleteNotification, updateNotification} from "@/utils/notification.js";
 import {ElMessage} from "element-plus";

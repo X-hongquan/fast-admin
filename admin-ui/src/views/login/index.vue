@@ -6,7 +6,7 @@ import {useRoute, useRouter} from "vue-router";
 import {getTimes} from '@/utils/time';
 import {checkPassword, checkUserName} from "@/utils/validate.js";
 import setting from '@/../setting'
-import {getCaptChaAPI} from "@/api/captcha.js";
+import {getCaptChaAPI} from "@/api/system/captcha.js";
 
 const userStore = useUserStore();
 const router = useRouter();

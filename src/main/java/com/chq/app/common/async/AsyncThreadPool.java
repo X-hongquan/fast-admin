@@ -15,7 +15,9 @@ public class AsyncThreadPool {
     private ThreadPoolExecutor executor;
 
     public AsyncThreadPool() {
-        ThreadFactory threadFactory = new ThreadFactoryBuilder().setNameFormat("async-pool-%d").build();
+        ThreadFactory threadFactory =
+                new ThreadFactoryBuilder().setNameFormat("async-pool-%d")
+                        .setPriority(Thread.MIN_PRIORITY).build();
         executor = new ThreadPoolExecutor(
                 Runtime.getRuntime().availableProcessors(),
                 Runtime.getRuntime().availableProcessors() * 5,

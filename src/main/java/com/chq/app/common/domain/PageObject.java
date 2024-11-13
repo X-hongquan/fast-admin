@@ -1,6 +1,6 @@
 package com.chq.app.common.domain;
 
-import com.chq.app.util.SqlUtil;
+import com.chq.app.common.util.SqlUtil;
 import lombok.Data;
 
 import java.util.Arrays;

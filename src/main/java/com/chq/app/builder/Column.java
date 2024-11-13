@@ -18,6 +18,11 @@ public class Column {
     private String comment;
     private String dbName;
     private String nullable;
+    private String select="n";
+    private String search="n";
+    private String disabled="";
+    private String img="";
+    private String completeComment;
 
 
     public String getType() {

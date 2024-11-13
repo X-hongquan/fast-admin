@@ -5,7 +5,13 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum MsgTypeEnum {
 
+    /**
+     * 统计在线人数
+     */
     ONLINE(1),
+    /**
+     * 系统提示，需要调用通知
+     */
     SYSTEM(2);
 
     @JsonValue

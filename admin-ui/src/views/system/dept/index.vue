@@ -2,14 +2,16 @@
 import {ref, reactive, onMounted} from "vue";
 import {
   listDeptAPI,
-  deleteDeptAPI,
   getDeptAPI,
   editDeptAPI,
-  addDeptAPI
-} from "@/api/dept.js";
+  addDeptAPI,
+  uploadDeptAPI,
+  deleteDeptAPI
+} from "@/api/system/dept.js";
 import {handleConfirmDel} from "@/utils/confirm.js";
 import {addNotification, deleteNotification, updateNotification} from "@/utils/notification.js";
 import {ElMessage} from "element-plus";
+import {dept$statusMap} from '@/utils/dictMap.js'
 
 const tableData = ref([])
 const req = reactive({
@@ -17,12 +19,24 @@ const req = reactive({
    pageSize: 10,
    id: undefined,
    name: undefined,
-   status: undefined
+   status: undefined,
+   avatar: undefined,
+   parentId: undefined,
+   sort: undefined,
+   createUser: undefined,
+   createTime: undefined
 })
 function reset() {
   req.id = undefined
   req.name = undefined
   req.status = undefined
+  req.avatar = undefined
+  req.parentId = undefined
+  req.sort = undefined
+  req.createUser = undefined
+  req.createTime = undefined
+  getDeptList()
+
 }
 
 const total = ref(0)
@@ -30,7 +44,12 @@ const total = ref(0)
 const dept = reactive({
     id: undefined,
     name: undefined,
-    status: undefined
+    status: undefined,
+    avatar: undefined,
+    parentId: undefined,
+    sort: undefined,
+    createUser: undefined,
+    createTime: undefined
 })
 
 
@@ -44,9 +63,6 @@ const formRules = reactive({
    name: [
     {required: true, message: '部门名称不能为空', trigger: 'blur'},
    ],
-    status: [
-     {required: true, message: '状态不能为空', trigger: 'blur'}
-   ]
 })
 
 
@@ -88,6 +104,11 @@ function resetForm() {
   dept.id = undefined
   dept.name = undefined
   dept.status = undefined
+  dept.avatar = undefined
+  dept.parentId = undefined
+  dept.sort = undefined
+  dept.createUser = undefined
+  dept.createTime = undefined
 }
 function handleAdd() {
   resetForm()
@@ -128,6 +149,27 @@ async function getDeptList() {
   }
 }
 
+/**
+ * 上传图片
+ */
+function beforeUpload(file) {
+    const isJPG = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/gif' || file.type === 'image/avif'
+    const isLt2M = file.size / 1024 / 1024 < 2
+    if (!isJPG) {
+        ElMessage.error('上传头像图片只能是 JPG 格式!')
+    }
+    if (!isLt2M) {
+        ElMessage.error('上传头像图片大小不能超过 2MB!')
+    }
+}
+async function handleUpload(files) {
+    const formData = new FormData()
+    formData.append('file', files.file)
+    const res = await uploadDeptAPI(formData)
+    updateNotification(res, ()=>{
+        dept.avatar = res.data
+    })
+}
 onMounted(() => {
   getDeptList()
 })
@@ -136,12 +178,14 @@ onMounted(() => {
 <template>
   <div class="content-box">
     <div class="search-box">
-      <el-form inline>
+      <el-form inline @keyup.enter="getDeptList">
         <el-form-item label="部门名称">
-          <el-input v-model="req.name" placeholder="请输入name" clearable class="input-width"></el-input>
+          <el-input v-model="req.name" placeholder="请输入部门名称" clearable class="input-width"></el-input>
         </el-form-item>
         <el-form-item label="状态">
-          <el-input v-model="req.status" placeholder="请输入status" clearable class="input-width"></el-input>
+          <el-select v-model="req.status" class="input-width" @change="getDeptList" clearable>
+            <el-option v-for="(val,key) in dept$statusMap" :key="key" :label="val" :value="Number(key)"/>
+          </el-select>
         </el-form-item>
       </el-form>
     </div>
@@ -156,11 +200,34 @@ onMounted(() => {
       <el-table-column label="序号" type="index" width="80"></el-table-column>
       <el-table-column label="" prop="id"></el-table-column>
       <el-table-column label="部门名称" prop="name"></el-table-column>
-      <el-table-column label="状态" prop="status"></el-table-column>
+      <el-table-column label="状态" prop="status">
+          <template #default="{row}">
+            <el-tag type="primary">{{ dept$statusMap[row.status]}}</el-tag>
+          </template>
+      </el-table-column>
+            <el-table-column label="部门头像" prop="avatar">
+          <template #default="{row}">
+              <el-image
+                      style="width: 50px; height: 50px"
+                      preview-teleported
+                      :src="row.avatar"
+                      :zoom-rate="1.2"
+                      :max-scale="7"
+                      :min-scale="0.2"
+                      :preview-src-list="[row.avatar]"
+                      :initial-index="0"
+                      fit="cover"
+              />
+          </template>
+      </el-table-column>
+      <el-table-column label="父级部门id" prop="parentId"></el-table-column>
+      <el-table-column label="排序" prop="sort"></el-table-column>
+      <el-table-column label="创建人" prop="createUser"></el-table-column>
+      <el-table-column label="创建时间" prop="createTime"></el-table-column>
       <el-table-column label="操作" width="300">
         <template #default="{row}">
-          <el-button type="primary" icon="Edit" @click="handleEdit(row)">编辑</el-button>
-          <el-button type="danger" icon="Delete" @click="deleteOne(row)">删除</el-button>
+          <el-button type="primary" icon="Edit" @click="handleEdit(row)" link>编辑</el-button>
+          <el-button type="danger" icon="Delete" @click="deleteOne(row)" link>删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -176,20 +243,66 @@ onMounted(() => {
           @current-change="handleCurrentChange"
       />
     </div>
+
     <el-dialog v-model="dialog" :title="title">
       <el-form :model="dept" :rules="formRules" label-width="80px" ref="formRef">
        <el-row :gutter="30">
         <el-col :span="12">
-        <el-form-item label="部门名称" prop="name">
-          <el-input v-model="dept.name" placeholder="请输入部门名称" clearable class="input-width"></el-input>
-        </el-form-item>
-        </el-col>
+           <el-form-item label="部门名称" prop="name">
+               <el-input v-model="dept.name" placeholder="请输入部门名称" clearable class="input-width" ></el-input>
+           </el-form-item>
+            </el-col>
         <el-col :span="12">
-        <el-form-item label="状态" prop="status">
-          <el-input v-model="dept.status" placeholder="请输入状态" clearable class="input-width"></el-input>
-        </el-form-item>
-         </el-col>
-         </el-row>
+           <el-form-item label="状态" prop="status">
+           <el-select v-model="dept.status" class="input-width">
+            <el-option v-for="(val,key) in dept$statusMap" :key="key" :label="val" :value="Number(key)"/>
+          </el-select>
+          </el-form-item>
+            </el-col>
+            </el-row>
+       <el-row :gutter="30">
+        <el-col :span="12">
+           <el-form-item label="部门头像" prop="avatar">
+               <el-upload
+                       class="avatar-uploader"
+                       action="void"
+                       :http-request="handleUpload"
+                       accept="image/*"
+                       :show-file-list="false"
+                       :before-upload="beforeUpload"
+               >
+                   <img v-if="dept.avatar" :src="dept.avatar" class="avatar"/>
+                   <el-icon v-else class="avatar-uploader-icon">
+                       <Plus/>
+                   </el-icon>
+               </el-upload>
+           </el-form-item>
+            </el-col>
+        <el-col :span="12">
+           <el-form-item label="父级部门id" prop="parentId">
+               <el-input v-model="dept.parentId" placeholder="请输入父级部门id" clearable class="input-width" ></el-input>
+          </el-form-item>
+            </el-col>
+            </el-row>
+       <el-row :gutter="30">
+        <el-col :span="12">
+           <el-form-item label="排序" prop="sort">
+               <el-input v-model="dept.sort" placeholder="请输入排序" clearable class="input-width" ></el-input>
+           </el-form-item>
+            </el-col>
+        <el-col :span="12">
+           <el-form-item label="创建人" prop="createUser">
+               <el-input v-model="dept.createUser" placeholder="请输入创建人" clearable class="input-width" ></el-input>
+          </el-form-item>
+            </el-col>
+            </el-row>
+       <el-row :gutter="30">
+        <el-col :span="12">
+           <el-form-item label="创建时间" prop="createTime">
+               <el-input v-model="dept.createTime" placeholder="请输入创建时间" clearable class="input-width" disabled></el-input>
+           </el-form-item>
+            </el-col>
+        </el-row>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
@@ -202,5 +315,33 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
+.avatar-uploader {
+    border: 1px dashed var(--el-border-color);
+    width: 178px;
+    height: 178px;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: var(--el-transition-duration-fast);
+}
+
+.avatar-uploader:hover {
+    border-color: var(--el-color-primary);
+}
+
+.el-icon.avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    text-align: center;
+}
+
+.avatar-uploader .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+}
 
 </style>

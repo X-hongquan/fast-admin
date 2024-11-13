@@ -37,8 +37,9 @@ public class ${className}  implements Serializable {
     <#if column.name!='id'>
 
       /**
-      * ${column.comment}
-      */
+      * ${column.completeComment}
+      */<#if column.name=='createTime'>
+      @TableField(fill = FieldFill.INSERT)</#if>
       private ${column.type} ${column.name};
     </#if>
 </#list>

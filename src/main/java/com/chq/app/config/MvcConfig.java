@@ -1,7 +1,7 @@
 package com.chq.app.config;
 
-import com.chq.app.controller.interceptor.LoginInterceptor;
-import com.chq.app.controller.interceptor.RefreshInterceptor;
+import com.chq.app.common.handler.interceptor.LoginInterceptor;
+import com.chq.app.common.handler.interceptor.RefreshInterceptor;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,7 +12,7 @@ import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import static com.chq.app.controller.interceptor.UrlInterceptor.LOGIN_NO_INTERCEPT;
+import static com.chq.app.common.handler.interceptor.UrlInterceptor.LOGIN_NO_INTERCEPT;
 
 
 @Configuration

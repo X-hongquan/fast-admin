@@ -1,7 +1,7 @@
 <script setup>
 import {useRoute, useRouter} from "vue-router";
 import {reactive, ref, watch} from "vue";
-import {getUserAPI} from "@/api/user.js";
+import {getUserAPI} from "@/api/system/user.js";
 import {user$genderMap} from "@/utils/dictMap.js";
 
 

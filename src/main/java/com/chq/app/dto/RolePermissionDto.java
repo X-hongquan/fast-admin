@@ -1,6 +1,5 @@
 package com.chq.app.dto;
 
-import com.chq.app.pojo.RolePermission;
 import lombok.Data;
 
 @Data

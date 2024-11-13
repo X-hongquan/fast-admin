@@ -18,7 +18,7 @@ public class GenerateResource {
 
     private static final String apiResource = "src/main/resources/generator/controller.txt";
 
-    private static final Set<String> typeSet = Set.of("pojo", "dto", "form", "vo", "controller","domain","common");
+    private static final Set<String> typeSet = Set.of("pojo", "dto", "form", "vo", "controller","domain","common","web","system");
 
     private static final String packageName = "\\src\\main\\java\\";
 

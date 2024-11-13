@@ -6,7 +6,7 @@ import {
   getMenuAPI,
   editMenuAPI,
   addMenuAPI
-} from "@/api/menu.js";
+} from "@/api/system/menu.js";
 import {handleConfirmDel} from "@/utils/confirm.js";
 import {addNotification, deleteNotification, updateNotification} from "@/utils/notification.js";
 import {ElMessage} from "element-plus";

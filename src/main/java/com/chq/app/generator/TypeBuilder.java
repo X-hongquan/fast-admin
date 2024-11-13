@@ -53,7 +53,6 @@ public class TypeBuilder {
                             String tsType = javaToTS(javaName);
                             sb.append("  " + declaredField.getName() + ": " + tsType + "\n");
                         } else {
-                            System.out.println("typeName = " + typeName);
                             if (typeName.contains("<")) {
                                 String s1 = StringUtils.substringBefore(typeName, ">");
                                 String[] split = s1.split("<");

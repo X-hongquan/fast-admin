@@ -7,12 +7,12 @@ import {
   editRoleAPI,
   addRoleAPI,
   assignPermissionRoleAPI, assignMenuRoleAPI
-} from "@/api/role.js";
+} from "@/api/system/role.js";
 import {handleConfirmDel} from "@/utils/confirm.js";
 import {addNotification, deleteNotification, updateNotification} from "@/utils/notification.js";
 import {ElMessage} from "element-plus";
-import {listGroupPermissionAPI, listPermissionAPI} from "@/api/permission.js";
-import {listMenuAPI} from "@/api/menu.js";
+import {listGroupPermissionAPI, listPermissionAPI} from "@/api/system/permission.js";
+import {listMenuAPI} from "@/api/system/menu.js";
 import {preHandleMenu} from "@/utils/init.js";
 
 let roleId

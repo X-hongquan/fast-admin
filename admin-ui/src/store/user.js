@@ -1,8 +1,8 @@
 import {defineStore} from "pinia";
 import {ref} from "vue";
-import { infoUserAPI, loginUserAPI, logoutUserAPI} from "@/api/user.js";
+import { infoUserAPI, loginUserAPI, logoutUserAPI} from "@/api/system/user.js";
 import {getToken, removeToken, setToken} from "@/utils/token.js";
-import {initMenuAPI} from "@/api/menu.js";
+import {initMenuAPI} from "@/api/system/menu.js";
 import {preHandleMenu} from "@/utils/init.js";
 import {closeSocket} from "@/utils/socket.js";
 

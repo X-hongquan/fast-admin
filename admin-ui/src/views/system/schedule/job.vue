@@ -9,7 +9,7 @@ import {
   listJobInfoAPI,
   startJobInfoAPI,
   stopJobInfoAPI
-} from "@/api/jobInfo.js";
+} from "@/api/system/jobInfo.js";
 import {handleConfirmDel} from "@/utils/confirm.js";
 import {addNotification, deleteNotification, updateNotification} from "@/utils/notification.js";
 import {useRouter} from "vue-router";

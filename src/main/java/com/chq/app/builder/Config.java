@@ -8,6 +8,7 @@ import lombok.experimental.Accessors;
 public class Config {
     private String tableName;
     private String packageName;
+    private String commonPackage;
     private String author;
     private String moduleName;
     private String absPath;
@@ -15,4 +16,5 @@ public class Config {
     private String username;
     private String password;
     private String frontAbsPath;
+    private String module;
 }

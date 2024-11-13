@@ -10,7 +10,7 @@ import {
   editUserAPI,
   resetPasswordUserAPI,
   sendPasswordCodeUserAPI
-} from "@/api/user.js";
+} from "@/api/system/user.js";
 import {useRouter} from "vue-router";
 import {ElMessage} from "element-plus";
 import {updateNotification} from "@/utils/notification.js";
@@ -104,6 +104,7 @@ const activeName = ref('first')
 
 
 function beforeAvatarUpload(file) {
+  console.log(file.type)
   const isJPG = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/gif' || file.type === 'image/avif'
   const isLt2M = file.size / 1024 / 1024 < 2
   if (!isJPG) {

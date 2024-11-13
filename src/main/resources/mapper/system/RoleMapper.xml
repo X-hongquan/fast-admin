@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chq.app.web.system.mapper.RoleMapper">
+
+    <select id="getList" resultType="com.chq.app.web.system.pojo.Role" parameterType="com.chq.app.web.system.pojo.Role">
+        select
+        r.id, r.name,r.create_by, r.create_time, r.update_by, r.update_time
+        from role as r
+        where 1=1
+        <if test="id != null">
+            and r.id = #{id}
+        </if>
+        <if test="name != null">
+            and r.name = #{name}
+        </if>
+        ${params.dataScope}
+    </select>
+</mapper>

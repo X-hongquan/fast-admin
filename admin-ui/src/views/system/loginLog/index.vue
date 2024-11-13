@@ -2,7 +2,7 @@
 
 import {onMounted, reactive, ref} from 'vue'
 import {handleConfirmDel} from "@/utils/confirm.js";
-import {deleteLoginLogAPI, listLoginLogAPI} from "@/api/loginLog.js";
+import {deleteLoginLogAPI, listLoginLogAPI} from "@/api/system/loginLog.js";
 import {deleteNotification} from "@/utils/notification.js";
 
 const tableData = ref([])

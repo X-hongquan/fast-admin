@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chq.app.web.system.mapper.PermissionMapper">
+
+    <select id="getPermissionList" resultType="com.chq.app.web.system.pojo.Permission" parameterType="com.chq.app.web.system.pojo.Permission">
+        select
+        p.id, p.code, p.description, p.create_by, p.create_time, p.update_by, p.update_time
+        from permission as p
+        left join role_permission as rp on p.id = rp.permission_id
+        where 1=1
+        <if test="id != null">
+            and p.id = #{id}
+        </if>
+        <if test="roleId!=null">
+            and rp.role_id = #{roleId}
+        </if>
+        <if test="code != null">
+            and p.code like concat('%',#{code},'%')
+        </if>
+        ${params.dataScope}
+        group by p.id
+    </select>
+</mapper>

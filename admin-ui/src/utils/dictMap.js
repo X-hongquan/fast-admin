@@ -1,4 +1,11 @@
 /**
+ * 状态字典
+ */
+export const dept$statusMap = {
+  0: '正常',
+  1: '禁用'
+}
+/**
  * 工作方式字典
  */
 export const job_info$job_typeMap = {

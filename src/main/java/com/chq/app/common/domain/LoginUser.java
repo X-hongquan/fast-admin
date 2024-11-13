@@ -1,12 +1,10 @@
 package com.chq.app.common.domain;
 
 import com.chq.app.common.exception.AuthException;
-import com.chq.app.pojo.Role;
-import com.chq.app.pojo.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.chq.app.web.system.pojo.Role;
+import com.chq.app.web.system.pojo.User;
 import lombok.Data;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -20,6 +18,8 @@ public class LoginUser {
     private String token;
     private Set<String> permissions;
     private Set<Role> roles;
+    private String ip;
+    private String location;
 
     private Set<Long> roleKeys;
 

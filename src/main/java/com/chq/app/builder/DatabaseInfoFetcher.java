@@ -4,30 +4,29 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 /**
  * 生成字典信息
  */
 public class DatabaseInfoFetcher {
 
-    public static void main(String[] args) {
+    public static void genMap() {
         String url = "jdbc:mysql://192.168.102.129:3306/vjs?nullCatalogMeansCurrent=true";
         String user = "root";
         String password = "123456";
         String schema = "vjs";
         StringBuilder sb = new StringBuilder();
+        String output = "admin-ui\\src\\utils\\dictMap.js";
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
             DatabaseMetaData metaData = connection.getMetaData();
+
 
             // 获取指定 schema 下的所有表
             ResultSet tables = metaData.getTables(null, "vjs", "%", new String[]{"TABLE"});
             while (tables.next()) {
                 String tableName = tables.getString("TABLE_NAME");
+                //获取注释
 
 
                 // 获取表的字段信息和注释
@@ -69,7 +68,7 @@ public class DatabaseInfoFetcher {
                 columns.close();
             }
             System.out.println(sb);
-            try (FileWriter fileWriter = new FileWriter("D:\\IdeaProject\\fast-admin\\admin-ui\\src\\utils\\dictMap.js")) {
+            try (FileWriter fileWriter = new FileWriter(output)) {
                 fileWriter.write(sb.toString());
             } catch (IOException e) {
                 throw new RuntimeException(e);

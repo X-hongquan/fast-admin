@@ -1,9 +1,9 @@
 package com.chq.app;
 
 import com.chq.app.common.annoation.PreAuth;
-import com.chq.app.pojo.*;
-import com.chq.app.service.*;
-import com.chq.app.util.JavaMailUntil;
+import com.chq.app.pojo.MenuBuilder;
+import com.chq.app.web.system.pojo.*;
+import com.chq.app.web.system.service.*;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +13,6 @@ import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,6 +38,20 @@ class AppApplicationTests {
 
     @Autowired
     private IRolePermissionService rolePermissionService;
+
+
+    @Test
+    void saveMenu() {
+        MenuBuilder menuBuilder = new MenuBuilder();
+        Menu m = menuBuilder.setComponent("system/akl/index")
+                .setName("akl")
+                .setUrl("/system/akl")
+                .setParentId(0L)
+                .setType(1)
+                .setTitle("akl神秘").build();
+
+        menuService.save(m);
+    }
 
     @Test
     void contextLoads() {

@@ -2,14 +2,20 @@
 import {ref, reactive, onMounted} from "vue";
 import {
   list${className}API,
-  delete${className}API,
   get${className}API,
   edit${className}API,
-  add${className}API
-} from "@/api/${paramsName}.js";
+  add${className}API,
+  <#list columns as c>
+    <#if c.img=='y'>
+  upload${className}API,
+    </#if>
+  </#list>
+  delete${className}API
+} from "@/api/${module}${paramsName}.js";
 import {handleConfirmDel} from "@/utils/confirm.js";
 import {addNotification, deleteNotification, updateNotification} from "@/utils/notification.js";
 import {ElMessage} from "element-plus";
+${tableInfo.dictLabel}
 
 const tableData = ref([])
 const req = reactive({
@@ -27,7 +33,7 @@ function reset() {
   <#list columns as c>
   req.${c.name} = undefined
   </#list>
-    get${className}List()
+  get${className}List()
 
 }
 
@@ -147,6 +153,31 @@ async function get${className}List() {
   }
 }
 
+<#list columns as c>
+<#if c.img=='y'>
+/**
+ * 上传图片
+ */
+function beforeUpload(file) {
+    const isJPG = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/gif' || file.type === 'image/avif'
+    const isLt2M = file.size / 1024 / 1024 < 2
+    if (!isJPG) {
+        ElMessage.error('上传头像图片只能是 JPG 格式!')
+    }
+    if (!isLt2M) {
+        ElMessage.error('上传头像图片大小不能超过 2MB!')
+    }
+}
+async function handleUpload(files) {
+    const formData = new FormData()
+    formData.append('file', files.file)
+    const res = await upload${className}API(formData)
+    updateNotification(res, ()=>{
+        ${paramsName}.${c.name} = res.data
+    })
+}
+</#if>
+</#list>
 onMounted(() => {
   get${className}List()
 })
@@ -155,11 +186,19 @@ onMounted(() => {
 <template>
   <div class="content-box">
     <div class="search-box">
-      <el-form inline>
+      <el-form inline @keyup.enter="get${className}List">
         <#list columns as c>
-        <#if c.name != 'id'>
+        <#if c.select == 'n'>
+        <#if c.search=='y'>
         <el-form-item label="${c.comment}">
-          <el-input v-model="req.${c.name}" placeholder="请输入${c.name}" clearable class="input-width"></el-input>
+          <el-input v-model="req.${c.name}" placeholder="请输入${c.comment}" clearable class="input-width"></el-input>
+        </el-form-item>
+        </#if>
+        <#else>
+        <el-form-item label="${c.comment}">
+          <el-select v-model="req.${c.name}" class="input-width" @change="get${className}List" clearable>
+            <el-option v-for="(val,key) in ${tableInfo.tableName}$${c.dbName}Map" :key="key" :label="val" :value="Number(key)"/>
+          </el-select>
         </el-form-item>
         </#if>
         </#list>
@@ -175,12 +214,38 @@ onMounted(() => {
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column label="序号" type="index" width="80"></el-table-column>
       <#list columns as c>
+      <#if c.select == 'n'>
+       <#if c.img == 'y'>
+            <el-table-column label="${c.comment}" prop="${c.name}">
+          <template #default="{row}">
+              <el-image
+                      style="width: 50px; height: 50px"
+                      preview-teleported
+                      :src="row.${c.name}"
+                      :zoom-rate="1.2"
+                      :max-scale="7"
+                      :min-scale="0.2"
+                      :preview-src-list="[row.${c.name}]"
+                      :initial-index="0"
+                      fit="cover"
+              />
+          </template>
+      </el-table-column>
+      <#else>
       <el-table-column label="${c.comment}" prop="${c.name}"></el-table-column>
+       </#if>
+      <#else>
+      <el-table-column label="${c.comment}" prop="${c.name}">
+          <template #default="{row}">
+            <el-tag type="primary">{{ ${tableInfo.tableName}$${c.dbName}Map[row.${c.name}]}}</el-tag>
+          </template>
+      </el-table-column>
+      </#if>
       </#list>
       <el-table-column label="操作" width="300">
         <template #default="{row}">
-          <el-button type="primary" icon="Edit" @click="handleEdit(row)">编辑</el-button>
-          <el-button type="danger" icon="Delete" @click="deleteOne(row)">删除</el-button>
+          <el-button type="primary" icon="Edit" @click="handleEdit(row)" link>编辑</el-button>
+          <el-button type="danger" icon="Delete" @click="deleteOne(row)" link>删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -196,6 +261,7 @@ onMounted(() => {
           @current-change="handleCurrentChange"
       />
     </div>
+
     <el-dialog v-model="dialog" :title="title">
       <el-form :model="${paramsName}" :rules="formRules" label-width="80px" ref="formRef">
         <#list columns as c>
@@ -203,22 +269,66 @@ onMounted(() => {
         <#if c_index %2 = 1>
        <el-row :gutter="30">
         <el-col :span="12">
-        <el-form-item label="${c.comment}" prop="${c.name}">
-          <el-input v-model="${paramsName}.${c.name}" placeholder="请输入${c.comment}" clearable class="input-width"></el-input>
-        </el-form-item>
-        </el-col>
+           <el-form-item label="${c.comment}" prop="${c.name}">
+               <#if c.select == 'n'>
+               <#if c.img=='y'>
+               <el-upload
+                       class="avatar-uploader"
+                       action="void"
+                       :http-request="handleUpload"
+                       accept="image/*"
+                       :show-file-list="false"
+                       :before-upload="beforeUpload"
+               >
+                   <img v-if="${paramsName}.${c.name}" :src="${paramsName}.${c.name}" class="avatar"/>
+                   <el-icon v-else class="avatar-uploader-icon">
+                       <Plus/>
+                   </el-icon>
+               </el-upload>
+               <#else>
+               <el-input v-model="${paramsName}.${c.name}" placeholder="请输入${c.comment}" clearable class="input-width" ${c.disabled}></el-input>
+               </#if>
+           <#else>
+           <el-select v-model="${paramsName}.${c.name}" class="input-width">
+            <el-option v-for="(val,key) in ${tableInfo.tableName}$${c.dbName}Map" :key="key" :label="val" :value="Number(key)"/>
+          </el-select>
+           </#if>
+           </el-form-item>
+            </el-col>
    <#if !c_has_next>
         </el-row>
    </#if>
         <#else>
         <el-col :span="12">
-        <el-form-item label="${c.comment}" prop="${c.name}">
-          <el-input v-model="${paramsName}.${c.name}" placeholder="请输入${c.comment}" clearable class="input-width"></el-input>
-        </el-form-item>
-         </el-col>
-         </el-row>
+           <el-form-item label="${c.comment}" prop="${c.name}">
+               <#if c.select == 'n'>
+               <#if c.img=='y'>
+               <el-upload
+                       class="avatar-uploader"
+                       action="void"
+                       :http-request="handleUpload"
+                       accept="image/*"
+                       :show-file-list="false"
+                       :before-upload="beforeUpload"
+               >
+                   <img v-if="${paramsName}.${c.name}" :src="${paramsName}.${c.name}" class="avatar"/>
+                   <el-icon v-else class="avatar-uploader-icon">
+                       <Plus/>
+                   </el-icon>
+               </el-upload>
+               <#else>
+               <el-input v-model="${paramsName}.${c.name}" placeholder="请输入${c.comment}" clearable class="input-width" ${c.disabled}></el-input>
+               </#if>
+           <#else>
+           <el-select v-model="${paramsName}.${c.name}" class="input-width">
+            <el-option v-for="(val,key) in ${tableInfo.tableName}$${c.dbName}Map" :key="key" :label="val" :value="Number(key)"/>
+          </el-select>
+           </#if>
+          </el-form-item>
+            </el-col>
+            </el-row>
         </#if>
-        </#if>
+           </#if>
         </#list>
       </el-form>
       <template #footer>
@@ -232,5 +342,37 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
+<#list  columns as c>
+<#if c.img=='y'>
+.avatar-uploader {
+    border: 1px dashed var(--el-border-color);
+    width: 178px;
+    height: 178px;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: var(--el-transition-duration-fast);
+}
 
+.avatar-uploader:hover {
+    border-color: var(--el-color-primary);
+}
+
+.el-icon.avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    text-align: center;
+}
+
+.avatar-uploader .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+}
+
+</#if>
+</#list>
 </style>

@@ -2,7 +2,7 @@
 import {
   exportTypeGeneratorAPI, exportZipGeneratorAPI,
   listGeneratorAPI
-} from '@/api/generator.js'
+} from '@/api/system/generator.js'
 import {onMounted, ref} from "vue";
 import CodeBox from '@/components/CodeBox/index.vue'
 import {ArrowUp} from "@element-plus/icons-vue";

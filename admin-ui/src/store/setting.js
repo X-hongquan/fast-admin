@@ -1,6 +1,6 @@
 import {defineStore} from "pinia";
 import {ref} from "vue";
-import {getSettingAPI, updateSettingAPI} from "@/api/setting.js";
+import {getSettingAPI, updateSettingAPI} from "@/api/system/setting.js";
 
 export const useSettingStore = defineStore('setting', () => {
     const fold = ref(false)

@@ -4,13 +4,10 @@ import com.chq.app.common.annoation.DataScope;
 import com.chq.app.common.domain.BaseEntity;
 import com.chq.app.common.domain.LoginUser;
 import com.chq.app.common.enums.PermissionModeEnum;
-import com.chq.app.pojo.Permission;
-import com.chq.app.pojo.Role;
+import com.chq.app.web.system.pojo.Role;
 
-import com.chq.app.util.UserHolder;
+import com.chq.app.common.util.UserHolder;
 
-import jakarta.annotation.PostConstruct;
-import lombok.AllArgsConstructor;
 import lombok.Setter;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;

@@ -2,16 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="${packageName}.mapper.${className}Mapper">
 
-    <sql id="base_column">
-     <#list columns as c>
-       ${c.dbName}<#if c_has_next>,</#if>
-   </#list>
-    </sql>
+
 
 
     <select id="get${className}List" resultType="${packageName}.pojo.${className}" parameterType="${packageName}.pojo.${className}">
         select
-        <include refid="base_column"/>
+        <#list columns as c>${c.dbName}<#if c_has_next>,</#if></#list>
         from ${tableInfo.tableName}
         where 1=1
         <#list columns as c>
@@ -29,7 +25,7 @@
 
     <select id="get${className}ById" resultType="${packageName}.pojo.${className}" >
         select
-        <include refid="base_column"/>
+        <#list columns as c>${c.dbName}<#if c_has_next>,</#if></#list>
         from ${tableInfo.tableName}
         where id = ${jin}{id}
     </select>

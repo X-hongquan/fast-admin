@@ -45,37 +45,35 @@ public class FreeMarkerBuilder {
             Template api = cfg.getTemplate("api.ftl");
             Template pages = cfg.getTemplate("pages.ftl");
 
-
             // 创建数据模型
             Map<String, Object> dataModel = new HashMap<>();
             dataModel.put("tableInfo", tableInfo);
             dataModel.put("packageName", config.getPackageName());
+            dataModel.put("commonPackage", config.getCommonPackage());
             dataModel.put("author", config.getAuthor());
             dataModel.put("columns", tableInfo.getColumns());
             dataModel.put("paramsName", conventParamsName(convertToClassName(tableInfo.getTableName())));
             dataModel.put("date", DateTimeFormatter.ofPattern("yyyy-MM-dd").format(LocalDateTime.now()));
             dataModel.put("className", convertToClassName(tableInfo.getTableName()));
             dataModel.put("jin", "#");
+            dataModel.put("module", config.getModule());
 
             String s = convertToClassName(tableInfo.getTableName());
             String s1 = conventParamsName(s);
             // 输出路径
-            String absPath = config.getAbsPath();
-            File pojoFile = new File(absPath + File.separator + "pojo\\" + s + ".java");
-            File mapperFile = new File(absPath + File.separator + "mapper\\" + s + "Mapper.java");
-            File xmlFile = new File("D:\\IdeaProject\\fast-admin\\src\\main\\resources\\mapper\\" + s + "Mapper.xml");
-            File serviceFile = new File(absPath + File.separator + "service\\" + "I" + s + "Service.java");
-            File implFile = new File(absPath + File.separator + "service\\impl\\" + s + "ServiceImpl.java");
-            File controllerFile = new File(absPath + File.separator + "controller\\" + s + "Controller.java");
+            File pojoFile = new File(tableInfo.getPojoOutputPath());
+            File mapperFile = new File(tableInfo.getMapperOutputPath());
+            File xmlFile = new File(tableInfo.getMapperXmlOutputPath());
+            File serviceFile = new File(tableInfo.getServiceOutputPath());
+            File implFile = new File(tableInfo.getServiceImplOutputPath());
+            File controllerFile = new File(tableInfo.getControllerOutputPath());
+            File viewsFile = new File(tableInfo.getViewsOutputPath());
+            File apiFile = new File(tableInfo.getApiOutputPath());
 
-            String frontPath = config.getFrontAbsPath();
-            File apiFile = new File(frontPath + "api\\" + s1 + ".js");
-            String vuePackage = frontPath + "views\\system\\" + s1 ;
-            File file = new File(vuePackage);
-            if (!file.exists()) {
-                file.mkdir();
-            }
-            File vueFile = new File(vuePackage+"\\index.vue");
+
+            //递归创建文件夹
+            treeFile(viewsFile.getParentFile());
+            treeFile(apiFile.getParentFile());
 
 
             // 将模板和数据模型合并生成HTML文件
@@ -100,12 +98,28 @@ public class FreeMarkerBuilder {
             try (FileWriter fileWriter = new FileWriter(apiFile)) {
                 api.process(dataModel, fileWriter);
             }
-            try (FileWriter fileWriter = new FileWriter(vueFile)) {
+            try (FileWriter fileWriter = new FileWriter(viewsFile)) {
                 pages.process(dataModel, fileWriter);
             }
             System.out.println("HTML file generated successfully.");
         } catch (IOException | TemplateException e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * 遍历创建父类文件
+     *
+     * @param parentFile
+     */
+    private static void treeFile(File parentFile) {
+        if (!parentFile.exists()) {
+            File grandparentFile = parentFile.getParentFile();
+            if (grandparentFile.exists()) {
+                parentFile.mkdir();
+            } else {
+                treeFile(grandparentFile);
+            }
         }
     }
 }

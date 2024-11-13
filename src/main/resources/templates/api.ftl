@@ -40,6 +40,15 @@ export function delete${className}API(ids) {
         params: ids
     })
 }
-
-
+<#list columns as c>
+<#if c.img == 'y'>
+export function upload${className}API(file) {
+    return request({
+        url: '/${paramsName}/upload',
+        method: 'post',
+        data: file
+    })
+}
+</#if>
+</#list>
 
